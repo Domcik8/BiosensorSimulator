@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Simulations;
+using BiosensorSimulator.SchemeCalculator;
 
 namespace BiosensorSimulator
 {
@@ -10,6 +10,72 @@ namespace BiosensorSimulator
     {
         static void Main(string[] args)
         {
+            BiosensorParameters biosensorParameters =
+                new ZeroOrderSimulation().GetInitiationParameters();
+
+            SimulationParameters simulationParameters =
+                new Simulation1().InitiationParameters(biosensorParameters);
+
+            ISchemeCalculator schemeCalculator =
+                new ImplicitSchemeCalculator();
+
+            CurrentCalculator currentCalculator =
+                new CurrentCalculator(simulationParameters, biosensorParameters, schemeCalculator);
+
+            Simulation1D simulation1D = new Simulation1D(
+                simulationParameters, biosensorParameters,
+                schemeCalculator, currentCalculator
+            );
+
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            GetValidationValues(biosensorParameters, simulationParameters);
+
+            //Start simulation
+            // Calculate steady current
+            simulation1D.CalculateSteadyCurrent();
+
+            // Run simulation till the end of times
+            /*for (int i = 1; i < 0.5 / simulationParameters.t; i++)
+                simulation1D.CalculateNextLayer();*/
+
+            stopWatch.Stop();
+
+            PrintResults(stopWatch, simulation1D.SCur, simulation1D.PCur, simulation1D.SteadyCurrent);
+
+            Console.ReadKey();
+
+            /*Tridiagonal solution example
+            Matrix matrix = new Matrix();
+            var a = new double[] { 0, -1, -1};
+            var b = new double[] { 3, 3, 3 };
+            var c = new double[] { -1, -1, 0 };
+            var r = new double[] {-1, 7, 7};
+           
+            matrix.SolveTridiagonalInPlace(a, b, c, r, b.Length);*/
+        }
+
+        public static void GetValidationValues(
+            BiosensorParameters biosensorParameters,
+            SimulationParameters simulationParameters)
+        {
+            AnaliticSimulation simulation = new AnaliticSimulation();
+            double firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(biosensorParameters, simulationParameters);
+            double zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(biosensorParameters, simulationParameters);
+
+            Console.WriteLine($"First order current : {firstOrderCurrent} nA/mm^2");
+            Console.WriteLine($"Zero order current : {zeroOrderCurrent} uA/mm^2");
+        }
+
+        public static void PrintResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)
+        {
+            Console.WriteLine($"Simulation took {stopwatch.ElapsedMilliseconds} seconds");
+
+
+            Console.WriteLine($"Steady current = {I}");
+            for (int i = 0; i < sCur.Length; i++)
+                Console.WriteLine($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");
         }
     }
 }
