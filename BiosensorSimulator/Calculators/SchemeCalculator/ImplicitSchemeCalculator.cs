@@ -1,7 +1,7 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 
-namespace BiosensorSimulator.SchemeCalculator
+namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class ImplicitSchemeCalculator : ISchemeCalculator
     {

@@ -47,8 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="1D Simulations\SingleLayerSimulation1D.cs" />
-    <Compile Include="AnaliticSimulation.cs" />
+    <Compile Include="Simulations\1D Simulations\SingleLayerSimulation1D.cs" />
+    <Compile Include="Simulations\AnaliticSimulation.cs" />
     <Compile Include="Parameters\Biosensors\SimulationValidation.cs" />
     <Compile Include="Parameters\Biosensors\ZeroOrderSimulation.cs" />
     <Compile Include="Parameters\Biosensors\FirstOrderSimulation.cs" />
@@ -56,18 +56,18 @@
     <Compile Include="Parameters\Biosensors\BiosensorParameters.cs" />
     <Compile Include="Parameters\Biosensors\IBiosensorParametersSuplier.cs" />
     <Compile Include="Parameters\Biosensors\BIK04.cs" />
-    <Compile Include="Matrix.cs" />
+    <Compile Include="Calculators\MatrixCalculator.cs" />
     <Compile Include="Parameters\Simulations\Simulation1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SchemeCalculator\ExplicitSchemeCalculatorsdsasa.cs" />
-    <Compile Include="SchemeCalculator\ISchemeCalculator.cs" />
-    <Compile Include="SchemeCalculator\ImplicitSchemeCalculator.cs" />
-    <Compile Include="ISimulation.cs" />
-    <Compile Include="Simulation1D.cs" />
-    <Compile Include="CurrentCalculator.cs" />
+    <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeCalculator.cs" />
+    <Compile Include="Calculators\SchemeCalculator\ISchemeCalculator.cs" />
+    <Compile Include="Calculators\SchemeCalculator\ImplicitSchemeCalculator.cs" />
+    <Compile Include="Simulations\ISimulation.cs" />
+    <Compile Include="Simulations\Simulation1D.cs" />
+    <Compile Include="Calculators\CurrentCalculator.cs" />
     <Compile Include="Parameters\Simulations\SimulationParameters.cs" />
-    <Compile Include="SchemeCalculator\ImplicitSchemeStabilityChecker.cs" />
+    <Compile Include="Calculators\SchemeCalculator\ImplicitSchemeStabilityChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using BiosensorSimulator.Calculators;
+using BiosensorSimulator.Calculators.SchemeCalculator;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
-using BiosensorSimulator.SchemeCalculator;
+using BiosensorSimulator.Simulations;
 
 namespace BiosensorSimulator._1D_Simulations
 {
@@ -42,8 +44,7 @@ namespace BiosensorSimulator._1D_Simulations
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-
-            AssertSimulationStability(SimulationParameters, BiosensorParameters);
+            
             SetInitialConditions();
 
             for (var i = 0; i < SimulationParameters.M; i++)
@@ -79,10 +80,33 @@ namespace BiosensorSimulator._1D_Simulations
             PCur[SimulationParameters.N] = BiosensorParameters.P0;
             PCur[0] = 0;
         }
-
-        public void AssertSimulationStability(SimulationParameters simulationParameters, BiosensorParameters biosensorParameters)
+        
+        public static void PrintSimulationResults(Stopwatch stopwatch, double I)
         {
-            new ImplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensorParameters);
+            Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
+            Console.WriteLine($"Steady current = {I}");
+        }
+
+        public static void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur)
+        {
+            Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
+            
+            for (int i = 0; i < sCur.Length; i++)
+                Console.WriteLine($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");
+        }
+
+        public static void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)
+        {
+            Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
+
+            Console.WriteLine($"Steady current = {I}");
+            for (int i = 0; i < sCur.Length; i++)
+                Console.WriteLine($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");
+        }
+
+        public void AssertSimulationStability()
+        {
+            new ImplicitSchemeStabilityChecker().AssertStability(SimulationParameters, BiosensorParameters);
         }
     }
 }

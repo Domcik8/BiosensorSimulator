@@ -2,7 +2,7 @@
 using BiosensorSimulator.Parameters.Simulations;
 using System;
 
-namespace BiosensorSimulator
+namespace BiosensorSimulator.Simulations
 {
     public class AnaliticSimulation
     {

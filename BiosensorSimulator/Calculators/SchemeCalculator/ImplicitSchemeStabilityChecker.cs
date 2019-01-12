@@ -2,24 +2,24 @@
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 
-namespace BiosensorSimulator.SchemeCalculator
+namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class ImplicitSchemeStabilityChecker
     {
         public void AssertStability(SimulationParameters simulationParameters, BiosensorParameters biosensorParameters)
         {
-            bool reactionStability = GetReactionStability(
+            var isReactionStable = GetReactionStability(
                 biosensorParameters.Vmax, biosensorParameters.Km, simulationParameters.t);
 
-            double Dmax = Math.Max(biosensorParameters.DSf, biosensorParameters.DPf);
-            bool reactionDiffusionLayerStability = GetDiffusionStability(
+            var Dmax = Math.Max(biosensorParameters.DSf, biosensorParameters.DPf);
+            var isDiffusionStableInFermentLayer = GetDiffusionStability(
                 Dmax, biosensorParameters.c / simulationParameters.Nf, simulationParameters.t);
 
             Dmax = Math.Max(biosensorParameters.DSd, biosensorParameters.DPd);
-            bool diffusionLayerStability = GetDiffusionStability(
+            bool isDiffusionStableInDiffusionLayer = GetDiffusionStability(
                 Dmax, biosensorParameters.n / simulationParameters.Nd, simulationParameters.t);
 
-            if (reactionStability && reactionDiffusionLayerStability && diffusionLayerStability)
+            if (isReactionStable && isDiffusionStableInFermentLayer && isDiffusionStableInDiffusionLayer)
                 return;
 
             throw new Exception("Simulation scheme is not stable");

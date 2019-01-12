@@ -1,10 +1,10 @@
-﻿using BiosensorSimulator.Parameters.Biosensors;
+﻿using System;
+using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
-using System;
 
-namespace BiosensorSimulator.SchemeCalculator
+namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
-    public class ExplicitSchemeCalculatorsdsasa : ISchemeCalculator
+    public class ExplicitSchemeCalculator : ISchemeCalculator
     {
         public void CalculateNextStep(
             double[] sCur, double[] pCur, double[] sPrev, double[] pPrev,
@@ -50,19 +50,15 @@ namespace BiosensorSimulator.SchemeCalculator
         /*double[] a = new double[];
         double[] b = ;
         double[] c = ;*/
+        
+        public void CalculateDiffusionLayerNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        {
+            throw new NotImplementedException();
+        }
 
-
-        // Calculate Diffusion layer
-
-        // Calculate Ferment layer
-
-        /* for (int i = 1; i < BiosensorParameters.N; i++)
-         {
-             double reaction = BiosensorParameters.Vmax * SPrev[i] / (BiosensorParameters.Km + SPrev[i]);
-             SCur[i] = BiosensorParameters.t * (areaDSf * (SPrev[i + 1] - 2 * SPrev[i] + SPrev[i - 1]) - reaction) + SPrev[i];
-             PCur[i] = BiosensorParameters.t * (areaDPf * (PPrev[i + 1] - 2 * PPrev[i] + PPrev[i - 1]) + reaction) + PPrev[i];
-
-             SCur[i] = BiosensorParameters.DSf * (1 - 2 * r) * SPrev[i] unj + r * unj - 1 + r * unj + 1;
-         }*/
+        public void CalculateReactionDiffusionLayerNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

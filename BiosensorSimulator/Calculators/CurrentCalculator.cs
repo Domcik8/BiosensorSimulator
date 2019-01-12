@@ -1,9 +1,9 @@
-﻿using BiosensorSimulator.SchemeCalculator;
-using System;
-using BiosensorSimulator.Parameters.Biosensors;
+﻿using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
+using System;
+using BiosensorSimulator.Calculators.SchemeCalculator;
 
-namespace BiosensorSimulator
+namespace BiosensorSimulator.Calculators
 {
     public class CurrentCalculator
     {
@@ -34,7 +34,7 @@ namespace BiosensorSimulator
                     sCur, pCur, sPrev, pPrev,
                     BiosensorParameters, SimulationParameters
                     );
-                
+
                 var iCur = pCur[1] * CurrentFactor;
 
                 if (iCur > 0 && iPrev > 0 && iCur > SimulationParameters.ZeroIBond && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)

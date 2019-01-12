@@ -1,5 +1,4 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors;
-using BiosensorSimulator.SchemeCalculator;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
