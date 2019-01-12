@@ -17,7 +17,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 Nd = 100,
                 Nf = 100,
                 N = 100,
-                t = 0.0000000000075
+                t = 7.5e-12
             };
             
             //simulationParameters.hf = biosensorParameters.c / simulationParameters.Nf;
@@ -25,18 +25,16 @@ namespace BiosensorSimulator.Parameters.Simulations
 
             foreach (var layer in biosensorParameters.Layers)
             {
-                if (layer.Type == LayerType.Enzyme)
-                {
-                    simulationParameters.hf = layer.Height / simulationParameters.Nf;
-                    layer.N = simulationParameters.Nf;
-                    layer.H = simulationParameters.hf;
-                }
+                simulationParameters.hf = layer.Height / simulationParameters.Nf;
+                layer.N = simulationParameters.Nf;
+                layer.H = simulationParameters.hf;
 
-                if (layer.Type == LayerType.DiffusionLayer)
+                layer.R = simulationParameters.t / (layer.H * layer.H);
+
+                foreach (Substance s in layer.Substances)
                 {
-                    simulationParameters.hf = layer.Height / simulationParameters.Nd;
-                    layer.N = simulationParameters.Nd;
-                    layer.H = simulationParameters.hd;
+                    s.DiffusionCoefficientOverR = s.DiffusionCoefficient * layer.R;
+                    s.DiffusionCoefficientOverSpace = s.DiffusionCoefficient / (layer.H * layer.H);
                 }
             }
 

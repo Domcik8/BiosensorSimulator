@@ -54,6 +54,11 @@ namespace BiosensorSimulator.Parameters.Biosensors
 
         public double H { get; set; }
 
+        /// <summary>
+        /// Time step over square space step
+        /// </summary>
+        public double R { get; set; }
+
         public List<Substance> Substances { get; set; }
     }
 
@@ -66,6 +71,16 @@ namespace BiosensorSimulator.Parameters.Biosensors
         public double StartConcentration { get; set; }
 
         public int ReactionRate { get; set; }
+
+        /// <summary>
+        /// DiffusionCoefficient over R
+        /// </summary>
+        public double DiffusionCoefficientOverR { get; set; }
+
+        /// <summary>
+        /// Diffusion coefficient over space
+        /// </summary>
+        public double DiffusionCoefficientOverSpace { get; set; }
     }
 
     public class Bound

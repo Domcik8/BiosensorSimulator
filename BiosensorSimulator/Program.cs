@@ -26,6 +26,9 @@ namespace BiosensorSimulator
             simulation.RunStableCurrentSimulation();
 
             Console.ReadKey();
+            Console.ReadKey();
+            Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }

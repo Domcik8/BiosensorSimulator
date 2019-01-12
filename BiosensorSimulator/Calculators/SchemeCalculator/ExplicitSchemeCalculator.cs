@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 
@@ -8,9 +9,6 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
     {
         public BiosensorParameters BiosensorParameters { get; }
         public SimulationParameters SimulationParameters { get; }
-        public double R { get; }
-        public double DSdr { get; }
-        public double DPdr { get; }
 
         public ExplicitSchemeCalculator(
             BiosensorParameters biosensorParameters, SimulationParameters simulationParameters)
@@ -21,48 +19,67 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
         public void CalculateNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
-            if (layer.Type == LayerType.Enzyme)
+            switch (layer.Type)
             {
-                CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
-            }
+                case LayerType.Enzyme:
+                    CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                    break;
 
-            if (layer.Type == LayerType.DiffusionLayer)
-            {
-                CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                case LayerType.DiffusionLayer:
+                    CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                    break;
+
+                case LayerType.SelectiveMembrane:
+                    throw new NotImplementedException();
+                    break;
+
+                case LayerType.PerforatedMembrane:
+                    throw new NotImplementedException();
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
         public void CalculateDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
-            double R = SimulationParameters.t / (layer.H * layer.H);
-            double DSdr = layer.Substances.First(s => s.Type == SubstanceType.Substrate).DiffusionCoefficient * R;
-            double DPdr = layer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient * R;
-
-            for (int i = 1; i < SimulationParameters.Nd; i++)
+            for (var i = 1; i < SimulationParameters.Nd; i++)
             {
-                sCur[i] = sPrev[i] + DSdr * (sPrev[i + 1] - 2 * sPrev[i] + sPrev[i - 1]);
-                pCur[i] = pPrev[i] + DPdr * (pPrev[i + 1] - 2 * pPrev[i] + pPrev[i - 1]);
+                sCur[i] =  CalculateDiffusionLayerNextLocation(sPrev[i - 1], sPrev[i], sPrev[i + 1],
+                    layer.Substances.First(x => x.Type == SubstanceType.Substrate).DiffusionCoefficientOverR);
+
+                pCur[i] = CalculateDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1],
+                    layer.Substances.First(x => x.Type == SubstanceType.Product).DiffusionCoefficientOverR);
             }
         }
 
-        public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        private double CalculateDiffusionLayerNextLocation(
+            double previous, double current, double next, double diffusionCoefficientOverR)
         {
-            double dSfOverhh = layer.Substances.First(s => s.Type == SubstanceType.Substrate).DiffusionCoefficient / (layer.H * layer.H);
-            double dPfOverhh = layer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient / (layer.H * layer.H);
+            return current + diffusionCoefficientOverR * (next - 2 * current + previous);
+        }
 
-            for (int i = 1; i < SimulationParameters.Nf; i++)
+        public void CalculateReactionDiffusionLayerNextStep(
+            Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        {
+            for (var i = 1; i < SimulationParameters.Nf; i++)
             {
-                double fermentReactionSpeed = BiosensorParameters.VMax * sPrev[i] /
+                var fermentReactionSpeed = BiosensorParameters.VMax * sPrev[i] /
                     (BiosensorParameters.Km + sPrev[i]);
 
-                sCur[i] = sPrev[i] + SimulationParameters.t * (dSfOverhh *
-                    (sPrev[i + 1] - 2 * sPrev[i] + sPrev[i - 1])
-                    - fermentReactionSpeed);
+                sCur[i] = CalculateReactionDiffusionLayerNextLocation(sPrev[i - 1], sPrev[i], sPrev[i + 1], -fermentReactionSpeed,
+                    layer.Substances.First(x => x.Type == SubstanceType.Substrate).DiffusionCoefficientOverSpace);
 
-                pCur[i] = pPrev[i] + SimulationParameters.t * (dPfOverhh *
-                    (pPrev[i + 1] - 2 * pPrev[i] + pPrev[i - 1])
-                    + fermentReactionSpeed);
+                pCur[i] = CalculateReactionDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1], fermentReactionSpeed, layer.Substances.First(x => x.Type == SubstanceType.Product).DiffusionCoefficientOverSpace);
             }
+        }
+        
+        private double CalculateReactionDiffusionLayerNextLocation(double previous, double current, double next,
+            double fermentReactionSpeed, double diffusionCoefficientOverSpace)
+        {
+            return current + SimulationParameters.t * (diffusionCoefficientOverSpace *
+                (next - 2 * current + previous) + fermentReactionSpeed);
         }
     }
 }
