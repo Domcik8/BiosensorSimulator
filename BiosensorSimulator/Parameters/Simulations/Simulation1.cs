@@ -7,7 +7,7 @@ namespace BiosensorSimulator.Parameters.Simulations
     {
         public SimulationParameters InitiationParameters(BiosensorParameters biosensorParameters)
         {
-            SimulationParameters simulationParameters = new SimulationParameters()
+            var simulationParameters = new SimulationParameters()
             {
                 ne = 2,
                 DecayRate = 1e-5,

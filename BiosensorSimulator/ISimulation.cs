@@ -10,5 +10,9 @@ namespace BiosensorSimulator
         BiosensorParameters BiosensorParameters { get; }
         ISchemeCalculator SchemeCalculator { get; }
         CurrentCalculator CurrentCalculator { get; }
+
+        void RunSimulation();
+        void RunStableCurrentSimulation();
+        void ShowValidationValues(BiosensorParameters biosensorParameters, SimulationParameters simulationParameters);
     }
 }

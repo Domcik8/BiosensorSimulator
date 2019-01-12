@@ -10,39 +10,28 @@ namespace BiosensorSimulator
     {
         static void Main(string[] args)
         {
-            BiosensorParameters biosensorParameters =
-                new ZeroOrderSimulation().GetInitiationParameters();
+            // You can choose different starting conditions
+            var biosensorParameters = new FirstOrderSimulation().GetInitiationParameters();
+            var simulationParameters = new Simulation1().InitiationParameters(biosensorParameters);
+            var schemeCalculator = new ImplicitSchemeCalculator(biosensorParameters, simulationParameters);
 
-            SimulationParameters simulationParameters =
-                new Simulation1().InitiationParameters(biosensorParameters);
+            var currentCalculator = new CurrentCalculator(simulationParameters, biosensorParameters, schemeCalculator);
 
-            ISchemeCalculator schemeCalculator =
-                new ImplicitSchemeCalculator();
+            ISimulation simulation = new Simulation1D(simulationParameters, biosensorParameters, schemeCalculator, currentCalculator);
 
-            CurrentCalculator currentCalculator =
-                new CurrentCalculator(simulationParameters, biosensorParameters, schemeCalculator);
+            //Analitic model validation
 
-            Simulation1D simulation1D = new Simulation1D(
-                simulationParameters, biosensorParameters,
-                schemeCalculator, currentCalculator
-            );
-
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            GetValidationValues(biosensorParameters, simulationParameters);
-
+            
+            
             //Start simulation
-            // Calculate steady current
-            simulation1D.CalculateSteadyCurrent();
+            simulation.RunStableCurrentSimulation();
 
-            // Run simulation till the end of times
-            /*for (int i = 1; i < 0.5 / simulationParameters.t; i++)
-                simulation1D.CalculateNextLayer();*/
+            simulation.ShowValidationValues(biosensorParameters, simulationParameters);
 
-            stopWatch.Stop();
+            //PrintResults(stopWatch, simulation1D.SCur, simulation1D.PCur, simulation1D.SteadyCurrent);
+            
 
-            PrintResults(stopWatch, simulation1D.SCur, simulation1D.PCur, simulation1D.SteadyCurrent);
+            
 
             Console.ReadKey();
 
@@ -54,18 +43,6 @@ namespace BiosensorSimulator
             var r = new double[] {-1, 7, 7};
            
             matrix.SolveTridiagonalInPlace(a, b, c, r, b.Length);*/
-        }
-
-        public static void GetValidationValues(
-            BiosensorParameters biosensorParameters,
-            SimulationParameters simulationParameters)
-        {
-            AnaliticSimulation simulation = new AnaliticSimulation();
-            double firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(biosensorParameters, simulationParameters);
-            double zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(biosensorParameters, simulationParameters);
-
-            Console.WriteLine($"First order current : {firstOrderCurrent} nA/mm^2");
-            Console.WriteLine($"Zero order current : {zeroOrderCurrent} uA/mm^2");
         }
 
         public static void PrintResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)

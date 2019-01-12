@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.SchemeCalculator;
 
-namespace BiosensorSimulator
+namespace BiosensorSimulator._1D_Simulations
 {
-    public class Simulation1D : ISimulation
+    public class SingleLaterSimulation1D : ISimulation
     {
         public SimulationParameters SimulationParameters { get; }
         public BiosensorParameters BiosensorParameters { get; }
@@ -16,17 +17,14 @@ namespace BiosensorSimulator
         public double[] SPrev, PPrev;
         public double SteadyCurrent;
 
-        public Simulation1D(
+        public SingleLaterSimulation1D(
             SimulationParameters simulationParameters, BiosensorParameters biosensorParameters,
-            ISchemeCalculator schemeCalculator, CurrentCalculator currentCalculator
-            )
+            ISchemeCalculator schemeCalculator, CurrentCalculator currentCalculator)
         {
             SimulationParameters = simulationParameters;
             BiosensorParameters = biosensorParameters;
-            CurrentCalculator = currentCalculator;
             SchemeCalculator = schemeCalculator;
-
-            AssertSimulationStability(simulationParameters, biosensorParameters);
+            CurrentCalculator = currentCalculator;
         }
 
         public void SetInitialConditions()
@@ -42,37 +40,49 @@ namespace BiosensorSimulator
 
         public void RunSimulation()
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            AssertSimulationStability(SimulationParameters, BiosensorParameters);
             SetInitialConditions();
-            CalculateNextLayer();
+
+            for (var i = 0; i < SimulationParameters.M; i++)
+                CalculateNextStep();
+
+            stopWatch.Stop();
         }
 
-        public void ShowValidationValues(BiosensorParameters biosensorParameters, SimulationParameters simulationParameters)
+        public void RunStableCurrentSimulation()
         {
-            var simulation = new AnaliticSimulation();
-            var firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(biosensorParameters, simulationParameters);
-            var zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(biosensorParameters, simulationParameters);
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
 
-            Console.WriteLine($"First order current : {firstOrderCurrent} nA/mm^2");
-            Console.WriteLine($"Zero order current : {zeroOrderCurrent} uA/mm^2");
-        }
-
-        public void CalculateNextLayer()
-        {
-           SchemeCalculator.CalculateNextStep(
-                SCur, PCur, SPrev, PPrev,
-                BiosensorParameters, SimulationParameters
-            );
-        }
-
-        public void CalculateSteadyCurrent()
-        {
             SteadyCurrent = CurrentCalculator.CalculateStableCurrent(SCur, PCur, SPrev, PPrev);
+            
+            stopWatch.Stop();
         }
 
-        private void AssertSimulationStability(SimulationParameters simulationParameters, BiosensorParameters biosensorParameters)
+        private void CalculateNextStep()
+        {
+            Array.Copy(SCur, SPrev, SCur.Length);
+            Array.Copy(PCur, PPrev, PCur.Length);
+
+            SchemeCalculator.CalculateDiffusionLayerNextStep(SCur, PCur, SPrev, PPrev);
+            SetBondaryConditions();
+        }
+
+        public void SetBondaryConditions()
+        {
+            SCur[SimulationParameters.N] = BiosensorParameters.S0;
+            SCur[0] = SCur[1];
+
+            PCur[SimulationParameters.N] = BiosensorParameters.P0;
+            PCur[0] = 0;
+        }
+
+        public void AssertSimulationStability(SimulationParameters simulationParameters, BiosensorParameters biosensorParameters)
         {
             new ImplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensorParameters);
         }
-
     }
 }

@@ -4,7 +4,7 @@ using System;
 
 namespace BiosensorSimulator.SchemeCalculator
 {
-    public class ExplicitSchemeCalculator : ISchemeCalculator
+    public class ExplicitSchemeCalculatorsdsasa : ISchemeCalculator
     {
         public void CalculateNextStep(
             double[] sCur, double[] pCur, double[] sPrev, double[] pPrev,
