@@ -12,9 +12,11 @@ namespace BiosensorSimulator.Simulations
         public BiosensorParameters BiosensorParameters { get; }
         public ISchemeCalculator SchemeCalculator { get; }
 
+        public double CurrentFactor { get; }
+
         public double[] SCur, PCur;
         public double[] SPrev, PPrev;
-        public double SteadyCurrent;
+        public double Current;
 
         protected BaseSimulation(
             SimulationParameters simulationParameters,
@@ -24,6 +26,9 @@ namespace BiosensorSimulator.Simulations
             SimulationParameters = simulationParameters;
             BiosensorParameters = biosensorParameters;
             SchemeCalculator = schemeCalculator;
+
+            CurrentFactor = SimulationParameters.ne * SimulationParameters.F
+                * BiosensorParameters.DPf / SimulationParameters.hf;
         }
 
         // Run simulation for x s
@@ -37,7 +42,11 @@ namespace BiosensorSimulator.Simulations
             for (var i = 0; i < SimulationParameters.M; i++)
                 CalculateNextStep();
 
+            Current = GetCurrent();
+
             stopWatch.Stop();
+
+            PrintSimulationResults(stopWatch, Current);
         }
 
         /// <summary>
@@ -65,8 +74,8 @@ namespace BiosensorSimulator.Simulations
             var firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(BiosensorParameters, SimulationParameters);
             var zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(BiosensorParameters, SimulationParameters);
 
-            Console.WriteLine($"First order current : {firstOrderCurrent} nA/mm^2");
-            Console.WriteLine($"Zero order current : {zeroOrderCurrent} uA/mm^2");
+            Console.WriteLine($"First order current : {firstOrderCurrent} A/mm^2");
+            Console.WriteLine($"Zero order current : {zeroOrderCurrent} A/mm^2");
         }
 
         /// <summary>
@@ -98,13 +107,12 @@ namespace BiosensorSimulator.Simulations
         {
             long i = 1;
             double iPrev = 0;
-            var currentFactor = SimulationParameters.ne * SimulationParameters.F * BiosensorParameters.DPf / SimulationParameters.hf;
 
             while (true)
             {
                 CalculateNextStep();
 
-                var iCur = PCur[1] * currentFactor;
+                var iCur = GetCurrent();
 
                 if (iCur > 0 && iPrev > 0
                     && iCur > SimulationParameters.ZeroIBond
@@ -117,15 +125,21 @@ namespace BiosensorSimulator.Simulations
             }
         }
 
+        private double GetCurrent()
+        {
+            return PCur[1] * CurrentFactor;
+        }
+
         private void PrintSimulationResults(Stopwatch stopwatch, double I)
         {
             Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
-            Console.WriteLine($"Steady current = {I}");
+            Console.WriteLine($"Steady current = {I} A");
         }
 
-        private void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur)
+        private void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)
         {
             Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
+            Console.WriteLine($"Current = {I} A");
 
             for (int i = 0; i < sCur.Length; i++)
                 Console.WriteLine($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");

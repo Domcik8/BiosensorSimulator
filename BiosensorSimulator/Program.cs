@@ -13,7 +13,7 @@ namespace BiosensorSimulator
         static void Main(string[] args)
         {
             // You can choose different starting conditions
-            var biosensorParameters = new FirstOrderSimulation().GetInitiationParameters();
+            var biosensorParameters = new ZeroOrderSimulation().GetInitiationParameters();
             var simulationParameters = new Simulation1().InitiationParameters(biosensorParameters);
             var schemeCalculator = new ExplicitSchemeCalculator(biosensorParameters, simulationParameters);
             
@@ -21,17 +21,11 @@ namespace BiosensorSimulator
                 simulationParameters, biosensorParameters, schemeCalculator);
 
             //Analitic model validation
-
-            
-            // AssertSimulation
-            simulation.AssertSimulation();
-            
+            simulation.AssertSimulationStability();
+            simulation.ShowValidationValues();
             simulation.RunStableCurrentSimulation();
 
-            simulation.ShowValidationValues();
-
             Console.ReadKey();
-
         }
     }
 }
