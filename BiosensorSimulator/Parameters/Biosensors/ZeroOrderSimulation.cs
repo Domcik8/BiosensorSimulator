@@ -4,7 +4,7 @@
     {
         public BiosensorParameters GetInitiationParameters()
         {
-            BiosensorParameters biosensorParameters = new BiosensorParameters()
+            var biosensorParameters = new BiosensorParameters()
             {
                 P0 = 0,
                 DSf = 300e-6,

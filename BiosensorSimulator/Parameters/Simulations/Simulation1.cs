@@ -4,7 +4,8 @@ namespace BiosensorSimulator.Parameters.Simulations
 {
     public class Simulation1 : ISimulationParametersSuplier
     {
-        public SimulationParameters InitiationParameters(BiosensorParameters biosensorParameters)
+        public SimulationParameters InitiationParameters(
+            BiosensorParameters biosensorParameters)
         {
             var simulationParameters = new SimulationParameters()
             {

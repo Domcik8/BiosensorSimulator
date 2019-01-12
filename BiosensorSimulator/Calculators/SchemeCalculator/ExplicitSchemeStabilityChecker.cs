@@ -19,18 +19,18 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             bool isDiffusionStableInDiffusionLayer = GetDiffusionStability(
                 Dmax, biosensorParameters.n / simulationParameters.Nd, simulationParameters.t);
 
-            if (isReactionStable && isDiffusionStableInFermentLayer && isDiffusionStableInDiffusionLayer)
+            if (isReactionStable && isDiffusionStableInFermentLayer /*&& isDiffusionStableInDiffusionLayer*/)
                 return;
 
             throw new Exception("Simulation scheme is not stable");
         }
-        
-        private bool GetDiffusionStability(double D, double h, double t)
+
+        public bool GetDiffusionStability(double D, double h, double t)
         {
             return D * t / (h * h) <= 0.25;
         }
 
-        private bool GetReactionStability(double Vmax, double Km, double t)
+        public bool GetReactionStability(double Vmax, double Km, double t)
         {
             return t * Vmax / Km <= 0.5;
         }

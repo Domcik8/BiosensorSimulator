@@ -57,6 +57,7 @@ namespace BiosensorSimulator.Simulations
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
+            SetInitialConditions();
             var stableCurrent = GetStableCurrent();
 
             stopWatch.Stop();

@@ -34,13 +34,13 @@
             /* loop from 1 to X - 1 inclusive, performing the forward sweep */
             for (long ix = 1; ix < X; ix++)
             {
-                double m = 1.0 / (b[ix] - a[ix] * c[ix - 1]);
+                var m = 1.0 / (b[ix] - a[ix] * c[ix - 1]);
                 c[ix] = c[ix] * m;
                 x[ix] = (x[ix] - a[ix] * x[ix - 1]) * m;
             }
 
             /* loop from X - 2 to 0 inclusive (safely testing loop condition for an unsigned integer), to perform the back substitution */
-            for (long ix = X - 2; ix > -1; ix--)
+            for (var ix = X - 2; ix > -1; ix--)
                 x[ix] -= c[ix] * x[ix + 1];
 
             return x;
