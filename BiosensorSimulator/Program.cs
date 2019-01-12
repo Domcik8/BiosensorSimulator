@@ -4,6 +4,7 @@ using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Simulations;
 using System;
+using BiosensorSimulator.Simulations._1D_Simulations;
 
 namespace BiosensorSimulator
 {
@@ -14,11 +15,10 @@ namespace BiosensorSimulator
             // You can choose different starting conditions
             var biosensorParameters = new FirstOrderSimulation().GetInitiationParameters();
             var simulationParameters = new Simulation1().InitiationParameters(biosensorParameters);
-            var schemeCalculator = new ImplicitSchemeCalculator(biosensorParameters, simulationParameters);
-
-            var currentCalculator = new CurrentCalculator(simulationParameters, biosensorParameters, schemeCalculator);
-
-            ISimulation simulation = new Simulation1D(simulationParameters, biosensorParameters, schemeCalculator, currentCalculator);
+            var schemeCalculator = new ExplicitSchemeCalculator(biosensorParameters, simulationParameters);
+            
+            BaseSimulation simulation = new SingleLaterSimulation1D(
+                simulationParameters, biosensorParameters, schemeCalculator);
 
             //Analitic model validation
 

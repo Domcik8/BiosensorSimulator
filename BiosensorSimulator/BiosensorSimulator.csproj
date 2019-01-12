@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Simulations\1D Simulations\SingleLayerSimulation1D.cs" />
+    <Compile Include="Simulations\1D Simulations\SingleLaterSimulation1D.cs" />
     <Compile Include="Simulations\AnaliticSimulation.cs" />
     <Compile Include="Parameters\Biosensors\SimulationValidation.cs" />
     <Compile Include="Parameters\Biosensors\ZeroOrderSimulation.cs" />
@@ -60,14 +60,13 @@
     <Compile Include="Parameters\Simulations\Simulation1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeCalculator.cs" />
-    <Compile Include="Calculators\SchemeCalculator\ISchemeCalculator.cs" />
     <Compile Include="Calculators\SchemeCalculator\ImplicitSchemeCalculator.cs" />
-    <Compile Include="Simulations\ISimulation.cs" />
-    <Compile Include="Simulations\Simulation1D.cs" />
+    <Compile Include="Calculators\SchemeCalculator\ISchemeCalculator.cs" />
+    <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeCalculator.cs" />
+    <Compile Include="Simulations\BaseSimulation.cs" />
     <Compile Include="Calculators\CurrentCalculator.cs" />
     <Compile Include="Parameters\Simulations\SimulationParameters.cs" />
-    <Compile Include="Calculators\SchemeCalculator\ImplicitSchemeStabilityChecker.cs" />
+    <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeStabilityChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

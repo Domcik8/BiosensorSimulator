@@ -1,54 +1,64 @@
-﻿using BiosensorSimulator.Parameters.Biosensors;
+﻿using System;
+using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 
 namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class ImplicitSchemeCalculator : ISchemeCalculator
     {
-        public BiosensorParameters BiosensorParameters { get; }
-        public SimulationParameters SimulationParameters { get; }
-        public double R { get; }
-        public double DSdr { get; }
-        public double DPdr { get; }
-
-        public ImplicitSchemeCalculator(
+        public void CalculateNextStep(
+            double[] sCur, double[] pCur, double[] sPrev, double[] pPrev,
             BiosensorParameters biosensorParameters, SimulationParameters simulationParameters)
         {
-            BiosensorParameters = biosensorParameters;
-            SimulationParameters = simulationParameters;
+            /*Copy(SPrev, SCur);
+            Copy(PPrev, PCur);
 
-            R = simulationParameters.t / (simulationParameters.hd * simulationParameters.hd);
-            DSdr = biosensorParameters.DSd * R;
-            DPdr = biosensorParameters.DPd * R;
+            double DsOverhh = BiosensorParameters.Ds / (BiosensorParameters.hd * BiosensorParameters.hd);
+            double DpOverhh = BiosensorParameters.Dp / (BiosensorParameters.hd * BiosensorParameters.hd);
+
+            for (int i = 1; i < BiosensorParameters.N; i++) // 29
+            {
+                double commonMember = BiosensorParameters.Vmax * SPrev[i] / (BiosensorParameters.Km + SPrev[i]);
+                SCur[i] = BiosensorParameters.t * (DsOverhh * (SPrev[i + 1] - 2 * SPrev[i] + SPrev[i - 1]) - commonMember) + SPrev[i];
+                PCur[i] = BiosensorParameters.t * (DpOverhh * (PPrev[i + 1] - 2 * PPrev[i] + PPrev[i - 1]) + commonMember) + PPrev[i];
+            }
+
+            SCur[BiosensorParameters.N] = BiosensorParameters.S0; //33
+            SCur[0] = Scur[1]; //33
+            PCur[BiosensorParameters.N] = BiosensorParameters.P0; //34
+            PCur[0] = 0; //Pcur[0] = Pcur[1];//34*/
+
+            throw new NotImplementedException();
         }
 
+        public void Copy(double[] a, double[] b)
+        {
+            for (int i = 1; i < a.Length; i++)
+                a[i] = b[i];
+        }
+
+        /*SPrev = SCur;
+            PPrev = PPrev;
+
+            double h2 = (BiosensorParameters.hd * BiosensorParameters.hd);
+            double r = BiosensorParameters.t / h2;
+            double rSd = r * (BiosensorParameters.DSd);
+            double rSf = r * (BiosensorParameters.DSf - (x / h2));
+            double rPd = r * (BiosensorParameters.DPd);
+            double rPf = r * (BiosensorParameters.DPf );*/
+
+        /*double[] a = new double[];
+        double[] b = ;
+        double[] c = ;*/
+        
         public void CalculateDiffusionLayerNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
-            for (int i = 1; i < SimulationParameters.Nd; i++)
-            {
-                sCur[i] = sPrev[i] + DSdr * (sPrev[i + 1] - 2 * sPrev[i] + sPrev[i - 1]);
-                pCur[i] = pPrev[i] + DPdr * (pPrev[i + 1] - 2 * pPrev[i] + pPrev[i - 1]);
-            }
+            throw new NotImplementedException();
         }
 
         public void CalculateReactionDiffusionLayerNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
-            double dSfOverhh = BiosensorParameters.DSf / (SimulationParameters.hf * SimulationParameters.hf);
-            double dPfOverhh = BiosensorParameters.DPf / (SimulationParameters.hf * SimulationParameters.hf);
-
-            for (int i = 1; i < SimulationParameters.Nf; i++)
-            {
-                double fermentReactionSpeed = BiosensorParameters.Vmax * sPrev[i] /
-                    (BiosensorParameters.Km + sPrev[i]);
-
-                sCur[i] = sPrev[i] + SimulationParameters.t * (dSfOverhh *
-                    (sPrev[i + 1] - 2 * sPrev[i] + sPrev[i - 1])
-                    - fermentReactionSpeed);
-
-                pCur[i] = pPrev[i] + SimulationParameters.t * (dPfOverhh *
-                    (pPrev[i + 1] - 2 * pPrev[i] + pPrev[i - 1])
-                    + fermentReactionSpeed);
-            }
+            throw new NotImplementedException();
         }
     }
 }

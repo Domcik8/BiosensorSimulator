@@ -4,7 +4,7 @@ using BiosensorSimulator.Parameters.Simulations;
 
 namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
-    public class ImplicitSchemeStabilityChecker
+    public class ExplicitSchemeStabilityChecker
     {
         public void AssertStability(SimulationParameters simulationParameters, BiosensorParameters biosensorParameters)
         {
