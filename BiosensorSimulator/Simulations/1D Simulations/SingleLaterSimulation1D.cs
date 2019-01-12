@@ -19,7 +19,7 @@ namespace BiosensorSimulator.Simulations._1D_Simulations
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-
+            SetInitialConditions();
             SteadyCurrent = new CurrentCalculator(this).CalculateStableCurrent();
 
             stopWatch.Stop();
@@ -45,7 +45,11 @@ namespace BiosensorSimulator.Simulations._1D_Simulations
             Array.Copy(SCur, SPrev, SCur.Length);
             Array.Copy(PCur, PPrev, PCur.Length);
 
-            SchemeCalculator.CalculateDiffusionLayerNextStep(SCur, PCur, SPrev, PPrev);
+            foreach (var layer in BiosensorParameters.Layers)
+            {
+                SchemeCalculator.CalculateNextStep(layer, SCur, PCur, SPrev, PPrev);
+            }
+            
             SetBondaryConditions();
         }
 

@@ -1,6 +1,7 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using System;
+using System.Linq;
 
 namespace BiosensorSimulator.Simulations
 {
@@ -11,21 +12,25 @@ namespace BiosensorSimulator.Simulations
         {
             biosensorParameters.S0 = 0.01 * biosensorParameters.Km;
 
-            double alpha = Math.Sqrt(biosensorParameters.Vmax / (biosensorParameters.Km * biosensorParameters.DSf));
+            var enzymeLayer = biosensorParameters.Layers.First(l => l.Type == LayerType.Enzyme);
 
-            double iCur = simulationParameters.ne * simulationParameters.F * biosensorParameters.DPf *
-                          biosensorParameters.S0 / biosensorParameters.c *
-                          (1 - 1 / Math.Cosh(alpha * biosensorParameters.c)) / 1e-6;
+            double alpha = Math.Sqrt(biosensorParameters.VMax / (biosensorParameters.Km * enzymeLayer.Substances.First(s => s.Type == SubstanceType.Substrate).DiffusionCoefficient));
+
+            double iCur = simulationParameters.ne * simulationParameters.F * enzymeLayer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient *
+                          biosensorParameters.S0 / enzymeLayer.Height *
+                          (1 - 1 / Math.Cosh(alpha * enzymeLayer.Height)) / 1e-6;
 
             return iCur;
         }
 
         public double GetZeroOrderAnaliticSolution(BiosensorParameters biosensorParameters, SimulationParameters simulationParameters)
         {
+            var enzymeLayer = biosensorParameters.Layers.First(l => l.Type == LayerType.Enzyme);
+
             biosensorParameters.S0 = 1000 * biosensorParameters.Km;
 
-            double iCur = simulationParameters.ne * simulationParameters.F * biosensorParameters.Vmax *
-                          biosensorParameters.c / 2 / 1e-3;
+            double iCur = simulationParameters.ne * simulationParameters.F * biosensorParameters.VMax *
+                          enzymeLayer.Height / 2 / 1e-3;
 
             return iCur;
         }

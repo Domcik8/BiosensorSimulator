@@ -1,4 +1,5 @@
-﻿using BiosensorSimulator.Parameters.Biosensors;
+﻿using System.Linq;
+using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 
 namespace BiosensorSimulator.Calculators.SchemeCalculator
@@ -16,14 +17,27 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         {
             BiosensorParameters = biosensorParameters;
             SimulationParameters = simulationParameters;
-
-            R = simulationParameters.t / (simulationParameters.hd * simulationParameters.hd);
-            DSdr = biosensorParameters.DSd * R;
-            DPdr = biosensorParameters.DPd * R;
         }
 
-        public void CalculateDiffusionLayerNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        public void CalculateNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
+            if (layer.Type == LayerType.Enzyme)
+            {
+                CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+            }
+
+            if (layer.Type == LayerType.DiffusionLayer)
+            {
+                CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+            }
+        }
+
+        public void CalculateDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        {
+            double R = SimulationParameters.t / (layer.H * layer.H);
+            double DSdr = layer.Substances.First(s => s.Type == SubstanceType.Substrate).DiffusionCoefficient * R;
+            double DPdr = layer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient * R;
+
             for (int i = 1; i < SimulationParameters.Nd; i++)
             {
                 sCur[i] = sPrev[i] + DSdr * (sPrev[i + 1] - 2 * sPrev[i] + sPrev[i - 1]);
@@ -31,14 +45,14 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             }
         }
 
-        public void CalculateReactionDiffusionLayerNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
-            double dSfOverhh = BiosensorParameters.DSf / (SimulationParameters.hf * SimulationParameters.hf);
-            double dPfOverhh = BiosensorParameters.DPf / (SimulationParameters.hf * SimulationParameters.hf);
+            double dSfOverhh = layer.Substances.First(s => s.Type == SubstanceType.Substrate).DiffusionCoefficient / (layer.H * layer.H);
+            double dPfOverhh = layer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient / (layer.H * layer.H);
 
             for (int i = 1; i < SimulationParameters.Nf; i++)
             {
-                double fermentReactionSpeed = BiosensorParameters.Vmax * sPrev[i] /
+                double fermentReactionSpeed = BiosensorParameters.VMax * sPrev[i] /
                     (BiosensorParameters.Km + sPrev[i]);
 
                 sCur[i] = sPrev[i] + SimulationParameters.t * (dSfOverhh *

@@ -1,6 +1,8 @@
 ﻿using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Simulations;
 using System;
+using System.Linq;
+using BiosensorSimulator.Parameters.Biosensors;
 
 namespace BiosensorSimulator.Calculators
 {
@@ -13,8 +15,10 @@ namespace BiosensorSimulator.Calculators
         {
             Simulation = simulation;
 
-            CurrentFactor = simulation.SimulationParameters.ne * simulation.SimulationParameters.F *
-                simulation.BiosensorParameters.DPf / simulation.SimulationParameters.hf;
+            var enzymeLayer = simulation.BiosensorParameters.Layers.First(l => l.Type == LayerType.Enzyme);
+            
+            CurrentFactor = simulation.SimulationParameters.ne * simulation.SimulationParameters.F * 
+                            enzymeLayer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient / enzymeLayer.H;
         }
 
         public double CalculateStableCurrent()
