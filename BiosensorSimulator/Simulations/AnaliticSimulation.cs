@@ -15,7 +15,7 @@ namespace BiosensorSimulator.Simulations
 
             double iCur = simulationParameters.ne * simulationParameters.F * biosensorParameters.DPf *
                           biosensorParameters.S0 / biosensorParameters.c *
-                          (1 - 1 / Math.Cosh(alpha * biosensorParameters.c)) / 1e-6;
+                          (1 - 1 / Math.Cosh(alpha * biosensorParameters.c));
 
             return iCur;
         }
@@ -25,7 +25,7 @@ namespace BiosensorSimulator.Simulations
             biosensorParameters.S0 = 1000 * biosensorParameters.Km;
 
             double iCur = simulationParameters.ne * simulationParameters.F * biosensorParameters.Vmax *
-                          biosensorParameters.c / 2 / 1e-3;
+                          biosensorParameters.c / 2;
 
             return iCur;
         }

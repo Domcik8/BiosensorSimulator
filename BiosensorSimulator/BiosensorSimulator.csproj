@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Simulations\1D Simulations\SingleLaterSimulation1D.cs" />
+    <Compile Include="Simulations\Simulations1D\SingleLayerSimulation1D.cs" />
     <Compile Include="Simulations\AnaliticSimulation.cs" />
     <Compile Include="Parameters\Biosensors\SimulationValidation.cs" />
     <Compile Include="Parameters\Biosensors\ZeroOrderSimulation.cs" />
@@ -64,7 +64,6 @@
     <Compile Include="Calculators\SchemeCalculator\ISchemeCalculator.cs" />
     <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeCalculator.cs" />
     <Compile Include="Simulations\BaseSimulation.cs" />
-    <Compile Include="Calculators\CurrentCalculator.cs" />
     <Compile Include="Parameters\Simulations\SimulationParameters.cs" />
     <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeStabilityChecker.cs" />
   </ItemGroup>
