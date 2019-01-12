@@ -3,6 +3,7 @@ using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BiosensorSimulator.Simulations
 {
@@ -27,8 +28,10 @@ namespace BiosensorSimulator.Simulations
             BiosensorParameters = biosensorParameters;
             SchemeCalculator = schemeCalculator;
 
-            CurrentFactor = SimulationParameters.ne * SimulationParameters.F
-                * BiosensorParameters.DPf / SimulationParameters.hf;
+            var enzymeLayer = biosensorParameters.Layers.First(l => l.Type == LayerType.Enzyme);
+
+            CurrentFactor = simulationParameters.ne * simulationParameters.F *
+                            enzymeLayer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient / enzymeLayer.H;
         }
 
         // Run simulation for x s
