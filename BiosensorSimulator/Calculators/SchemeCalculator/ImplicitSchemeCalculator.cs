@@ -51,12 +51,17 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         double[] b = ;
         double[] c = ;*/
         
-        public void CalculateDiffusionLayerNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        public void CalculateDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
             throw new NotImplementedException();
         }
 
-        public void CalculateReactionDiffusionLayerNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CalculateNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
             throw new NotImplementedException();
         }

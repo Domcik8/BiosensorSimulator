@@ -1,28 +1,98 @@
-﻿namespace BiosensorSimulator.Parameters.Biosensors
+﻿using System.Collections.Generic;
+
+namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public struct BiosensorParameters
+    //public struct BiosensorParameters
+    //{
+    //    // Initial concentration of substrate and product
+    //    public double S0, P0;
+
+    //    // Substrate and Product diffusion cofficents in enzyme layer
+    //    public double DSf, DPf;
+
+    //    // Substrate and Product diffusion cofficent in diffusion layer
+    //    public double DSd, DPd;
+
+    //    // Maximal enzymatic rate
+    //    public double Vmax;
+
+    //    // Michaelis constant
+    //    public double Km;
+
+    //    // Biosensor unit parameters:
+    //    // a - microreactor radius,
+    //    // b - unit radius,
+    //    // c - ferment layer height,
+    //    // d - viso jutiklio
+    //    // n - Nernst layer height (d - c)
+    //    public double a, b, c, d, n;
+    //}
+
+    public class BiosensorParameters
     {
-        // Initial concentration of substrate and product
-        public double S0, P0;
+        public double S0 { get; set; }
+        public double P0 { get; set; }
 
-        // Substrate and Product diffusion cofficents in enzyme layer
-        public double DSf, DPf;
+        public double VMax { get; set; }
+        public double Km { get; set; }
 
-        // Substrate and Product diffusion cofficent in diffusion layer
-        public double DSd, DPd;
+        public List<Layer> Layers { get; set; }
+        public List<Bound> Bounds { get; set; }
 
-        // Maximal enzymatic rate
-        public double Vmax;
+        public double MicroReactorRadius { get; set; }
+        public double UnitRadius { get; set; }
+        public double NerstLayerHeight { get; set; }
+    }
 
-        // Michaelis constant
-        public double Km;
+    public class Layer
+    {
+        public LayerType Type { get; set; }
 
-        // Biosensor unit parameters:
-        // a - microreactor radius,
-        // b - unit radius,
-        // c - ferment layer height,
-        // d - diffusion layer height,
-        // n - Nernst layer height (d - c)
-        public double a, b, c, d, n;
+        public double Height { get; set; }
+
+        public long N { get; set; }
+
+        public double H { get; set; }
+
+        public List<Substance> Substances { get; set; }
+    }
+
+    public class Substance
+    {
+        public SubstanceType Type { get; set; }
+
+        public double DiffusionCoefficient { get; set; }
+
+        public double StartConcentration { get; set; }
+
+        public int ReactionRate { get; set; }
+    }
+
+    public class Bound
+    {
+        public BoundType Type { get; set; }
+
+        public double StartConcentration { get; set; }
+
+    }
+
+    public enum LayerType
+    {
+        SelectiveMembrane,
+        Enzyme,
+        PerforatedMembrane,
+        DiffusionLayer
+    }
+
+    public enum SubstanceType
+    {
+        Product,
+        Substrate
+    }
+
+    public enum BoundType
+    {
+        Start,
+        End
     }
 }
