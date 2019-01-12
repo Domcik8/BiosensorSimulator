@@ -3,9 +3,8 @@ using BiosensorSimulator.Calculators;
 using BiosensorSimulator.Calculators.SchemeCalculator;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
-using BiosensorSimulator.Simulations;
 
-namespace BiosensorSimulator
+namespace BiosensorSimulator.Simulations
 {
     public class Simulation1D : ISimulation
     {
@@ -46,6 +45,21 @@ namespace BiosensorSimulator
         {
             SetInitialConditions();
             CalculateNextLayer();
+        }
+
+        public void RunStableCurrentSimulation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowValidationValues()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AssertSimulation()
+        {
+            throw new NotImplementedException();
         }
 
         public void ShowValidationValues(BiosensorParameters biosensorParameters, SimulationParameters simulationParameters)

@@ -28,7 +28,7 @@ namespace BiosensorSimulator
             
             simulation.RunStableCurrentSimulation();
 
-            simulation.ShowValidationValues(biosensorParameters, simulationParameters);
+            simulation.ShowValidationValues();
 
             Console.ReadKey();
 

@@ -4,9 +4,8 @@ using BiosensorSimulator.Calculators;
 using BiosensorSimulator.Calculators.SchemeCalculator;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
-using BiosensorSimulator.Simulations;
 
-namespace BiosensorSimulator._1D_Simulations
+namespace BiosensorSimulator.Simulations._1D_Simulations
 {
     public class SingleLaterSimulation1D : ISimulation
     {
@@ -61,6 +60,16 @@ namespace BiosensorSimulator._1D_Simulations
             SteadyCurrent = CurrentCalculator.CalculateStableCurrent(SCur, PCur, SPrev, PPrev);
             
             stopWatch.Stop();
+        }
+
+        public void ShowValidationValues()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AssertSimulation()
+        {
+            throw new NotImplementedException();
         }
 
         private void CalculateNextStep()
