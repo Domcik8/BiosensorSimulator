@@ -54,7 +54,7 @@
     <Compile Include="Parameters\Biosensors\FirstOrderSimulation.cs" />
     <Compile Include="Parameters\Simulations\ISimulationParametersSuplier.cs" />
     <Compile Include="Parameters\Biosensors\Biosensor.cs" />
-    <Compile Include="Parameters\Biosensors\IBiosensorParametersSuplier.cs" />
+    <Compile Include="Parameters\Biosensors\IBiosensorSupplier.cs" />
     <Compile Include="Parameters\Biosensors\BIK04.cs" />
     <Compile Include="Calculators\MatrixCalculator.cs" />
     <Compile Include="Parameters\Simulations\Simulation1.cs" />

@@ -2,11 +2,11 @@
 {
     public struct SimulationParameters
     {
-        // Simulation1D time, time steps and space steps
-        public double T, t, hd, hf;
+        // Simulation1D time, time steps
+        public double T, t;
 
-        // Simulation number of space steps in diffusion layer and time steps
-        public long Nd, Nf, N, M;
+        // Simulation number of space steps and time steps
+        public long N, M;
         
         // Number of electrons involved in charge transfer
         public int ne;
@@ -18,6 +18,6 @@
         public double F;
         
         // Lowest allowed current threshold
-        public double ZeroIBond;
+        public double ZeroIBond;   
     }
 }
