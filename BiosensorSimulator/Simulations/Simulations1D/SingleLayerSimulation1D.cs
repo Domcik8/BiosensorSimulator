@@ -27,11 +27,8 @@ namespace BiosensorSimulator.Simulations.Simulations1D
         {
             Array.Copy(SCur, SPrev, SCur.Length);
             Array.Copy(PCur, PPrev, PCur.Length);
-
-            foreach (var layer in Biosensor.Layers)
-            {
-                SchemeCalculator.CalculateNextStep(layer, SCur, PCur, SPrev, PPrev);
-            }
+            
+            SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
 
             SetBoundaryConditions();
         }
