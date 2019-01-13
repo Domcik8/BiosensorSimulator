@@ -2,11 +2,11 @@
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class Bik0401 : IBiosensorParametersSuplier
+    public class Bik0401 : IBiosensorSupplier
     {
         public Biosensor GetInitiationParameters()
         {
-            var biosensorParameters = new Biosensor
+            var biosensor = new Biosensor
             {
                 S0 = 20e-6,
                 P0 = 0,
@@ -18,7 +18,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 BiosensorHeight = 12e-5
             };
 
-            biosensorParameters.Layers = new List<Layer>
+            biosensor.Layers = new List<Layer>
             {
                 new Layer
                 {
@@ -48,20 +48,20 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     {
                         Type = SubstanceType.Substrate,
                         DiffusionCoefficient = 6e-10,
-                        StartConcentration = biosensorParameters.S0,
+                        StartConcentration = biosensor.S0,
                         ReactionRate = 0
                     },
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
                         DiffusionCoefficient = 6e-10,
-                        StartConcentration = biosensorParameters.P0,
+                        StartConcentration = biosensor.P0,
                         ReactionRate = 0
                     }
                 }
             };
 
-            return biosensorParameters;
+            return biosensor;
         }
     }
 }
