@@ -47,10 +47,10 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             for (var i = 1; i < SimulationParameters.Nd; i++)
             {
                 sCur[i] =  CalculateDiffusionLayerNextLocation(sPrev[i - 1], sPrev[i], sPrev[i + 1],
-                    layer.Substances.First(x => x.Type == SubstanceType.Substrate).DiffusionCoefficientOverR);
+                    layer.Substances.First(x => x.Type == SubstanceType.Substrate).ExplicitScheme.DiffusionCoefficientOverR);
 
                 pCur[i] = CalculateDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1],
-                    layer.Substances.First(x => x.Type == SubstanceType.Product).DiffusionCoefficientOverR);
+                    layer.Substances.First(x => x.Type == SubstanceType.Product).ExplicitScheme.DiffusionCoefficientOverR);
             }
         }
 
@@ -69,9 +69,9 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                     (BiosensorParameters.Km + sPrev[i]);
 
                 sCur[i] = CalculateReactionDiffusionLayerNextLocation(sPrev[i - 1], sPrev[i], sPrev[i + 1], -fermentReactionSpeed,
-                    layer.Substances.First(x => x.Type == SubstanceType.Substrate).DiffusionCoefficientOverSpace);
+                    layer.Substances.First(x => x.Type == SubstanceType.Substrate).ExplicitScheme.DiffusionCoefficientOverSpace);
 
-                pCur[i] = CalculateReactionDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1], fermentReactionSpeed, layer.Substances.First(x => x.Type == SubstanceType.Product).DiffusionCoefficientOverSpace);
+                pCur[i] = CalculateReactionDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1], fermentReactionSpeed, layer.Substances.First(x => x.Type == SubstanceType.Product).ExplicitScheme.DiffusionCoefficientOverSpace);
             }
         }
         

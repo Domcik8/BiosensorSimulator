@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Scheme;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
@@ -31,10 +32,14 @@ namespace BiosensorSimulator.Parameters.Simulations
 
                 layer.R = simulationParameters.t / (layer.H * layer.H);
 
-                foreach (Substance s in layer.Substances)
+                foreach (var s in layer.Substances)
                 {
-                    s.DiffusionCoefficientOverR = s.DiffusionCoefficient * layer.R;
-                    s.DiffusionCoefficientOverSpace = s.DiffusionCoefficient / (layer.H * layer.H);
+                    s.ExplicitScheme =
+                        new ExplicitSchemeParameters
+                        {
+                            DiffusionCoefficientOverR = s.DiffusionCoefficient * layer.R,
+                            DiffusionCoefficientOverSpace = s.DiffusionCoefficient / (layer.H * layer.H)
+                        };
                 }
             }
 

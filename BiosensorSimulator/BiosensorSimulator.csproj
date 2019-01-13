@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parameters\Scheme\ExplicitSchemeParameters.cs" />
+    <Compile Include="Parameters\Scheme\ImplicitSchemeParameters.cs" />
     <Compile Include="Simulations\Simulations1D\SingleLayerSimulation1D.cs" />
     <Compile Include="Simulations\AnaliticSimulation.cs" />
     <Compile Include="Parameters\Biosensors\SimulationValidation.cs" />

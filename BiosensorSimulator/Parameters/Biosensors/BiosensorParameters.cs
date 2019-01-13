@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BiosensorSimulator.Parameters.Scheme;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
@@ -72,15 +73,13 @@ namespace BiosensorSimulator.Parameters.Biosensors
 
         public int ReactionRate { get; set; }
 
-        /// <summary>
-        /// DiffusionCoefficient over R
-        /// </summary>
-        public double DiffusionCoefficientOverR { get; set; }
+        public ExplicitSchemeParameters ExplicitScheme { get; set;}
+    }
 
-        /// <summary>
-        /// Diffusion coefficient over space
-        /// </summary>
-        public double DiffusionCoefficientOverSpace { get; set; }
+    public class ImplicitSchemeParameters
+    {
+        private double a, b, c;
+        private double betha1, betha2;
     }
 
     public class Bound
