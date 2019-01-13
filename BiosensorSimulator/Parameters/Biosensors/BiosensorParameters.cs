@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
@@ -42,6 +43,8 @@ namespace BiosensorSimulator.Parameters.Biosensors
         public double MicroReactorRadius { get; set; }
         public double UnitRadius { get; set; }
         public double NerstLayerHeight { get; set; }
+
+        public Layer EnzymeLayer => Layers.First(l => l.Type == LayerType.Enzyme);
     }
 
     public class Layer
@@ -59,7 +62,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
         /// </summary>
         public double R { get; set; }
 
-        public List<Substance> Substances { get; set; }
+        public Product Product { get; set; }
+
+        public Substrate Substrate { get; set; }
     }
 
     public class Substance
@@ -82,6 +87,10 @@ namespace BiosensorSimulator.Parameters.Biosensors
         /// </summary>
         public double DiffusionCoefficientOverSpace { get; set; }
     }
+
+    public class Product : Substance { }    
+
+    public class Substrate : Substance { }
 
     public class Bound
     {

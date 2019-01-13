@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using BiosensorSimulator.Parameters.Biosensors;
+﻿using BiosensorSimulator.Parameters.Biosensors;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
     public class Simulation1 : ISimulationParametersSuplier
     {
-        public SimulationParameters InitiationParameters(
-            BiosensorParameters biosensorParameters)
+        public SimulationParameters InitiationParameters(BiosensorParameters biosensorParameters)
         {
             var simulationParameters = new SimulationParameters()
             {
@@ -31,14 +29,24 @@ namespace BiosensorSimulator.Parameters.Simulations
 
                 layer.R = simulationParameters.t / (layer.H * layer.H);
 
-                foreach (Substance s in layer.Substances)
-                {
-                    s.DiffusionCoefficientOverR = s.DiffusionCoefficient * layer.R;
-                    s.DiffusionCoefficientOverSpace = s.DiffusionCoefficient / (layer.H * layer.H);
-                }
+                layer.Product.DiffusionCoefficientOverR = GetSubstanceDiffusionCoefficientOverR(layer.Product, layer.R);
+                layer.Substrate.DiffusionCoefficientOverR = GetSubstanceDiffusionCoefficientOverR(layer.Substrate, layer.R);
+
+                layer.Product.DiffusionCoefficientOverSpace = GetSubstanceDiffusionCoefficientOverSpace(layer.Product, layer.H);
+                layer.Substrate.DiffusionCoefficientOverSpace = GetSubstanceDiffusionCoefficientOverSpace(layer.Substrate, layer.H);
             }
 
             return simulationParameters;
+        }
+
+        private static double GetSubstanceDiffusionCoefficientOverR(Substance substance, double R)
+        {
+            return substance.DiffusionCoefficient * R;
+        }
+
+        private static double GetSubstanceDiffusionCoefficientOverSpace(Substance substance, double H)
+        {
+            return substance.DiffusionCoefficient / (H * H);
         }
     }
 }

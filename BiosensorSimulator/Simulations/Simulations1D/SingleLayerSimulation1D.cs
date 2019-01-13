@@ -33,10 +33,10 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                 SchemeCalculator.CalculateNextStep(layer, SCur, PCur, SPrev, PPrev);
             }
 
-            SetBondaryConditions();
+            SetBoundaryConditions();
         }
 
-        public void SetBondaryConditions()
+        public void SetBoundaryConditions()
         {
             SCur[SimulationParameters.N] = BiosensorParameters.S0;
             SCur[0] = SCur[1];

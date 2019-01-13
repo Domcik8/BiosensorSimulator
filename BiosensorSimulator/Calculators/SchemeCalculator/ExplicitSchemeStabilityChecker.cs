@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 
@@ -9,17 +8,17 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
     {
         public void AssertStability(SimulationParameters simulationParameters, BiosensorParameters biosensorParameters)
         {
-            var isReactionStable = GetReactionStability(
-                biosensorParameters.VMax, biosensorParameters.Km, simulationParameters.t);
+            var isReactionStable = GetReactionStability(biosensorParameters.VMax, biosensorParameters.Km, simulationParameters.t);
 
+            if (!isReactionStable)
+            {
+                throw new Exception("Simulation scheme is not stable");
+            }
 
             foreach (var layer in biosensorParameters.Layers)
             {
-                var Dmax = Math.Max(layer.Substances.First(s => s.Type == SubstanceType.Substrate).DiffusionCoefficient, 
-                    layer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient);
-
-                var isLayerStable = GetDiffusionStability(
-                    Dmax, layer.Height / layer.N, simulationParameters.t);
+                var Dmax = Math.Max(layer.Substrate.DiffusionCoefficient, layer.Product.DiffusionCoefficient);
+                var isLayerStable = GetDiffusionStability(Dmax, layer.Height / layer.N, simulationParameters.t);
 
                 if (!isLayerStable)
                 {
@@ -34,11 +33,6 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             //Dmax = Math.Max(biosensorParameters.DSd, biosensorParameters.DPd);
             //bool isDiffusionStableInDiffusionLayer = GetDiffusionStability(
             //    Dmax, biosensorParameters.n / simulationParameters.Nd, simulationParameters.t);
-
-            if (isReactionStable)
-                return;
-
-            throw new Exception("Simulation scheme is not stable");
         }
 
         public bool GetDiffusionStability(double D, double h, double t)
