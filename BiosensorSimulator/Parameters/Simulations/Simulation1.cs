@@ -45,20 +45,6 @@ namespace BiosensorSimulator.Parameters.Simulations
             return simulationParameters;
         }
 
-        private static ExplicitSchemeParameters GetExplicitSchemeParameters(Layer layer, Substance substance)
-        {
-            return new ExplicitSchemeParameters
-            {
-                DiffusionCoefficientOverR = substance.DiffusionCoefficient * layer.R,
-                DiffusionCoefficientOverSpace = substance.DiffusionCoefficient / (layer.H * layer.H)
-            };
-        }
-
-        private static ImplicitSchemeParameters GetImplicitSchemeParameters(Layer layer, Substance substance)
-        {
-            return new ImplicitSchemeParameters();
-        }
-
         private long GetLayerSteps(LayerType layerType)
         {
             return LayersSteps.First(s => s.Key == layerType).Value;
