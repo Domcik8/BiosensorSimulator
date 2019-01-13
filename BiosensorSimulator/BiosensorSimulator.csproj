@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parameters\Biosensors\Biosensor.cs" />
     <Compile Include="Parameters\Scheme\ExplicitSchemeParameters.cs" />
     <Compile Include="Parameters\Scheme\ImplicitSchemeParameters.cs" />
     <Compile Include="Simulations\Simulations1D\SingleLayerSimulation1D.cs" />
@@ -55,7 +56,6 @@
     <Compile Include="Parameters\Biosensors\ZeroOrderSimulation.cs" />
     <Compile Include="Parameters\Biosensors\FirstOrderSimulation.cs" />
     <Compile Include="Parameters\Simulations\ISimulationParametersSuplier.cs" />
-    <Compile Include="Parameters\Biosensors\Biosensor.cs" />
     <Compile Include="Parameters\Biosensors\IBiosensorParametersSuplier.cs" />
     <Compile Include="Parameters\Biosensors\BIK04.cs" />
     <Compile Include="Calculators\MatrixCalculator.cs" />

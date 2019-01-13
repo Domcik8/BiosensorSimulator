@@ -18,7 +18,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 N = 100,
                 t = 7.5e-12
             };
-            
+
             //simulationParameters.hf = biosensor.c / simulationParameters.Nf;
             //simulationParameters.hd = biosensor.n / simulationParameters.Nd;
 
@@ -30,24 +30,28 @@ namespace BiosensorSimulator.Parameters.Simulations
 
                 layer.R = simulationParameters.t / (layer.H * layer.H);
 
-                layer.Product.DiffusionCoefficientOverR = GetSubstanceDiffusionCoefficientOverR(layer.Product, layer.R);
-                layer.Substrate.DiffusionCoefficientOverR = GetSubstanceDiffusionCoefficientOverR(layer.Substrate, layer.R);
+                layer.Product.ExplicitScheme = GetExplicitSchemeParameters(layer, layer.Product);
+                layer.Substrate.ExplicitScheme = GetExplicitSchemeParameters(layer, layer.Substrate);
 
-                layer.Product.DiffusionCoefficientOverSpace = GetSubstanceDiffusionCoefficientOverSpace(layer.Product, layer.H);
-                layer.Substrate.DiffusionCoefficientOverSpace = GetSubstanceDiffusionCoefficientOverSpace(layer.Substrate, layer.H);
+                layer.Product.ImplicitScheme = GetImplicitSchemeParameters(layer, layer.Product);
+                layer.Substrate.ImplicitScheme = GetImplicitSchemeParameters(layer, layer.Substrate);
             }
 
             return simulationParameters;
         }
 
-        private static double GetSubstanceDiffusionCoefficientOverR(Substance substance, double R)
+        private static ExplicitSchemeParameters GetExplicitSchemeParameters(Layer layer, Substance substance)
         {
-            return substance.DiffusionCoefficient * R;
+            return new ExplicitSchemeParameters
+            {
+                DiffusionCoefficientOverR = substance.DiffusionCoefficient * layer.R,
+                DiffusionCoefficientOverSpace = substance.DiffusionCoefficient / (layer.H * layer.H)
+            };
         }
 
-        private static double GetSubstanceDiffusionCoefficientOverSpace(Substance substance, double H)
+        private static ImplicitSchemeParameters GetImplicitSchemeParameters(Layer layer, Substance substance)
         {
-            return substance.DiffusionCoefficient / (H * H);
+            return new ImplicitSchemeParameters();
         }
     }
 }

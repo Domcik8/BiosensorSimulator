@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using BiosensorSimulator.Parameters.Scheme;
 using System.Linq;
+using BiosensorSimulator.Parameters.Scheme;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
@@ -61,13 +61,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
 
         public int ReactionRate { get; set; }
 
-        public ExplicitSchemeParameters ExplicitScheme { get; set;}
-    }
+        public ExplicitSchemeParameters ExplicitScheme { get; set; }
 
-    public class ImplicitSchemeParameters
-    {
-        private double a, b, c;
-        private double betha1, betha2;
+        public ImplicitSchemeParameters ImplicitScheme { get; set; }
     }
 
     public class Product : Substance { }
