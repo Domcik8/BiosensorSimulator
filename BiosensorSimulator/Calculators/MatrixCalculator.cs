@@ -1,6 +1,6 @@
 ﻿namespace BiosensorSimulator.Calculators
 {
-    public class Matrix
+    public static class MatrixCalculator
     {
         /// <summary>
         /// Tridiagonal solution example: 
@@ -13,7 +13,7 @@
         /// 
         /// matrix.SolveTridiagonalInPlace(a, b, c, r, b.Length);
         /// </summary>
-        public double[] SolveTridiagonalInPlace(
+        public static double[] SolveTridiagonalInPlace(
             double[] a, double[] b, double[] c, double[] x, long X)
         {
             /*

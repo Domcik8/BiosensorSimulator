@@ -12,7 +12,7 @@ namespace BiosensorSimulator
         static void Main(string[] args)
         {
             // You can choose different starting conditions
-            var biosensor = new ZeroOrderSimulation().GetInitiationParameters();
+            var biosensor = new FirstOrderSimulation().GetInitiationParameters();
             var simulationParameters = new Simulation1().InitiationParameters(biosensor);
             var schemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
             

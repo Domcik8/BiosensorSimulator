@@ -1,27 +1,40 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Simulations;
 
 namespace BiosensorSimulator.Parameters.Scheme
 {
     public struct ImplicitSchemeParameters
     {
-        public double A { get; set; }
+        public double[] A { get; set; }
+        public double[] B { get; set; }
+        public double[] C { get; set; }
+        public double[] S { get; set; }
 
-        public double B { get; set; }
-
-        public double C { get; set; }
-
-        public double Betha1 { get; set; }
-        public double Betha2 { get; set; }
-
-        public ImplicitSchemeParameters(Layer layer, Substance substance)
+        public ImplicitSchemeParameters(Layer layer, Substance substance, double timeStep)
         {
-           /* A = substance.DiffusionCoefficient * layer.R;
-            B = A;
-            C = 1 + 2 * A;
-            Betha1 = 1 / (1 + layer.H * substance.StartConcentration);
-            Betha2 = 1 / (1 - layer.H * layer.EndConcentration);*/
+            var a = substance.DiffusionCoefficient * layer.R;
+            var b = a;
+            var c = 1 + 2 * a;
+            //var f = layer.Type == LayerType.DiffusionLayer ? 0 : -timeStep * reaction;
+            
+            var n = layer.N;
 
-            A = B = C = Betha1 = Betha2 = 0;
+            A = new double[n];
+            B = new double[n];
+            C = new double[n];
+            S = new double[n];
+
+            for (var i = 0; i < n; i++)
+            {
+                A[i] = a;
+                B[i] = b;
+                C[i] = c;
+            }
+
+            A[0] = 0;
+            C[0] = 1;
+            B[n - 1] = 0;
+            C[n - 1] = 1;
         }
     }
 }

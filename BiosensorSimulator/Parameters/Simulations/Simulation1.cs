@@ -15,7 +15,7 @@ namespace BiosensorSimulator.Parameters.Simulations
             {
                 ne = 2,
                 DecayRate = 1e-5,
-                F = 96485.3329,
+                F = 96485.33289,
                 ZeroIBond = 1e-25,         
                 t = 7.5e-12,
                 N = 100
@@ -38,8 +38,8 @@ namespace BiosensorSimulator.Parameters.Simulations
                 layer.Product.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Product);
                 layer.Substrate.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Substrate);
 
-                layer.Product.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Product);
-                layer.Substrate.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Substrate);
+                layer.Product.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Product, simulationParameters.t);
+                layer.Substrate.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Substrate, simulationParameters.t);
             }
 
             return simulationParameters;
