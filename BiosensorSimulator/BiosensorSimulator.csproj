@@ -59,7 +59,7 @@
     <Compile Include="Parameters\Biosensors\IBiosensorSupplier.cs" />
     <Compile Include="Parameters\Biosensors\BIK04.cs" />
     <Compile Include="Calculators\MatrixCalculator.cs" />
-    <Compile Include="Parameters\Simulations\Simulation1.cs" />
+    <Compile Include="Parameters\Simulations\SimulationParametersSuplier1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Calculators\SchemeCalculator\ImplicitSchemeCalculator.cs" />

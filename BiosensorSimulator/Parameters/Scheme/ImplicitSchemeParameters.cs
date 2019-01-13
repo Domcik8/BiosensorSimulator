@@ -8,21 +8,18 @@ namespace BiosensorSimulator.Parameters.Scheme
         public double[] A { get; set; }
         public double[] B { get; set; }
         public double[] C { get; set; }
-        public double[] S { get; set; }
 
-        public ImplicitSchemeParameters(Layer layer, Substance substance, double timeStep)
+        public ImplicitSchemeParameters(Layer layer, Substance substance)
         {
             var a = substance.DiffusionCoefficient * layer.R;
             var b = a;
             var c = 1 + 2 * a;
-            //var f = layer.Type == LayerType.DiffusionLayer ? 0 : -timeStep * reaction;
             
             var n = layer.N;
 
             A = new double[n];
             B = new double[n];
             C = new double[n];
-            S = new double[n];
 
             for (var i = 0; i < n; i++)
             {

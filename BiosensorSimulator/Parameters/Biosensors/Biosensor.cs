@@ -33,13 +33,35 @@ namespace BiosensorSimulator.Parameters.Biosensors
 
     public class Layer
     {
+        /// <summary>
+        /// Layer type
+        /// </summary>
         public LayerType Type { get; set; }
 
+        /// <summary>
+        /// Layer height
+        /// </summary>
         public double Height { get; set; }
 
+        /// <summary>
+        /// Quantity of layer space steps
+        /// </summary>
         public long N { get; set; }
 
+        /// <summary>
+        /// Layer space step
+        /// </summary>
         public double H { get; set; }
+
+        /// <summary>
+        /// Layer upper bond index
+        /// </summary>
+        public long UpperBondIndex { get; set; }
+
+        /// <summary>
+        /// Layer lower bond index
+        /// </summary>
+        public long LowerBondIndex { get; set; }
 
         /// <summary>
         /// Time step over square space step

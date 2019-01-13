@@ -5,7 +5,7 @@ using BiosensorSimulator.Parameters.Scheme;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
-    public class Simulation1 : ISimulationParametersSuplier
+    public class SimulationParametersSuplier1 : ISimulationParametersSuplier
     {
         private List<KeyValuePair<LayerType, long>> LayersSteps { get; set; }
 
@@ -29,17 +29,21 @@ namespace BiosensorSimulator.Parameters.Simulations
                 new KeyValuePair<LayerType, long>(LayerType.Enzyme, 100)
             };
 
+            long lastLayerMaxIndex = 0;
             foreach (var layer in biosensor.Layers)
             {
                 layer.N = GetLayerSteps(layer.Type);
+                layer.LowerBondIndex = lastLayerMaxIndex;
+                lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N;
+
                 layer.H = layer.Height / layer.N;
                 layer.R = simulationParameters.t / (layer.H * layer.H);
 
                 layer.Product.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Product);
                 layer.Substrate.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Substrate);
 
-                layer.Product.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Product, simulationParameters.t);
-                layer.Substrate.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Substrate, simulationParameters.t);
+                layer.Product.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Product);
+                layer.Substrate.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Substrate);
             }
 
             return simulationParameters;

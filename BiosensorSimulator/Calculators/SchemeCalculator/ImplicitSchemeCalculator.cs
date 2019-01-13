@@ -27,11 +27,15 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             var a = substance.ImplicitScheme.A;
             var b = substance.ImplicitScheme.B;
             var c = substance.ImplicitScheme.C;
+            var s = new double[n];
 
-            /*substance.ImplicitScheme.A[0] = -1 / (1 + layer.H * sCur[LAYER_START]);
-            substance.ImplicitScheme.B[n] = -1 / (1 - layer.H * sCur[LAYER_END]);
+            substance.ImplicitScheme.A[0] = -1 / (1 + layer.H * sCur[layer.UpperBondIndex]);
+            substance.ImplicitScheme.B[n] = -1 / (1 - layer.H * sCur[layer.LowerBondIndex]);
+
+            for (var i = 1; i < n - 1; i++)
+                s[i] = -SimulationParameters.t * Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
             
-            MatrixCalculator.SolveTridiagonalInPlace(a, c.Clone(), b, r, n);*/
+            MatrixCalculator.SolveTridiagonalInPlace(a, (double[])c.Clone(), b, s, n);
         }
 
         public void CalculateDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
