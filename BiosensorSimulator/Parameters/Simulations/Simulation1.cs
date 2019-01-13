@@ -4,7 +4,7 @@ namespace BiosensorSimulator.Parameters.Simulations
 {
     public class Simulation1 : ISimulationParametersSuplier
     {
-        public SimulationParameters InitiationParameters(BiosensorParameters biosensorParameters)
+        public SimulationParameters InitiationParameters(Biosensor biosensor)
         {
             var simulationParameters = new SimulationParameters()
             {
@@ -18,10 +18,10 @@ namespace BiosensorSimulator.Parameters.Simulations
                 t = 7.5e-12
             };
             
-            //simulationParameters.hf = biosensorParameters.c / simulationParameters.Nf;
-            //simulationParameters.hd = biosensorParameters.n / simulationParameters.Nd;
+            //simulationParameters.hf = biosensor.c / simulationParameters.Nf;
+            //simulationParameters.hd = biosensor.n / simulationParameters.Nd;
 
-            foreach (var layer in biosensorParameters.Layers)
+            foreach (var layer in biosensor.Layers)
             {
                 simulationParameters.hf = layer.Height / simulationParameters.Nf;
                 layer.N = simulationParameters.Nf;

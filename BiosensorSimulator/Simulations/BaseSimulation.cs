@@ -9,7 +9,7 @@ namespace BiosensorSimulator.Simulations
     public abstract class BaseSimulation
     {
         public SimulationParameters SimulationParameters { get; }
-        public BiosensorParameters BiosensorParameters { get; }
+        public Biosensor Biosensor { get; }
         public ISchemeCalculator SchemeCalculator { get; }
 
         public double CurrentFactor { get; }
@@ -20,14 +20,14 @@ namespace BiosensorSimulator.Simulations
 
         protected BaseSimulation(
             SimulationParameters simulationParameters,
-            BiosensorParameters biosensorParameters,
+            Biosensor biosensor,
             ISchemeCalculator schemeCalculator)
         {
             SimulationParameters = simulationParameters;
-            BiosensorParameters = biosensorParameters;
+            Biosensor = biosensor;
             SchemeCalculator = schemeCalculator;
 
-            var enzymeLayer = biosensorParameters.EnzymeLayer;
+            var enzymeLayer = biosensor.EnzymeLayer;
             CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
         }
 
@@ -72,8 +72,8 @@ namespace BiosensorSimulator.Simulations
         public void ShowValidationValues()
         {
             var simulation = new AnaliticSimulation();
-            var firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(BiosensorParameters, SimulationParameters);
-            var zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(BiosensorParameters, SimulationParameters);
+            var firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(Biosensor, SimulationParameters);
+            var zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(Biosensor, SimulationParameters);
 
             Console.WriteLine($"First order current : {firstOrderCurrent} A/mm^2");
             Console.WriteLine($"Zero order current : {zeroOrderCurrent} A/mm^2");
@@ -84,7 +84,7 @@ namespace BiosensorSimulator.Simulations
         /// </summary>
         public void AssertSimulationStability()
         {
-            new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, BiosensorParameters);
+            new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace BiosensorSimulator.Simulations
             SPrev = new double[SimulationParameters.N + 1];
             PPrev = new double[SimulationParameters.N + 1];
 
-            SCur[SimulationParameters.N] = BiosensorParameters.S0;
-            PCur[SimulationParameters.N] = BiosensorParameters.P0;
+            SCur[SimulationParameters.N] = Biosensor.S0;
+            PCur[SimulationParameters.N] = Biosensor.P0;
         }
 
         /// <summary>

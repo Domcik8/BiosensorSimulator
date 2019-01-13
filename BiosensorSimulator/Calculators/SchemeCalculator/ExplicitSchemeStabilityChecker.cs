@@ -6,16 +6,16 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class ExplicitSchemeStabilityChecker
     {
-        public void AssertStability(SimulationParameters simulationParameters, BiosensorParameters biosensorParameters)
+        public void AssertStability(SimulationParameters simulationParameters, Biosensor biosensor)
         {
-            var isReactionStable = GetReactionStability(biosensorParameters.VMax, biosensorParameters.Km, simulationParameters.t);
+            var isReactionStable = GetReactionStability(biosensor.VMax, biosensor.Km, simulationParameters.t);
 
             if (!isReactionStable)
             {
                 throw new Exception("Simulation scheme is not stable");
             }
 
-            foreach (var layer in biosensorParameters.Layers)
+            foreach (var layer in biosensor.Layers)
             {
                 var Dmax = Math.Max(layer.Substrate.DiffusionCoefficient, layer.Product.DiffusionCoefficient);
                 var isLayerStable = GetDiffusionStability(Dmax, layer.Height / layer.N, simulationParameters.t);
@@ -25,14 +25,6 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                     throw new Exception("Simulation scheme is not stable");
                 }
             }
-
-            //var Dmax = Math.Max(biosensorParameters.DSf, biosensorParameters.DPf);
-            //var isDiffusionStableInFermentLayer = GetDiffusionStability(
-            //    Dmax, biosensorParameters.c / simulationParameters.Nf, simulationParameters.t);
-
-            //Dmax = Math.Max(biosensorParameters.DSd, biosensorParameters.DPd);
-            //bool isDiffusionStableInDiffusionLayer = GetDiffusionStability(
-            //    Dmax, biosensorParameters.n / simulationParameters.Nd, simulationParameters.t);
         }
 
         public bool GetDiffusionStability(double D, double h, double t)

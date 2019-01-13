@@ -4,19 +4,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
 {
     public class SimulationValidation : IBiosensorParametersSuplier
     {
-        public BiosensorParameters GetInitiationParameters()
+        public Biosensor GetInitiationParameters()
         {
-            //BiosensorParameters biosensorParameters = new BiosensorParameters()
-            //{
-            //    P0 = 0,
-            //    DSf = 300e-6,
-            //    DPf = 300e-6,
-            //    Vmax = 100e-6,
-            //    Km = 100e-6,
-            //    c = 0.01e-3
-            //};
-
-            var biosensorParameters = new BiosensorParameters
+            var biosensorParameters = new Biosensor
             {
                 P0 = 0,
                 VMax = 100e-6,
@@ -29,7 +19,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 {
                     Type = LayerType.Enzyme,
                     Height = 0.01e-3,
-                    Substrate = 
+                    Substrate =
                     new Substrate
                     {
                         Type = SubstanceType.Substrate,
@@ -44,7 +34,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                         StartConcentration = biosensorParameters.P0,
                         ReactionRate = 1
                     }
-                }             
+                }
             };
 
             return biosensorParameters;

@@ -6,12 +6,12 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class ExplicitSchemeCalculator : ISchemeCalculator
     {
-        public BiosensorParameters BiosensorParameters { get; }
+        public Biosensor Biosensor { get; }
         public SimulationParameters SimulationParameters { get; }
 
-        public ExplicitSchemeCalculator(BiosensorParameters biosensorParameters, SimulationParameters simulationParameters)
+        public ExplicitSchemeCalculator(Biosensor biosensor, SimulationParameters simulationParameters)
         {
-            BiosensorParameters = biosensorParameters;
+            Biosensor = biosensor;
             SimulationParameters = simulationParameters;
         }
 
@@ -58,7 +58,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         {
             for (var i = 1; i < SimulationParameters.Nf; i++)
             {
-                var fermentReactionSpeed = BiosensorParameters.VMax * sPrev[i] / (BiosensorParameters.Km + sPrev[i]);
+                var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
 
                 sCur[i] = CalculateReactionDiffusionLayerNextLocation(sPrev[i - 1], sPrev[i], sPrev[i + 1],
                     -fermentReactionSpeed, layer.Substrate.DiffusionCoefficientOverSpace);

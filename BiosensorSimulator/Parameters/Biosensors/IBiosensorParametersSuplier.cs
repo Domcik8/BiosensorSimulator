@@ -2,6 +2,6 @@
 {
     public interface IBiosensorParametersSuplier
     {
-        BiosensorParameters GetInitiationParameters();
+        Biosensor GetInitiationParameters();
     }
 }

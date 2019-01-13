@@ -4,28 +4,16 @@ namespace BiosensorSimulator.Parameters.Biosensors
 {
     public class ZeroOrderSimulation : IBiosensorParametersSuplier
     {
-        public BiosensorParameters GetInitiationParameters()
+        public Biosensor GetInitiationParameters()
         {
-            //BiosensorParameters biosensorParameters = new BiosensorParameters()
-            //{
-            //    P0 = 0,
-            //    DSf = 300e-6,
-            //    DPf = 300e-6,
-            //    Vmax = 100e-6,
-            //    Km = 100e-6,
-            //    c = 0.01e-3
-            //};
-
-            //biosensorParameters.S0 = 1000 * biosensorParameters.Km;
-
-            var biosensorParameters = new BiosensorParameters
+            var biosensorParameters = new Biosensor
             {
-                S0 = 1000 * 100e-6,
                 P0 = 0,
                 VMax = 100e-6,
                 Km = 100e-6,
             };
 
+            biosensorParameters.S0 = 1000 * biosensorParameters.Km;
             biosensorParameters.Layers = new List<Layer>
             {
                 new Layer
