@@ -4,19 +4,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
 {
     public class SimulationValidation : IBiosensorParametersSuplier
     {
-        public BiosensorParameters GetInitiationParameters()
+        public Biosensor GetInitiationParameters()
         {
-            //BiosensorParameters biosensorParameters = new BiosensorParameters()
-            //{
-            //    P0 = 0,
-            //    DSf = 300e-6,
-            //    DPf = 300e-6,
-            //    Vmax = 100e-6,
-            //    Km = 100e-6,
-            //    c = 0.01e-3
-            //};
-
-            var biosensorParameters = new BiosensorParameters
+            var biosensorParameters = new Biosensor
             {
                 P0 = 0,
                 VMax = 100e-6,
@@ -29,22 +19,20 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 {
                     Type = LayerType.Enzyme,
                     Height = 0.01e-3,
-                    Substances = new List<Substance>
+                    Substrate =
+                    new Substrate
                     {
-                        new Substance
-                        {
-                            Type = SubstanceType.Substrate,
-                            DiffusionCoefficient = 300e-6,
-                            StartConcentration = biosensorParameters.S0,
-                            ReactionRate = 1
-                        },
-                        new Substance
-                        {
-                            Type = SubstanceType.Product,
-                            DiffusionCoefficient = 300e-6,
-                            StartConcentration = biosensorParameters.P0,
-                            ReactionRate = 1
-                        }
+                        Type = SubstanceType.Substrate,
+                        DiffusionCoefficient = 300e-6,
+                        StartConcentration = biosensorParameters.S0,
+                        ReactionRate = 1
+                    },
+                    Product = new Product
+                    {
+                        Type = SubstanceType.Product,
+                        DiffusionCoefficient = 300e-6,
+                        StartConcentration = biosensorParameters.P0,
+                        ReactionRate = 1
                     }
                 }
             };

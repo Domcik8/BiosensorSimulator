@@ -1,35 +1,10 @@
 ﻿using System.Collections.Generic;
 using BiosensorSimulator.Parameters.Scheme;
+using System.Linq;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    //public struct BiosensorParameters
-    //{
-    //    // Initial concentration of substrate and product
-    //    public double S0, P0;
-
-    //    // Substrate and Product diffusion cofficents in enzyme layer
-    //    public double DSf, DPf;
-
-    //    // Substrate and Product diffusion cofficent in diffusion layer
-    //    public double DSd, DPd;
-
-    //    // Maximal enzymatic rate
-    //    public double Vmax;
-
-    //    // Michaelis constant
-    //    public double Km;
-
-    //    // Biosensor unit parameters:
-    //    // a - microreactor radius,
-    //    // b - unit radius,
-    //    // c - ferment layer height,
-    //    // d - viso jutiklio
-    //    // n - Nernst layer height (d - c)
-    //    public double a, b, c, d, n;
-    //}
-
-    public class BiosensorParameters
+    public class Biosensor
     {
         public double S0 { get; set; }
         public double P0 { get; set; }
@@ -42,7 +17,18 @@ namespace BiosensorSimulator.Parameters.Biosensors
 
         public double MicroReactorRadius { get; set; }
         public double UnitRadius { get; set; }
+
+        /// <summary>
+        /// Full biosensor height
+        /// </summary>
+        public double BiosensorHeight { get; set; }
+
+        /// <summary>
+        /// BiosensorHeight - ferment layer height
+        /// </summary>
         public double NerstLayerHeight { get; set; }
+
+        public Layer EnzymeLayer => Layers.First(l => l.Type == LayerType.Enzyme);
     }
 
     public class Layer
@@ -60,7 +46,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
         /// </summary>
         public double R { get; set; }
 
-        public List<Substance> Substances { get; set; }
+        public Product Product { get; set; }
+
+        public Substrate Substrate { get; set; }
     }
 
     public class Substance
@@ -81,6 +69,10 @@ namespace BiosensorSimulator.Parameters.Biosensors
         private double a, b, c;
         private double betha1, betha2;
     }
+
+    public class Product : Substance { }
+
+    public class Substrate : Substance { }
 
     public class Bound
     {

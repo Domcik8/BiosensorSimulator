@@ -9,15 +9,15 @@ namespace BiosensorSimulator.Simulations.Simulations1D
     {
         public SingleLayerSimulation1D(
             SimulationParameters simulationParameters,
-            BiosensorParameters biosensorParameters,
+            Biosensor biosensor,
             ISchemeCalculator schemeCalculator
-            ) : base(simulationParameters, biosensorParameters, schemeCalculator) { }
+            ) : base(simulationParameters, biosensor, schemeCalculator) { }
 
-        public void ShowValidationValues(BiosensorParameters biosensorParameters, SimulationParameters simulationParameters)
+        public void ShowValidationValues(Biosensor biosensor, SimulationParameters simulationParameters)
         {
             var simulation = new AnaliticSimulation();
-            var firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(biosensorParameters, simulationParameters);
-            var zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(biosensorParameters, simulationParameters);
+            var firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(biosensor, simulationParameters);
+            var zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(biosensor, simulationParameters);
 
             Console.WriteLine($"First order current : {firstOrderCurrent} A/mm^2");
             Console.WriteLine($"Zero order current : {zeroOrderCurrent} A/mm^2");
@@ -28,20 +28,20 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             Array.Copy(SCur, SPrev, SCur.Length);
             Array.Copy(PCur, PPrev, PCur.Length);
 
-            foreach (var layer in BiosensorParameters.Layers)
+            foreach (var layer in Biosensor.Layers)
             {
                 SchemeCalculator.CalculateNextStep(layer, SCur, PCur, SPrev, PPrev);
             }
 
-            SetBondaryConditions();
+            SetBoundaryConditions();
         }
 
-        public void SetBondaryConditions()
+        public void SetBoundaryConditions()
         {
-            SCur[SimulationParameters.N] = BiosensorParameters.S0;
+            SCur[SimulationParameters.N] = Biosensor.S0;
             SCur[0] = SCur[1];
 
-            PCur[SimulationParameters.N] = BiosensorParameters.P0;
+            PCur[SimulationParameters.N] = Biosensor.P0;
             PCur[0] = 0;
         }
     }

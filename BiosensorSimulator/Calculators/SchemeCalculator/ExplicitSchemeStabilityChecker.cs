@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 
@@ -7,38 +6,25 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class ExplicitSchemeStabilityChecker
     {
-        public void AssertStability(SimulationParameters simulationParameters, BiosensorParameters biosensorParameters)
+        public void AssertStability(SimulationParameters simulationParameters, Biosensor biosensor)
         {
-            var isReactionStable = GetReactionStability(
-                biosensorParameters.VMax, biosensorParameters.Km, simulationParameters.t);
+            var isReactionStable = GetReactionStability(biosensor.VMax, biosensor.Km, simulationParameters.t);
 
-
-            foreach (var layer in biosensorParameters.Layers)
+            if (!isReactionStable)
             {
-                var Dmax = Math.Max(layer.Substances.First(s => s.Type == SubstanceType.Substrate).DiffusionCoefficient, 
-                    layer.Substances.First(s => s.Type == SubstanceType.Product).DiffusionCoefficient);
+                throw new Exception("Simulation scheme is not stable");
+            }
 
-                var isLayerStable = GetDiffusionStability(
-                    Dmax, layer.Height / layer.N, simulationParameters.t);
+            foreach (var layer in biosensor.Layers)
+            {
+                var Dmax = Math.Max(layer.Substrate.DiffusionCoefficient, layer.Product.DiffusionCoefficient);
+                var isLayerStable = GetDiffusionStability(Dmax, layer.Height / layer.N, simulationParameters.t);
 
                 if (!isLayerStable)
                 {
                     throw new Exception("Simulation scheme is not stable");
                 }
             }
-
-            //var Dmax = Math.Max(biosensorParameters.DSf, biosensorParameters.DPf);
-            //var isDiffusionStableInFermentLayer = GetDiffusionStability(
-            //    Dmax, biosensorParameters.c / simulationParameters.Nf, simulationParameters.t);
-
-            //Dmax = Math.Max(biosensorParameters.DSd, biosensorParameters.DPd);
-            //bool isDiffusionStableInDiffusionLayer = GetDiffusionStability(
-            //    Dmax, biosensorParameters.n / simulationParameters.Nd, simulationParameters.t);
-
-            if (isReactionStable)
-                return;
-
-            throw new Exception("Simulation scheme is not stable");
         }
 
         public bool GetDiffusionStability(double D, double h, double t)

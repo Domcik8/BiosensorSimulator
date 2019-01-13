@@ -4,6 +4,6 @@ namespace BiosensorSimulator.Parameters.Simulations
 {
     public interface ISimulationParametersSuplier
     {
-        SimulationParameters InitiationParameters(BiosensorParameters biosensorParameters);
+        SimulationParameters InitiationParameters(Biosensor biosensor);
     }
 }
