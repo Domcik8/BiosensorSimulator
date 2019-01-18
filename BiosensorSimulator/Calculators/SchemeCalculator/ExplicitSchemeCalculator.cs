@@ -15,6 +15,12 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             SimulationParameters = simulationParameters;
         }
 
+        public void CalculateNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        {
+            foreach (var layer in Biosensor.Layers)
+                CalculateNextStep(layer, sCur, pCur, sPrev, pPrev);
+        }
+
         public void CalculateNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
             switch (layer.Type)
