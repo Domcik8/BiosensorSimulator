@@ -29,6 +29,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
         public double NerstLayerHeight { get; set; }
 
         public Layer EnzymeLayer => Layers.First(l => l.Type == LayerType.Enzyme);
+        public Layer DiffusionLayer => Layers.First(l => l.Type == LayerType.DiffusionLayer);
     }
 
     public class Layer

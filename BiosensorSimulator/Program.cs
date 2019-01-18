@@ -3,7 +3,7 @@ using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Simulations;
 using BiosensorSimulator.Simulations.Simulations1D;
-using System;
+using BiosensorSimulator.Results;
 
 namespace BiosensorSimulator
 {
@@ -12,21 +12,18 @@ namespace BiosensorSimulator
         static void Main()
         {
             // You can choose different starting conditions
-            var biosensor = new ZeroOrderSimulation().GetInitiationParameters();
+            var biosensor = new TwoModelBiosensor().GetInitiationParameters();
             var simulationParameters = new SimulationParametersSuplier1().InitiationParameters(biosensor);
             var schemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
+            var resultPrinter = new FilePrinter(@"C:\BiosensorSimulations");
 
-            BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, schemeCalculator);
+            BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, schemeCalculator, resultPrinter);
 
-            //Analitic model validation
+            // Analytic model validation
             simulation.AssertSimulationStability();
+            simulation.PrintParameters();
             simulation.ShowValidationValues();
             simulation.RunStableCurrentSimulation();
-
-            Console.ReadKey();
-            Console.ReadKey();
-            Console.ReadKey();
-            Console.ReadKey();
         }
     }
 }

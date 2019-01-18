@@ -3,6 +3,7 @@ using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using System;
 using System.Diagnostics;
+using BiosensorSimulator.Results;
 
 namespace BiosensorSimulator.Simulations
 {
@@ -11,6 +12,8 @@ namespace BiosensorSimulator.Simulations
         public SimulationParameters SimulationParameters { get; }
         public Biosensor Biosensor { get; }
         public ISchemeCalculator SchemeCalculator { get; }
+
+        protected IResultPrinter ResultPrinter { get; }
 
         public double CurrentFactor { get; }
 
@@ -21,15 +24,20 @@ namespace BiosensorSimulator.Simulations
         protected BaseSimulation(
             SimulationParameters simulationParameters,
             Biosensor biosensor,
-            ISchemeCalculator schemeCalculator)
+            ISchemeCalculator schemeCalculator,
+            IResultPrinter resultPrinter)
         {
             SimulationParameters = simulationParameters;
             Biosensor = biosensor;
             SchemeCalculator = schemeCalculator;
+            ResultPrinter = resultPrinter;
 
             var enzymeLayer = biosensor.EnzymeLayer;
             CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
         }
+
+        // Calculate next step of biosensor
+        public abstract void CalculateNextStep();
 
         // Run simulation for x s
         public void RunSimulation()
@@ -65,18 +73,19 @@ namespace BiosensorSimulator.Simulations
             PrintSimulationResults(stopWatch, stableCurrent);
         }
 
-        // Calculate next step of biosensor
-        public abstract void CalculateNextStep();
-
-        // Show ZeroCondition and First condition
+        // Show ZeroCondition and First condition and two model condition
         public void ShowValidationValues()
         {
-            var simulation = new AnaliticSimulation();
-            var firstOrderCurrent = simulation.GetFirstOrderAnaliticSolution(Biosensor, SimulationParameters);
-            var zeroOrderCurrent = simulation.GetZeroOrderAnaliticSolution(Biosensor, SimulationParameters);
+            var simulation = new AnalyticSimulation();
+            var firstOrderCurrent = simulation.GetFirstOrderAnalyticSolution(Biosensor, SimulationParameters);
+            var zeroOrderCurrent = simulation.GetZeroOrderAnalyticSolution(Biosensor, SimulationParameters);
+            var twoModelCurrent = simulation.GetTwoCompartmentModelAnalyticSolution(Biosensor, SimulationParameters);
 
-            Console.WriteLine($"First order current : {firstOrderCurrent} A/mm^2");
-            Console.WriteLine($"Zero order current : {zeroOrderCurrent} A/mm^2");
+            ResultPrinter.Print("====Analytic validations====");
+            ResultPrinter.Print($"First order current: {firstOrderCurrent} A/mm^2");
+            ResultPrinter.Print($"Zero order current: {zeroOrderCurrent} A/mm^2");
+            ResultPrinter.Print($"Two model current: {twoModelCurrent / 1000000} A/mm^2");
+            ResultPrinter.Print("");
         }
 
         /// <summary>
@@ -85,6 +94,32 @@ namespace BiosensorSimulator.Simulations
         public void AssertSimulationStability()
         {
             new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
+        }
+
+        /// <summary>
+        /// Write parameters for result
+        /// </summary>
+        public void PrintParameters()
+        {
+            ResultPrinter.Print("====Parameters====");
+            ResultPrinter.Print($"Km: {Biosensor.Km} M");
+            ResultPrinter.Print($"S0: {Biosensor.S0} M");
+            ResultPrinter.Print($"Vmax: {Biosensor.VMax} M/s");
+            ResultPrinter.Print($"Time step: {SimulationParameters.t} s");
+            ResultPrinter.Print($"Steps: {SimulationParameters.N}");
+            ResultPrinter.Print($"Decay rate: {SimulationParameters.DecayRate}");
+            ResultPrinter.Print("");
+
+            foreach (var biosensorLayer in Biosensor.Layers)
+            {
+                ResultPrinter.Print($"{biosensorLayer.Type}:");
+                ResultPrinter.Print($"Height: {biosensorLayer.Height} m");
+                ResultPrinter.Print($"Dp: {biosensorLayer.Product.DiffusionCoefficient} m2/s");
+                ResultPrinter.Print($"Ds: {biosensorLayer.Substrate.DiffusionCoefficient} m2/s");
+                ResultPrinter.Print($"Steps count: {biosensorLayer.N}");
+                ResultPrinter.Print($"Step: {biosensorLayer.H} M");
+                ResultPrinter.Print("");
+            }
         }
 
         /// <summary>
@@ -111,15 +146,17 @@ namespace BiosensorSimulator.Simulations
 
             while (true)
             {
+
                 CalculateNextStep();
 
                 var iCur = GetCurrent();
 
                 if (iCur > 0 && iPrev > 0
-                    && iCur > SimulationParameters.ZeroIBond
-                    && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate
-                )
+                             && iCur > SimulationParameters.ZeroIBond
+                             && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
+                {
                     return iCur;
+                }
 
                 iPrev = iCur;
                 i++;
@@ -133,17 +170,20 @@ namespace BiosensorSimulator.Simulations
 
         private void PrintSimulationResults(Stopwatch stopwatch, double I)
         {
-            Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
-            Console.WriteLine($"Steady current = {I} A");
+            ResultPrinter.Print("====Results====");
+            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
+            ResultPrinter.Print($"Steady current = {I / 1000000 } A/mm2");
         }
 
         private void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)
         {
-            Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
-            Console.WriteLine($"Current = {I} A");
+            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
+            ResultPrinter.Print($"Current = {I} A");
 
             for (var i = 0; i < sCur.Length; i++)
-                Console.WriteLine($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");
+            {
+                ResultPrinter.Print($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");
+            }
         }
     }
 }

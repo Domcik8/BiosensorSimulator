@@ -2,7 +2,7 @@
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
-    public interface ISimulationParametersSuplier
+    public interface ISimulationParametersSupplier
     {
         SimulationParameters InitiationParameters(Biosensor biosensor);
     }
