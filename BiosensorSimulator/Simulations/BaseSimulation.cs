@@ -122,7 +122,7 @@ namespace BiosensorSimulator.Simulations
                 ResultPrinter.Print($"{biosensorLayer.Type}:");
                 ResultPrinter.Print($"Height: {biosensorLayer.Height} m");
                 ResultPrinter.Print($"Dp: {biosensorLayer.Product.DiffusionCoefficient} m2/s");
-                ResultPrinter.Print($"Ds: {biosensorLayer.Substrate.DiffusionCoefficient} m2/s");
+                ResultPrinter.Print($"Ds: {biosensorLayer.Substrate?.DiffusionCoefficient} m2/s");
                 ResultPrinter.Print($"Steps count: {biosensorLayer.N}");
                 ResultPrinter.Print($"Step: {biosensorLayer.H} M");
                 ResultPrinter.Print("");

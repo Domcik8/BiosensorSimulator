@@ -17,8 +17,13 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
             foreach (var layer in biosensor.Layers)
             {
+                if (layer.N == 0 || layer.Type == LayerType.SelectiveMembrane)
+                {
+                    continue;
+                }
+
                 var Dmax = Math.Max(layer.Substrate.DiffusionCoefficient, layer.Product.DiffusionCoefficient);
-                var isLayerStable = layer.N == 0 || GetDiffusionStability(Dmax, layer.H, simulationParameters.t);
+                var isLayerStable = GetDiffusionStability(Dmax, layer.H, simulationParameters.t);
 
                 if (!isLayerStable)
                 {

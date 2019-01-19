@@ -34,11 +34,11 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                     break;
 
                 case LayerType.SelectiveMembrane:
-                    throw new NotImplementedException();
+                    CalculateDiffusionLayerWithOnlyProductNextStep(layer, pCur, pPrev);
                     break;
 
                 case LayerType.PerforatedMembrane:
-                    throw new NotImplementedException();
+                    CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                     break;
 
                 default:
@@ -71,13 +71,21 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
                 pCur[i] = CalculateReactionDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1],
                     fermentReactionSpeed, layer.Product.ExplicitScheme.DiffusionCoefficientOverSpace);
-            }         
+            }
         }
 
         private double CalculateReactionDiffusionLayerNextLocation(double previous, double current, double next,
             double fermentReactionSpeed, double diffusionCoefficientOverSpace)
         {
             return current + SimulationParameters.t * (diffusionCoefficientOverSpace * (next - 2 * current + previous) + fermentReactionSpeed);
+        }
+
+        public void CalculateDiffusionLayerWithOnlyProductNextStep(Layer layer, double[] pCur, double[] pPrev)
+        {
+            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
+            {
+                pCur[i] = CalculateDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1], layer.Product.ExplicitScheme.DiffusionCoefficientOverR);
+            }
         }
     }
 }
