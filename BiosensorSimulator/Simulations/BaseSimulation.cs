@@ -134,13 +134,13 @@ namespace BiosensorSimulator.Simulations
         private void PrintSimulationResults(Stopwatch stopwatch, double I)
         {
             Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
-            Console.WriteLine($"Steady current = {I} A");
+            Console.WriteLine($"Steady current = {I} A/m^2");
         }
 
         private void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)
         {
             Console.WriteLine($"Simulation lasted {stopwatch.ElapsedMilliseconds} miliseconds");
-            Console.WriteLine($"Current = {I} A");
+            Console.WriteLine($"Current = {I} A/m^2");
 
             for (var i = 0; i < sCur.Length; i++)
                 Console.WriteLine($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");

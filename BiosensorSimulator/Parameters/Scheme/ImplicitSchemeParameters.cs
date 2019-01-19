@@ -9,22 +9,30 @@ namespace BiosensorSimulator.Parameters.Scheme
         public double[] B { get; set; }
         public double[] C { get; set; }
 
+        public double[] F { get; set; }
+
+        public double[] D { get; set; }
+        public double[] E { get; set; }
+
+        public double Beta1 { get; set; }
+        public double Beta2 { get; set; }
+
         public ImplicitSchemeParameters(Layer layer, Substance substance)
         {
             var a = substance.DiffusionCoefficient * layer.R;
-            var b = a;
             var c = 1 + 2 * a;
-            
             var n = layer.N;
 
             A = new double[n];
             B = new double[n];
             C = new double[n];
+            D = new double[n];
+            E = new double[n];
+            F = new double[n];
 
-            for (var i = 0; i < n; i++)
+            for (var i = 1; i < n - 1; i++)
             {
-                A[i] = a;
-                B[i] = b;
+                A[i] = B[i] = a;
                 C[i] = c;
             }
 
@@ -32,6 +40,8 @@ namespace BiosensorSimulator.Parameters.Scheme
             C[0] = 1;
             B[n - 1] = 0;
             C[n - 1] = 1;
+
+            Beta1 = Beta2 = 0;
         }
     }
 }
