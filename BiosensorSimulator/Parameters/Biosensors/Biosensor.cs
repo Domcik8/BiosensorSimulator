@@ -6,6 +6,11 @@ namespace BiosensorSimulator.Parameters.Biosensors
 {
     public class Biosensor
     {
+        /// <summary>
+        /// Biosensor name
+        /// </summary>
+        public string Name { get; set; }
+
         public double S0 { get; set; }
         public double P0 { get; set; }
 

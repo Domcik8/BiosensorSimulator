@@ -79,12 +79,17 @@ namespace BiosensorSimulator.Simulations
             var simulation = new AnalyticSimulation();
             var firstOrderCurrent = simulation.GetFirstOrderAnalyticSolution(Biosensor, SimulationParameters);
             var zeroOrderCurrent = simulation.GetZeroOrderAnalyticSolution(Biosensor, SimulationParameters);
-            var twoModelCurrent = simulation.GetTwoCompartmentModelAnalyticSolution(Biosensor, SimulationParameters);
 
             ResultPrinter.Print("====Analytic validations====");
-            ResultPrinter.Print($"First order current: {firstOrderCurrent} A/mm^2");
-            ResultPrinter.Print($"Zero order current: {zeroOrderCurrent} A/mm^2");
-            ResultPrinter.Print($"Two model current: {twoModelCurrent / 1000000} A/mm^2");
+            ResultPrinter.Print($"First order current: {firstOrderCurrent / 1000000} A/mm^2");
+            ResultPrinter.Print($"Zero order current: {zeroOrderCurrent / 1000000} A/mm^2");
+
+            if (Biosensor.Layers.Count == 2)
+            {
+                var twoModelCurrent = simulation.GetTwoCompartmentModelAnalyticSolution(Biosensor, SimulationParameters);
+                ResultPrinter.Print($"Two model current: {twoModelCurrent / 1000000} A/mm^2");
+            }
+   
             ResultPrinter.Print("");
         }
 
@@ -101,6 +106,8 @@ namespace BiosensorSimulator.Simulations
         /// </summary>
         public void PrintParameters()
         {
+            ResultPrinter.Print("*********" + Biosensor.Name + "*********");
+            ResultPrinter.Print("");
             ResultPrinter.Print("====Parameters====");
             ResultPrinter.Print($"Km: {Biosensor.Km} M");
             ResultPrinter.Print($"S0: {Biosensor.S0} M");
@@ -173,6 +180,11 @@ namespace BiosensorSimulator.Simulations
             ResultPrinter.Print("====Results====");
             ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
             ResultPrinter.Print($"Steady current = {I / 1000000 } A/mm2");
+
+            if (ResultPrinter is ConsolePrinter)
+            {
+                Console.ReadKey();
+            }
         }
 
         private void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)

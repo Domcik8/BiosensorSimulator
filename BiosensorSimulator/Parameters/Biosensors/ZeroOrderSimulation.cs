@@ -8,6 +8,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
         {
             var biosensor = new Biosensor
             {
+                Name = "Zero order biosensor",
                 P0 = 0,
                 VMax = 100e-6,
                 Km = 100e-6,
