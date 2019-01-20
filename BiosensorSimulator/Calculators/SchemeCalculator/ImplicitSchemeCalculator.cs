@@ -51,6 +51,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         {
             var f = new double[layer.N];
 
+            //ToDo: think why we use sPrev and also make these 2 for loops more effective
             for (var i = 1; i < layer.N - 1; i++)
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
@@ -58,7 +59,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             }
             
             CalculateNextStep(layer, layer.Substrate, sCur, f);
-
+            
             for (var i = 1; i < layer.N - 1; i++)
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
@@ -74,22 +75,20 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         {
             FillSchemeParameters(substance, layer, s, f);
             var parameters = substance.ImplicitScheme;
-
-            s[layer.N - 1] = //layer.LastLayer ? 0 :
-                (parameters.Niu2 + parameters.Beta2 * parameters.E[layer.N - 1]) /
-                (1 - parameters.D[layer.N - 1] * parameters.Beta2);
             
-            for (var i = layer.N - 2; i >= 0; i--)
-                s[i] = parameters.D[i + 1] * s[i + 1] + parameters.E[i + 1];
 
-            s[0] =
-                parameters.Beta1 * s[1] + parameters.Niu1;
+            MatrixCalculator.SolveTriagonalLinearSystem(
+                parameters.A, parameters.B, parameters.C,
+                parameters.D, parameters.E, parameters.F,
+                s,
+                parameters.Beta1, parameters.Beta2,
+                parameters.Niu1, parameters.Niu2, layer.N);
         }
 
         public void FillSchemeParameters(Substance substance, Layer layer, double[] s, double[] f)
         {
             var parameters = substance.ImplicitScheme;
-
+            
             if (substance is Substrate)
             {
                 parameters.Niu1 = 0;
@@ -98,7 +97,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                 parameters.Beta1 = 1;
                 parameters.Beta2 = 0;
             }
-
+            
 
             if (substance is Product)
             {
@@ -111,8 +110,8 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
             //if (layer.FirstLayer)
             //{
-            //parameters.Y0 = 1;
-                //parameters.Niu1 = 0;
+            //    parameters.Y0 = 1;
+            //    parameters.Niu1 = Biosensor.S0;
             //} 
             //else
             //{
@@ -125,7 +124,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             //if (layer.LastLayer)
             //{
                 //parameters.Y1 = 1;
-                //parameters.Niu2 = Biosensor.S0;
+                //parameters.Niu2 = 0;
             //}
             //else
             //{
@@ -138,26 +137,18 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             //parameters.Beta1 = 1 / (1 + layer.H * parameters.Y0);
             //parameters.Beta2 = 1 / (1 - layer.H * parameters.Y1);
 
-            //parameters.Beta1 = 0;
-            //parameters.Beta2 = 1 / (1 - layer.H * parameters.Y1);
+            
+            //parameters.Beta1 =
+                (layer.R * layer.Substrate.DiffusionCoefficient / 2) / 1 + t * (DsOverhh + Vmax / (Km + Sprev[1]));
+            
+
 
             //parameters.A[layer.N - 1] = -parameters.Beta2;
-           // parameters.B[0] = -parameters.Beta1;
+            //parameters.B[0] = -parameters.Beta1;
 
             parameters.F = f;
             parameters.F[0] = parameters.Niu1;
             parameters.F[layer.N - 1] = parameters.Niu2;
-
-            parameters.D[1] = parameters.B[0] / (parameters.C[0] - parameters.A[0] * parameters.Beta1);
-            parameters.E[1] = (parameters.A[0] * parameters.Niu1 - parameters.F[0]) /
-                                  (parameters.C[0] -  parameters.A[0] * parameters.Beta1);
-
-            for (var i = 1; i < layer.N - 1; i++)
-            {
-                parameters.D[i + 1] = parameters.B[i] / (parameters.C[i] - parameters.D[i] * parameters.A[i]);
-                parameters.E[i + 1] = (parameters.A[i] * parameters.E[i] - parameters.F[i]) /
-                    (parameters.C[i] - parameters.D[i] * parameters.A[i]);
-            } 
         }
     }
 }
