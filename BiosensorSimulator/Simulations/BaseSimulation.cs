@@ -134,13 +134,13 @@ namespace BiosensorSimulator.Simulations
         /// </summary>
         private void SetInitialConditions()
         {
-            SCur = new double[SimulationParameters.N + 1];
-            PCur = new double[SimulationParameters.N + 1];
-            SPrev = new double[SimulationParameters.N + 1];
-            PPrev = new double[SimulationParameters.N + 1];
+            SCur = new double[SimulationParameters.N];
+            PCur = new double[SimulationParameters.N];
+            SPrev = new double[SimulationParameters.N];
+            PPrev = new double[SimulationParameters.N];
 
-            SCur[SimulationParameters.N] = Biosensor.S0;
-            PCur[SimulationParameters.N] = Biosensor.P0;
+            SCur[SimulationParameters.N - 1] = Biosensor.S0;
+            PCur[SimulationParameters.N - 1] = Biosensor.P0;
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace BiosensorSimulator.Simulations
         private void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)
         {
             ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Current = {I} A");
+            ResultPrinter.Print($"Current = {I} A/m^2");
 
             for (var i = 0; i < sCur.Length; i++)
             {

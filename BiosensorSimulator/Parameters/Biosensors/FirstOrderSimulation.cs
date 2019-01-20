@@ -34,7 +34,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
                         DiffusionCoefficient = 300e-6,
                         StartConcentration = biosensor.P0,
                         ReactionRate = 1
-                    }
+                    },
+                    FirstLayer = true,
+                    LastLayer = true
                 }
             };
 
