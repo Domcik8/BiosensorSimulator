@@ -44,10 +44,32 @@ namespace BiosensorSimulator.Parameters.Scheme
                 C[i] = c;
             }
 
-            A[0] = 0;
-            C[0] = 1;
-            B[n - 1] = 0;
-            C[n - 1] = 1;
+            if (substance is Substrate)
+            {
+                A[0] = 0;
+                C[0] = 1;
+                B[0] = 1;
+
+                A[n - 1] = 0;
+                B[n - 1] = 0;
+                C[n - 1] = -1;
+            }
+
+            if (substance is Product)
+            {
+                A[0] = 0;
+                C[0] = 1;
+                B[0] = 0;
+
+                A[n - 1] = 0;
+                B[n - 1] = 0;
+                C[n - 1] = -1;
+            }
+
+            //A[0] = 0;
+            //C[0] = 1;
+            //B[n - 1] = 0;
+            //C[n - 1] = 1;
 
             Beta1 = Beta2 = 0;
             U0 = U1 = 0;

@@ -14,7 +14,7 @@ namespace BiosensorSimulator
             // You can choose different starting conditions
             var biosensor = new FirstOrderSimulation().GetInitiationParameters();
             var simulationParameters = new SimulationParametersSuplier1().InitiationParameters(biosensor);
-            var schemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
+            var schemeCalculator = new ImplicitSchemeCalculator(biosensor, simulationParameters);
 
             var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter(@"C:\BiosensorSimulations");
