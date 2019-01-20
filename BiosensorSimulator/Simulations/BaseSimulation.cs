@@ -191,6 +191,8 @@ namespace BiosensorSimulator.Simulations
             if (ResultPrinter is ConsolePrinter)
             {
                 Console.ReadKey();
+                Console.ReadKey();
+                Console.ReadKey();
             }
         }
 

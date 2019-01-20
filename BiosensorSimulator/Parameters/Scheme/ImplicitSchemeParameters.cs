@@ -23,7 +23,7 @@ namespace BiosensorSimulator.Parameters.Scheme
         public double Niu1 { get; set; }
         public double Niu2 { get; set; }
 
-        public ImplicitSchemeParameters(Layer layer, Substance substance)
+        public ImplicitSchemeParameters(Biosensor biosensor, Layer layer, Substance substance)
         {
             var a = substance.DiffusionCoefficient * layer.R;
             var c = 1 + 2 * a;
@@ -45,29 +45,37 @@ namespace BiosensorSimulator.Parameters.Scheme
             if (substance is Substrate)
             {
                 A[0] = 0;
-                B[0] = 1;
                 C[0] = 1;
-
-                A[n - 1] = 0;
+                
                 B[n - 1] = 0;
-                C[n - 1] = -1;
+                C[n - 1] = 1;
+
+                Niu1 = 0;
+                Niu2 = biosensor.S0;
+                Beta1 = 1;
+                Beta2 = 0;
             }
 
             if (substance is Product)
             {
                 A[0] = 0;
-                B[0] = 0;
                 C[0] = 1;
-
-                A[n - 1] = 0;
+                
                 B[n - 1] = 0;
-                C[n - 1] = -1;
+                C[n - 1] = 1;
+
+                Niu1 = 0;
+                Niu2 = 0;
+
+                Beta1 = 0;
+                Beta2 = 0;
             }
 
-            Beta1 = Beta2 = 0;
+            A[n - 1] = Beta2;
+            B[0] = Beta1;
+
             U0 = U1 = 0;
             Y0 = Y1 = 0;
-            Niu1 = Niu2 = 0;
         }
     }
 }

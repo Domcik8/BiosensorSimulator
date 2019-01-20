@@ -48,7 +48,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 }
 
                 layer.Product.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Product);
-                layer.Product.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Product);
+                layer.Product.ImplicitScheme = new ImplicitSchemeParameters(biosensor, layer, layer.Product);
 
                 if (layer.Type == LayerType.SelectiveMembrane)
                 {
@@ -56,7 +56,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 }
 
                 layer.Substrate.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Substrate);
-                layer.Substrate.ImplicitScheme = new ImplicitSchemeParameters(layer, layer.Substrate);
+                layer.Substrate.ImplicitScheme = new ImplicitSchemeParameters(biosensor, layer, layer.Substrate);
             }
 
             return simulationParameters;

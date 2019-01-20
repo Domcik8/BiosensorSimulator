@@ -89,24 +89,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         {
             var parameters = substance.ImplicitScheme;
             
-            if (substance is Substrate)
-            {
-                parameters.Niu1 = 0;
-                parameters.Niu2 = Biosensor.S0;
-
-                parameters.Beta1 = 1;
-                parameters.Beta2 = 0;
-            }
             
-
-            if (substance is Product)
-            {
-                parameters.Niu1 = 0;
-                parameters.Niu2 = 0;
-
-                parameters.Beta1 = 0;
-                parameters.Beta2 = 0;
-            }
 
             //if (layer.FirstLayer)
             //{
@@ -139,10 +122,8 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
             
             //parameters.Beta1 =
-                (layer.R * layer.Substrate.DiffusionCoefficient / 2) / 1 + t * (DsOverhh + Vmax / (Km + Sprev[1]));
+                //(layer.R * layer.Substrate.DiffusionCoefficient / 2) / 1 + t * //(DsOverhh + Vmax / (Km + Sprev[1]));
             
-
-
             //parameters.A[layer.N - 1] = -parameters.Beta2;
             //parameters.B[0] = -parameters.Beta1;
 
