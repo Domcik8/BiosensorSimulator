@@ -64,7 +64,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             for (var i = 1; i < layer.N - 1; i++)
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
-                f[i] = -(sPrev[i] + SimulationParameters.t * fermentReactionSpeed);
+                f[i] = -(pPrev[i] + SimulationParameters.t * fermentReactionSpeed);
             }
 
             CalculateNextStep(layer, layer.Product, pCur, f);
