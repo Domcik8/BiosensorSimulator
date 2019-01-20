@@ -1,9 +1,8 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors;
-using BiosensorSimulator.Parameters.Simulations;
 
 namespace BiosensorSimulator.Parameters.Scheme
 {
-    public struct ImplicitSchemeParameters
+    public class ImplicitSchemeParameters
     {
         public double[] A { get; set; }
         public double[] B { get; set; }
@@ -16,6 +15,15 @@ namespace BiosensorSimulator.Parameters.Scheme
 
         public double Beta1 { get; set; }
         public double Beta2 { get; set; }
+
+        public double Y0 { get; set; }
+        public double Y1 { get; set; }
+
+        public double U0 { get; set; }
+        public double U1 { get; set; }
+
+        public double Niu1 { get; set; }
+        public double Niu2 { get; set; }
 
         public ImplicitSchemeParameters(Layer layer, Substance substance)
         {
@@ -42,6 +50,9 @@ namespace BiosensorSimulator.Parameters.Scheme
             C[n - 1] = 1;
 
             Beta1 = Beta2 = 0;
+            U0 = U1 = 0;
+            Y0 = Y1 = 0;
+            Niu1 = Niu2 = 0;
         }
     }
 }

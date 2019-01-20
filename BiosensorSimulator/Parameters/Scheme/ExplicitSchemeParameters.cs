@@ -2,7 +2,7 @@
 
 namespace BiosensorSimulator.Parameters.Scheme
 {
-    public struct ExplicitSchemeParameters
+    public class ExplicitSchemeParameters
     {
         /// <summary>
         /// Diffusion coefficient over R

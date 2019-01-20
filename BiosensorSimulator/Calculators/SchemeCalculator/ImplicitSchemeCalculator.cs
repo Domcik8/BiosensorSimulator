@@ -1,6 +1,7 @@
 ﻿using BiosensorSimulator.Parameters.Simulations;
 using System;
 using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Scheme;
 
 namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
@@ -30,7 +31,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                     break;
 
                 case LayerType.DiffusionLayer:
-                    CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                    throw new NotImplementedException();
                     break;
 
                 case LayerType.SelectiveMembrane:
@@ -46,43 +47,90 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             }
         }
 
-        private void CalculateDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
-        {
-           
-        }
-
         private void CalculateReactionDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
-            var n = layer.N;
-            var s = new double[n];
+            var f = new double[layer.N];
 
-            for (var i = 1; i < n - 1; i++)
+            for (var i = 1; i < layer.N - 1; i++)
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
-                s[i] = -SimulationParameters.t * fermentReactionSpeed;
+                f[i] = -SimulationParameters.t * fermentReactionSpeed;
             }
+            
+            CalculateNextStep(layer, layer.Substrate.ImplicitScheme, sCur, f);
 
-            sCur = CalculateNextStep(layer, layer.Substrate, sCur, pCur, sPrev, pPrev, s);
+            for (var i = 1; i < layer.N - 1; i++)
+                f[i] *= -1;
 
-            for (var i = 1; i < n - 1; i++)
-                s[i] *= -1;
-
-            pCur = CalculateNextStep(layer, layer.Product, sCur, pCur, sPrev, pPrev, s);
+            CalculateNextStep(layer, layer.Substrate.ImplicitScheme, pCur, f);
         }
 
-        public double[] CalculateNextStep(
-            Layer layer, Substance substance,
-            double[] sCur, double[] pCur, double[] sPrev, double[] pPrev, double[] s)
+        public void CalculateNextStep(
+            Layer layer, ImplicitSchemeParameters parameters,
+            double[] s, double[] f)
         {
-            var n = layer.N;
-            var a = substance.ImplicitScheme.A;
-            var b = substance.ImplicitScheme.B;
-            var c = substance.ImplicitScheme.C;
+            FillSchemeParameters(parameters, layer, s, f);
 
-            substance.ImplicitScheme.A[n - 1] = -1 / (1 + layer.H * sCur[layer.UpperBondIndex]);
-            substance.ImplicitScheme.B[0] = -1 / (1 - layer.H * sCur[layer.LowerBondIndex]);
+
+            s[layer.N - 1] = //layer.LastLayer ? 0 :
+                (parameters.Niu2 + parameters.Beta2 * parameters.E[layer.N - 1]) /
+                (1 - parameters.D[layer.N - 1] * parameters.Beta2);
             
-            return MatrixCalculator.SolveTridiagonalInPlace(a, (double[])c.Clone(), b, s, n);
+            for (var i = layer.N - 2; i >= 0; i--)
+                s[i] = parameters.D[i + 1] * s[i + 1] + parameters.E[i + 1];
+
+            s[0] = layer.FirstLayer ? Biosensor.S0 :
+                parameters.Beta1 * s[1] + parameters.Niu1;
+        }
+
+        public void FillSchemeParameters(ImplicitSchemeParameters parameters, Layer layer, double[] s, double[] f)
+        {
+            if (layer.FirstLayer)
+            {
+                parameters.Y0 = 1;
+                parameters.Niu1 = Biosensor.S0;
+            } 
+            else
+            {
+                //parameters.Y0 = 1;
+                //parameters.U0 = s[layer.LowerBondIndex];
+                
+                parameters.Niu1 = layer.H * parameters.Y0 * parameters.U0 / (1 + layer.H * parameters.Y0);
+            }
+
+            if (layer.LastLayer)
+            {
+                parameters.Y1 = 1;
+                parameters.Niu2 = 0;
+            }
+            else
+            {
+                //parameters.Y1 = 1;
+                //parameters.U1 = s[layer.UpperBondIndex];
+
+                parameters.Niu2 = layer.H * parameters.Y1 * parameters.U1 / (layer.H * parameters.Y1 - 1);
+            }
+
+            parameters.Beta1 = 1 / (1 + layer.H * parameters.Y0);
+            parameters.Beta2 = 1 / (1 - layer.H * parameters.Y1);
+
+            parameters.A[layer.N - 1] = -parameters.Beta2;
+            parameters.B[0] = -parameters.Beta1;
+
+            parameters.F = f;
+            parameters.F[0] = parameters.Niu1;
+            parameters.F[layer.N - 1] = parameters.Niu2;
+
+            parameters.D[0] = parameters.B[1] / (parameters.C[1] - parameters.A[1] * parameters.Beta1);
+            parameters.E[0] = (parameters.A[1] * parameters.Niu1 - parameters.F[1]) /
+                                  (parameters.C[1] -  parameters.A[1] * parameters.Beta1);
+
+            for (var i = 0; i < layer.N - 1; i++)
+            {
+                parameters.D[i + 1] = parameters.B[i] / (parameters.C[i] - parameters.D[i] * parameters.A[i]);
+                parameters.E[i + 1] = (parameters.A[i] * parameters.E[i] - parameters.F[i]) /
+                    (parameters.C[i] - parameters.D[i] * parameters.A[i]);
+            } 
         }
     }
 }

@@ -71,6 +71,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
         public Product Product { get; set; }
 
         public Substrate Substrate { get; set; }
+
+        public bool FirstLayer { get; set; } = false;
+        public bool LastLayer { get; set; } = false;
     }
 
     public class Substance

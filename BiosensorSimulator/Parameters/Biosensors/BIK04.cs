@@ -37,7 +37,8 @@ namespace BiosensorSimulator.Parameters.Biosensors
                         DiffusionCoefficient = 3e-10,
                         StartConcentration = 0,
                         ReactionRate = 1
-                    }
+                    },
+                    FirstLayer = true
 
                 },
                 new Layer
@@ -57,7 +58,8 @@ namespace BiosensorSimulator.Parameters.Biosensors
                         DiffusionCoefficient = 6e-10,
                         StartConcentration = biosensor.P0,
                         ReactionRate = 0
-                    }
+                    },
+                    LastLayer = true
                 }
             };
 
