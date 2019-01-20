@@ -71,16 +71,12 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         {
             FillSchemeParameters(parameters, layer, s, f);
 
-
-            s[layer.N - 1] = //layer.LastLayer ? 0 :
-                (parameters.Niu2 + parameters.Beta2 * parameters.E[layer.N - 1]) /
-                (1 - parameters.D[layer.N - 1] * parameters.Beta2);
-            
-            for (var i = layer.N - 2; i >= 0; i--)
-                s[i] = parameters.D[i + 1] * s[i + 1] + parameters.E[i + 1];
-
-            s[0] = layer.FirstLayer ? Biosensor.S0 :
-                parameters.Beta1 * s[1] + parameters.Niu1;
+            MatrixCalculator.SolveTriagonalLinearSystem(
+                parameters.A, parameters.B, parameters.C,
+                parameters.D, parameters.E, parameters.F,
+                s,
+                parameters.Beta1, parameters.Beta2,
+                parameters.Niu1, parameters.Niu2, layer.N);
         }
 
         public void FillSchemeParameters(ImplicitSchemeParameters parameters, Layer layer, double[] s, double[] f)
@@ -111,8 +107,11 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                 parameters.Niu2 = layer.H * parameters.Y1 * parameters.U1 / (layer.H * parameters.Y1 - 1);
             }
 
-            parameters.Beta1 = 1 / (1 + layer.H * parameters.Y0);
-            parameters.Beta2 = 1 / (1 - layer.H * parameters.Y1);
+
+            /*parameters.Beta1 = 1 / (1 + layer.H * parameters.Y0);
+            parameters.Beta2 = 1 / (1 - layer.H * parameters.Y1);*/
+
+            parameters.Beta1 = (layer.R * layer.Substrate.DiffusionCoefficient / 2) / 1 + t * (DsOverhh + Vmax / (Km + Sprev[1])); ;
 
             parameters.A[layer.N - 1] = -parameters.Beta2;
             parameters.B[0] = -parameters.Beta1;
@@ -120,17 +119,6 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             parameters.F = f;
             parameters.F[0] = parameters.Niu1;
             parameters.F[layer.N - 1] = parameters.Niu2;
-
-            parameters.D[0] = parameters.B[1] / (parameters.C[1] - parameters.A[1] * parameters.Beta1);
-            parameters.E[0] = (parameters.A[1] * parameters.Niu1 - parameters.F[1]) /
-                                  (parameters.C[1] -  parameters.A[1] * parameters.Beta1);
-
-            for (var i = 0; i < layer.N - 1; i++)
-            {
-                parameters.D[i + 1] = parameters.B[i] / (parameters.C[i] - parameters.D[i] * parameters.A[i]);
-                parameters.E[i + 1] = (parameters.A[i] * parameters.E[i] - parameters.F[i]) /
-                    (parameters.C[i] - parameters.D[i] * parameters.A[i]);
-            } 
         }
     }
 }

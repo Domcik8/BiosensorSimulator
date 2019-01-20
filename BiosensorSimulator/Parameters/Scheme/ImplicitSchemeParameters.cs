@@ -7,11 +7,9 @@ namespace BiosensorSimulator.Parameters.Scheme
         public double[] A { get; set; }
         public double[] B { get; set; }
         public double[] C { get; set; }
-
-        public double[] F { get; set; }
-
         public double[] D { get; set; }
         public double[] E { get; set; }
+        public double[] F { get; set; }
 
         public double Beta1 { get; set; }
         public double Beta2 { get; set; }

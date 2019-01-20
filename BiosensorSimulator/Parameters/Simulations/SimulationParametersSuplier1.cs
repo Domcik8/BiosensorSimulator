@@ -35,7 +35,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 simulationParameters.N += layer.N;
 
                 layer.LowerBondIndex = lastLayerMaxIndex;
-                lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N - 1;
+                lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N;
 
                 if (layer.N != 0)
                 {
