@@ -62,7 +62,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
         public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex - 1; i++)
+            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
 
@@ -82,7 +82,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
         public void CalculateDiffusionLayerWithOnlyProductNextStep(Layer layer, double[] pCur, double[] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex - 1; i++)
+            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
             {
                 pCur[i] = CalculateDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1], layer.Product.ExplicitScheme.DiffusionCoefficientOverR);
             }
