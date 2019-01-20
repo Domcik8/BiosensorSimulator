@@ -53,10 +53,10 @@
             double beta1, double beta2,
             double u1, double u2, long n)
         {
-            d[0] = b[1] / (c[1] - a[1] * beta1);
-            e[0] = (a[1] * u1 - f[1]) / (c[1] - a[1] * beta1);
+            d[1] = b[0] / (c[0] - a[0] * beta1);
+            e[1] = (a[0] * u1 - f[0]) / (c[0] - a[0] * beta1);
 
-            for (var i = 0; i < n - 1; i++)
+            for (var i = 1; i < n - 1; i++)
             {
                 var nextIndex = i + 1;
                 var denominator = c[i] - d[i] * a[i];
