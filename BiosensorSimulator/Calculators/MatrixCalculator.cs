@@ -45,5 +45,33 @@
 
             return x;
         }
+
+        public static double[] SolveTriagonalLinearSystem(
+            double[] a, double[] b, double[] c,
+            double[] d, double[] e, double[] f,
+            double[] s,
+            double beta1, double beta2,
+            double u1, double u2, long n)
+        {
+            d[1] = b[0] / (c[0] - a[0] * beta1);
+            e[1] = (a[0] * u1 - f[0]) / (c[0] - a[0] * beta1);
+
+            for (var i = 1; i < n - 1; i++)
+            {
+                var nextIndex = i + 1;
+                var denominator = c[i] - d[i] * a[i];
+                d[nextIndex] = b[i] / denominator;
+                e[nextIndex] = (a[i] * e[i] - f[i]) / denominator;
+            }
+
+            s[n - 1] = (u2 + beta2 * e[n - 1]) / (1 - d[n - 1] * beta2);
+
+            for (var i = n - 2; i >= 0; i--)
+                s[i] = d[i + 1] * s[i + 1] + e[i + 1];
+
+            s[0] = beta1 * s[1] + u1;
+
+            return s;
+        }
     }
 }

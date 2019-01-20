@@ -89,7 +89,7 @@ namespace BiosensorSimulator.Simulations
                 var twoModelCurrent = simulation.GetTwoCompartmentModelAnalyticSolution(Biosensor, SimulationParameters);
                 ResultPrinter.Print($"Two model current: {twoModelCurrent / 1000000} A/mm^2");
             }
-   
+
             ResultPrinter.Print("");
         }
 
@@ -110,16 +110,11 @@ namespace BiosensorSimulator.Simulations
             ResultPrinter.Print("");
 
             if (SchemeCalculator is ImplicitSchemeCalculator)
-            {
                 ResultPrinter.Print("====Implicit Scheme Calculator====");
-                ResultPrinter.Print("");
-            }
             else
-            {
                 ResultPrinter.Print("====Explicit Scheme Calculator====");
-                ResultPrinter.Print("");
-            }
 
+            ResultPrinter.Print("");
             ResultPrinter.Print("====Parameters====");
             ResultPrinter.Print($"Km: {Biosensor.Km} M");
             ResultPrinter.Print($"S0: {Biosensor.S0} M");

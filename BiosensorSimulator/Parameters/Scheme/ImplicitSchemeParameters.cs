@@ -7,11 +7,9 @@ namespace BiosensorSimulator.Parameters.Scheme
         public double[] A { get; set; }
         public double[] B { get; set; }
         public double[] C { get; set; }
-
-        public double[] F { get; set; }
-
         public double[] D { get; set; }
         public double[] E { get; set; }
+        public double[] F { get; set; }
 
         public double Beta1 { get; set; }
         public double Beta2 { get; set; }
@@ -47,8 +45,8 @@ namespace BiosensorSimulator.Parameters.Scheme
             if (substance is Substrate)
             {
                 A[0] = 0;
-                C[0] = 1;
                 B[0] = 1;
+                C[0] = 1;
 
                 A[n - 1] = 0;
                 B[n - 1] = 0;
@@ -58,18 +56,13 @@ namespace BiosensorSimulator.Parameters.Scheme
             if (substance is Product)
             {
                 A[0] = 0;
-                C[0] = 1;
                 B[0] = 0;
+                C[0] = 1;
 
                 A[n - 1] = 0;
                 B[n - 1] = 0;
                 C[n - 1] = -1;
             }
-
-            //A[0] = 0;
-            //C[0] = 1;
-            //B[n - 1] = 0;
-            //C[n - 1] = 1;
 
             Beta1 = Beta2 = 0;
             U0 = U1 = 0;
