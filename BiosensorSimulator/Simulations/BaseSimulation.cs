@@ -45,35 +45,21 @@ namespace BiosensorSimulator.Simulations
         // Run simulation for x s
         public void RunSimulation()
         {
-            var i = 0;
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            SetInitialConditions();
-
-            while (true)
-            {
-                //for (var i = 0; i < SimulationParameters.M; i++)
-                    CalculateNextStep();
-
-                Current = GetCurrent();
-
-                if (i++ % 100000 == 0)
-                    PrintSimulationResults(stopWatch, Current);
-            }
-            stopWatch.Stop();
-
-            PrintSimulationResults(stopWatch, Current);
+            RunSimulation(int.MaxValue);
         }
 
         // Run simulation for x s
-        public void RunSimulation(long simulationTime)
+        public void RunSimulation(int simulationTime)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-
+            
             var m = simulationTime / SimulationParameters.t;
-            var halfSecond = (int)(m / simulationTime);
+
+            //Print result every resultTime seconds
+            var resultTime = 0.5;
+            // Print result every resulSteps steps
+            var resultSteps = (int)(resultTime / SimulationParameters.t);
 
             SetInitialConditions();
 
@@ -83,7 +69,7 @@ namespace BiosensorSimulator.Simulations
 
                 Current = GetCurrent();
 
-                if (i % halfSecond == 0)
+                if (i % resultSteps == 0)
                     PrintSimulationResults(stopWatch, Current);
             }
             PrintSimulationResults(stopWatch, Current);
