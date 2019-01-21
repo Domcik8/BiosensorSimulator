@@ -34,6 +34,9 @@ namespace BiosensorSimulator.Simulations
 
             var enzymeLayer = biosensor.EnzymeLayer;
             CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
+            
+            if (schemeCalculator is ExplicitSchemeCalculator)
+                new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
         }
 
         // Calculate next step of biosensor
@@ -42,16 +45,34 @@ namespace BiosensorSimulator.Simulations
         // Run simulation for x s
         public void RunSimulation()
         {
+            RunSimulation(int.MaxValue);
+        }
+
+        // Run simulation for x s
+        public void RunSimulation(int simulationTime)
+        {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
+            
+            var m = simulationTime / SimulationParameters.t;
+
+            //Print result every resultTime seconds
+            var resultTime = 0.5;
+            // Print result every resulSteps steps
+            var resultSteps = (int)(resultTime / SimulationParameters.t);
 
             SetInitialConditions();
 
-            for (var i = 0; i < SimulationParameters.M; i++)
+            for(var i = 0; i < m; i++)
+            {
                 CalculateNextStep();
 
-            Current = GetCurrent();
+                Current = GetCurrent();
 
+                if (i % resultSteps == 0)
+                    PrintSimulationResults(stopWatch, Current);
+            }
+            PrintSimulationResults(stopWatch, Current);
             stopWatch.Stop();
 
             PrintSimulationResults(stopWatch, Current);
@@ -89,58 +110,8 @@ namespace BiosensorSimulator.Simulations
                 var twoModelCurrent = simulation.GetTwoCompartmentModelAnalyticSolution(Biosensor, SimulationParameters);
                 ResultPrinter.Print($"Two model current: {twoModelCurrent / 1000000} A/mm^2");
             }
-   
+
             ResultPrinter.Print("");
-        }
-
-        /// <summary>
-        /// Assert that simulation steps are correct
-        /// </summary>
-        public void AssertSimulationStability()
-        {
-            new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
-        }
-
-        /// <summary>
-        /// Write parameters for result
-        /// </summary>
-        public void PrintParameters()
-        {
-            ResultPrinter.Print("*********" + Biosensor.Name + "*********");
-            ResultPrinter.Print("");
-            ResultPrinter.Print("====Parameters====");
-            ResultPrinter.Print($"Km: {Biosensor.Km} M");
-            ResultPrinter.Print($"S0: {Biosensor.S0} M");
-            ResultPrinter.Print($"Vmax: {Biosensor.VMax} M/s");
-            ResultPrinter.Print($"Time step: {SimulationParameters.t} s");
-            ResultPrinter.Print($"Steps: {SimulationParameters.N}");
-            ResultPrinter.Print($"Decay rate: {SimulationParameters.DecayRate}");
-            ResultPrinter.Print("");
-
-            foreach (var biosensorLayer in Biosensor.Layers)
-            {
-                ResultPrinter.Print($"{biosensorLayer.Type}:");
-                ResultPrinter.Print($"Height: {biosensorLayer.Height} m");
-                ResultPrinter.Print($"Dp: {biosensorLayer.Product.DiffusionCoefficient} m2/s");
-                ResultPrinter.Print($"Ds: {biosensorLayer.Substrate?.DiffusionCoefficient} m2/s");
-                ResultPrinter.Print($"Steps count: {biosensorLayer.N}");
-                ResultPrinter.Print($"Step: {biosensorLayer.H} M");
-                ResultPrinter.Print("");
-            }
-        }
-
-        /// <summary>
-        /// Set initial biosensor conditions
-        /// </summary>
-        private void SetInitialConditions()
-        {
-            SCur = new double[SimulationParameters.N];
-            PCur = new double[SimulationParameters.N];
-            SPrev = new double[SimulationParameters.N];
-            PPrev = new double[SimulationParameters.N];
-
-            SCur[SimulationParameters.N - 1] = Biosensor.S0;
-            PCur[SimulationParameters.N - 1] = Biosensor.P0;
         }
 
         /// <summary>
@@ -175,26 +146,59 @@ namespace BiosensorSimulator.Simulations
             return PCur[1] * CurrentFactor;
         }
 
+        /// <summary>
+        /// Set initial biosensor conditions
+        /// </summary>
+        private void SetInitialConditions()
+        {
+            SCur = new double[SimulationParameters.N];
+            PCur = new double[SimulationParameters.N];
+            SPrev = new double[SimulationParameters.N];
+            PPrev = new double[SimulationParameters.N];
+
+            SCur[SimulationParameters.N - 1] = Biosensor.S0;
+            PCur[SimulationParameters.N - 1] = Biosensor.P0;
+        }
+
         private void PrintSimulationResults(Stopwatch stopwatch, double I)
         {
             ResultPrinter.Print("====Results====");
             ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
             ResultPrinter.Print($"Steady current = {I / 1000000 } A/mm2");
-
-            if (ResultPrinter is ConsolePrinter)
-            {
-                Console.ReadKey();
-            }
         }
 
-        private void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)
+        /// <summary>
+        /// Write parameters for result
+        /// </summary>
+        public void PrintParameters()
         {
-            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Current = {I} A/m^2");
+            ResultPrinter.Print("*********" + Biosensor.Name + "*********");
+            ResultPrinter.Print("");
 
-            for (var i = 0; i < sCur.Length; i++)
+            if (SchemeCalculator is ImplicitSchemeCalculator)
+                ResultPrinter.Print("====Implicit Scheme Calculator====");
+            else
+                ResultPrinter.Print("====Explicit Scheme Calculator====");
+
+            ResultPrinter.Print("");
+            ResultPrinter.Print("====Parameters====");
+            ResultPrinter.Print($"Km: {Biosensor.Km} M");
+            ResultPrinter.Print($"S0: {Biosensor.S0} M");
+            ResultPrinter.Print($"Vmax: {Biosensor.VMax} M/s");
+            ResultPrinter.Print($"Time step: {SimulationParameters.t} s");
+            ResultPrinter.Print($"Steps: {SimulationParameters.N}");
+            ResultPrinter.Print($"Decay rate: {SimulationParameters.DecayRate}");
+            ResultPrinter.Print("");
+
+            foreach (var biosensorLayer in Biosensor.Layers)
             {
-                ResultPrinter.Print($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");
+                ResultPrinter.Print($"{biosensorLayer.Type}:");
+                ResultPrinter.Print($"Height: {biosensorLayer.Height} m");
+                ResultPrinter.Print($"Dp: {biosensorLayer.Product.DiffusionCoefficient} m2/s");
+                ResultPrinter.Print($"Ds: {biosensorLayer.Substrate?.DiffusionCoefficient} m2/s");
+                ResultPrinter.Print($"Steps count: {biosensorLayer.N}");
+                ResultPrinter.Print($"Step: {biosensorLayer.H} M");
+                ResultPrinter.Print("");
             }
         }
     }
