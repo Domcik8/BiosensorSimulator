@@ -4,6 +4,7 @@ using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using BiosensorSimulator.Simulations;
 using BiosensorSimulator.Simulations.Simulations1D;
+using System;
 
 namespace BiosensorSimulator
 {
@@ -22,10 +23,17 @@ namespace BiosensorSimulator
             BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, schemeCalculator, resultPrinter);
 
             // Analytic model validation
-            simulation.AssertSimulationStability();
             simulation.PrintParameters();
             simulation.ShowValidationValues();
             simulation.RunStableCurrentSimulation();
+            simulation.RunSimulation(10);
+
+            if (resultPrinter is ConsolePrinter)
+            {
+                Console.ReadKey();
+                Console.ReadKey();
+                Console.ReadKey();
+            }
         }
     }
 }

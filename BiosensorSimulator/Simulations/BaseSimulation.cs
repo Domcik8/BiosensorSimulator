@@ -34,6 +34,9 @@ namespace BiosensorSimulator.Simulations
 
             var enzymeLayer = biosensor.EnzymeLayer;
             CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
+            
+            if (schemeCalculator is ExplicitSchemeCalculator)
+                new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
         }
 
         // Calculate next step of biosensor
@@ -42,16 +45,48 @@ namespace BiosensorSimulator.Simulations
         // Run simulation for x s
         public void RunSimulation()
         {
+            var i = 0;
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
             SetInitialConditions();
 
-            for (var i = 0; i < SimulationParameters.M; i++)
+            while (true)
+            {
+                //for (var i = 0; i < SimulationParameters.M; i++)
+                    CalculateNextStep();
+
+                Current = GetCurrent();
+
+                if (i++ % 100000 == 0)
+                    PrintSimulationResults(stopWatch, Current);
+            }
+            stopWatch.Stop();
+
+            PrintSimulationResults(stopWatch, Current);
+        }
+
+        // Run simulation for x s
+        public void RunSimulation(long simulationTime)
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            var m = simulationTime / SimulationParameters.t;
+            var halfSecond = (int)(m / simulationTime);
+
+            SetInitialConditions();
+
+            for(var i = 0; i < m; i++)
+            {
                 CalculateNextStep();
 
-            Current = GetCurrent();
+                Current = GetCurrent();
 
+                if (i % halfSecond == 0)
+                    PrintSimulationResults(stopWatch, Current);
+            }
+            PrintSimulationResults(stopWatch, Current);
             stopWatch.Stop();
 
             PrintSimulationResults(stopWatch, Current);
@@ -94,11 +129,56 @@ namespace BiosensorSimulator.Simulations
         }
 
         /// <summary>
-        /// Assert that simulation steps are correct
+        /// Get stable current 
         /// </summary>
-        public void AssertSimulationStability()
+        private double GetStableCurrent()
         {
-            new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
+            long i = 1;
+            double iPrev = 0;
+
+            while (true)
+            {
+
+                CalculateNextStep();
+
+                var iCur = GetCurrent();
+
+                if (iCur > 0 && iPrev > 0
+                             && iCur > SimulationParameters.ZeroIBond
+                             && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
+                {
+                    return iCur;
+                }
+
+                iPrev = iCur;
+                i++;
+            }
+        }
+
+        private double GetCurrent()
+        {
+            return PCur[1] * CurrentFactor;
+        }
+
+        /// <summary>
+        /// Set initial biosensor conditions
+        /// </summary>
+        private void SetInitialConditions()
+        {
+            SCur = new double[SimulationParameters.N];
+            PCur = new double[SimulationParameters.N];
+            SPrev = new double[SimulationParameters.N];
+            PPrev = new double[SimulationParameters.N];
+
+            SCur[SimulationParameters.N - 1] = Biosensor.S0;
+            PCur[SimulationParameters.N - 1] = Biosensor.P0;
+        }
+
+        private void PrintSimulationResults(Stopwatch stopwatch, double I)
+        {
+            ResultPrinter.Print("====Results====");
+            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
+            ResultPrinter.Print($"Steady current = {I / 1000000 } A/mm2");
         }
 
         /// <summary>
@@ -133,77 +213,6 @@ namespace BiosensorSimulator.Simulations
                 ResultPrinter.Print($"Steps count: {biosensorLayer.N}");
                 ResultPrinter.Print($"Step: {biosensorLayer.H} M");
                 ResultPrinter.Print("");
-            }
-        }
-
-        /// <summary>
-        /// Set initial biosensor conditions
-        /// </summary>
-        private void SetInitialConditions()
-        {
-            SCur = new double[SimulationParameters.N];
-            PCur = new double[SimulationParameters.N];
-            SPrev = new double[SimulationParameters.N];
-            PPrev = new double[SimulationParameters.N];
-
-            SCur[SimulationParameters.N - 1] = Biosensor.S0;
-            PCur[SimulationParameters.N - 1] = Biosensor.P0;
-        }
-
-        /// <summary>
-        /// Get stable current 
-        /// </summary>
-        private double GetStableCurrent()
-        {
-            long i = 1;
-            double iPrev = 0;
-
-            while (true)
-            {
-
-                CalculateNextStep();
-
-                var iCur = GetCurrent();
-
-                if (iCur > 0 && iPrev > 0
-                             && iCur > SimulationParameters.ZeroIBond
-                             && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
-                {
-                    return iCur;
-                }
-
-                iPrev = iCur;
-                i++;
-            }
-        }
-
-        private double GetCurrent()
-        {
-            return PCur[1] * CurrentFactor;
-        }
-
-        private void PrintSimulationResults(Stopwatch stopwatch, double I)
-        {
-            ResultPrinter.Print("====Results====");
-            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Steady current = {I / 1000000 } A/mm2");
-
-            if (ResultPrinter is ConsolePrinter)
-            {
-                Console.ReadKey();
-                Console.ReadKey();
-                Console.ReadKey();
-            }
-        }
-
-        private void PrintSimulationResults(Stopwatch stopwatch, double[] sCur, double[] pCur, double I)
-        {
-            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Current = {I} A/m^2");
-
-            for (var i = 0; i < sCur.Length; i++)
-            {
-                ResultPrinter.Print($"S[{i}] = {sCur[i]}, P[{i}] = {pCur[i]}");
             }
         }
     }
