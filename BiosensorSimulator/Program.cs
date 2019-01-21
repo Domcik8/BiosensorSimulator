@@ -26,7 +26,7 @@ namespace BiosensorSimulator
             simulation.PrintParameters();
             simulation.ShowValidationValues();
             simulation.RunStableCurrentSimulation();
-            simulation.RunSimulation(10);
+            simulation.RunSimulation(30);
 
             if (resultPrinter is ConsolePrinter)
             {
