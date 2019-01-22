@@ -20,7 +20,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 0.01e-3,
+                    Height = 0.15e-3,
                     Substrate =
                     new Substrate
                     {

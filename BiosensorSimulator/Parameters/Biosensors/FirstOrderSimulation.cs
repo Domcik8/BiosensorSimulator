@@ -10,8 +10,8 @@ namespace BiosensorSimulator.Parameters.Biosensors
             {
                 Name = "First order biosensor",
                 P0 = 0,
-                VMax = 100e-6,
-                Km = 100e-6,
+                VMax = 100e-6, //3
+                Km = 100e-6 //9
             };
 
             biosensor.S0 = 0.01 * biosensor.Km;
@@ -20,11 +20,11 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 0.01e-3,
+                    Height = 0.01, //e-3 e-6,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
-                        DiffusionCoefficient = 300e-6,
+                        DiffusionCoefficient = 300e-6, //e-12,
                         StartConcentration = biosensor.S0,
                         ReactionRate = 1
                     },

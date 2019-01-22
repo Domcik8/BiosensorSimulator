@@ -25,7 +25,10 @@ namespace BiosensorSimulator
             // Analytic model validation
             simulation.PrintParameters();
             simulation.ShowValidationValues();
-            simulation.RunStableCurrentSimulation();
+
+            resultPrinter.Print("====Results====");
+
+            //simulation.RunStableCurrentSimulation();
             simulation.RunSimulation(30);
 
             if (resultPrinter is ConsolePrinter)

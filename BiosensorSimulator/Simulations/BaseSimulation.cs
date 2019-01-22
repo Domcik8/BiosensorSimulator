@@ -34,7 +34,7 @@ namespace BiosensorSimulator.Simulations
 
             var enzymeLayer = biosensor.EnzymeLayer;
             CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
-            
+
             if (schemeCalculator is ExplicitSchemeCalculator)
                 new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
         }
@@ -53,7 +53,7 @@ namespace BiosensorSimulator.Simulations
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            
+
             var m = simulationTime / SimulationParameters.t;
 
             //Print result every resultTime seconds
@@ -63,14 +63,14 @@ namespace BiosensorSimulator.Simulations
 
             SetInitialConditions();
 
-            for(var i = 0; i < m; i++)
+            for (var i = 1; i <= m; i++)
             {
                 CalculateNextStep();
 
                 Current = GetCurrent();
 
                 if (i % resultSteps == 0)
-                    PrintSimulationResults(stopWatch, Current);
+                    PrintSimulationResults(stopWatch, Current, i / resultSteps * resultTime);
             }
             PrintSimulationResults(stopWatch, Current);
             stopWatch.Stop();
@@ -160,11 +160,17 @@ namespace BiosensorSimulator.Simulations
             PCur[SimulationParameters.N - 1] = Biosensor.P0;
         }
 
+        private void PrintSimulationResults(Stopwatch stopwatch, double I, double simulationTime)
+        {
+            ResultPrinter.Print($"Simulated biosensor response time: {simulationTime} s");
+            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
+            ResultPrinter.Print($"Steady current = {I / 1000000} A/mm2");
+        }
+
         private void PrintSimulationResults(Stopwatch stopwatch, double I)
         {
-            ResultPrinter.Print("====Results====");
             ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Steady current = {I / 1000000 } A/mm2");
+            ResultPrinter.Print($"Steady current = {I / 1000000} A/mm2");
         }
 
         /// <summary>
