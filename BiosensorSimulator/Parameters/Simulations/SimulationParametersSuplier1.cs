@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BiosensorSimulator.Parameters.Biosensors;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Scheme;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
@@ -17,7 +17,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 DecayRate = 1e-5,
                 F = 96485.33289,
                 ZeroIBond = 1e-25,
-                t = 7.5e-3
+                t = 1e-7
             };
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
@@ -40,7 +40,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                     lastLayerMaxIndex--;
 
                 lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N;
-                
+
                 if (layer.N != 0)
                 {
                     layer.H = layer.Height / layer.N;

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class TwoModelBiosensor : IBiosensorSupplier
+    public class TwoLayerModelBiosensor : IBiosensorSupplier
     {
         public Biosensor GetInitiationParameters()
         {
@@ -10,9 +11,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
             {
                 Name = "Two model biosensor",
                 P0 = 0,
-                VMax = 10e-6,
-                Km = 100e-6,
-                S0 = 100e-6
+                VMax = 10e-12,
+                Km = 100e-12,
+                S0 = 100e-12
             };
 
             //biosensor.S0 = 0.01 * biosensor.Km;
@@ -21,7 +22,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 100e-6,
+                    Height = 100e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
@@ -40,7 +41,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.DiffusionLayer,
-                    Height = 100e-6,
+                    Height = 500e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,

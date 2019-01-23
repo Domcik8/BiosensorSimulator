@@ -1,9 +1,9 @@
 ﻿using BiosensorSimulator.Calculators.SchemeCalculator;
-using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Simulations;
+using BiosensorSimulator.Results;
 using System;
 using System.Diagnostics;
-using BiosensorSimulator.Results;
 
 namespace BiosensorSimulator.Simulations
 {
@@ -102,13 +102,13 @@ namespace BiosensorSimulator.Simulations
             var zeroOrderCurrent = simulation.GetZeroOrderAnalyticSolution(Biosensor, SimulationParameters);
 
             ResultPrinter.Print("====Analytic validations====");
-            ResultPrinter.Print($"First order current: {firstOrderCurrent / 1000000} A/mm^2");
-            ResultPrinter.Print($"Zero order current: {zeroOrderCurrent / 1000000} A/mm^2");
+            ResultPrinter.Print($"First order current: {firstOrderCurrent } A/mm^2");
+            ResultPrinter.Print($"Zero order current: {zeroOrderCurrent } A/mm^2");
 
             if (Biosensor.Layers.Count == 2)
             {
                 var twoModelCurrent = simulation.GetTwoCompartmentModelAnalyticSolution(Biosensor, SimulationParameters);
-                ResultPrinter.Print($"Two model current: {twoModelCurrent / 1000000} A/mm^2");
+                ResultPrinter.Print($"Two model current: {twoModelCurrent } A/mm^2");
             }
 
             ResultPrinter.Print("");
@@ -164,13 +164,13 @@ namespace BiosensorSimulator.Simulations
         {
             ResultPrinter.Print($"Simulated biosensor response time: {simulationTime} s");
             ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Steady current = {I / 1000000} A/mm2");
+            ResultPrinter.Print($"Steady current = {I } A/mm2");
         }
 
         private void PrintSimulationResults(Stopwatch stopwatch, double I)
         {
             ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Steady current = {I / 1000000} A/mm2");
+            ResultPrinter.Print($"Steady current = {I } A/mm2");
         }
 
         /// <summary>

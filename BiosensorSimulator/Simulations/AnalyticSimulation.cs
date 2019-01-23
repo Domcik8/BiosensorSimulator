@@ -1,4 +1,4 @@
-﻿using BiosensorSimulator.Parameters.Biosensors;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Simulations;
 using System;
 

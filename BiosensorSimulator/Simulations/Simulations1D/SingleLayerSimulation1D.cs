@@ -1,9 +1,9 @@
 ﻿using BiosensorSimulator.Calculators.SchemeCalculator;
-using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Simulations;
+using BiosensorSimulator.Results;
 using System;
 using System.Linq;
-using BiosensorSimulator.Results;
 
 namespace BiosensorSimulator.Simulations.Simulations1D
 {

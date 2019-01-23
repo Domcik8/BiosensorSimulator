@@ -1,4 +1,4 @@
-﻿using BiosensorSimulator.Parameters.Biosensors;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 
 namespace BiosensorSimulator.Parameters.Scheme
 {
@@ -46,7 +46,7 @@ namespace BiosensorSimulator.Parameters.Scheme
             {
                 A[0] = 0;
                 C[0] = 1;
-                
+
                 B[n - 1] = 0;
                 C[n - 1] = 1;
 
@@ -60,7 +60,7 @@ namespace BiosensorSimulator.Parameters.Scheme
             {
                 A[0] = 0;
                 C[0] = 1;
-                
+
                 B[n - 1] = 0;
                 C[n - 1] = 1;
 
