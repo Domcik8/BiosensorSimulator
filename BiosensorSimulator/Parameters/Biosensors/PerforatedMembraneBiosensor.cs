@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+using System;
+using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
@@ -6,6 +8,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
     {
         public Biosensor GetInitiationParameters()
         {
+            //Skaicius pmastyti kaip konvertuoti
+            throw new Exception();
+
             var biosensor = new Biosensor
             {
                 Name = "Biosensor with perforated membrane",

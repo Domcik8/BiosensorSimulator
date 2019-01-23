@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using BiosensorSimulator.Parameters.Scheme;
+using System.Collections.Generic;
 using System.Linq;
-using BiosensorSimulator.Parameters.Scheme;
 
-namespace BiosensorSimulator.Parameters.Biosensors
+namespace BiosensorSimulator.Parameters.Biosensors.Base
 {
     public class Biosensor
     {

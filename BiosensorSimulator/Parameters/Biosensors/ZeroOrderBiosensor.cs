@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class ZeroOrderSimulation : IBiosensorSupplier
+    public class ZeroOrderBiosensor : IBiosensorSupplier
     {
         public Biosensor GetInitiationParameters()
         {
@@ -10,8 +11,8 @@ namespace BiosensorSimulator.Parameters.Biosensors
             {
                 Name = "Zero order biosensor",
                 P0 = 0,
-                VMax = 100e-6,
-                Km = 100e-6,
+                VMax = 100e-12, //-6 decimeters / -3 meters / -12 milimeters
+                Km = 100e-12 //-6 decimeters / -3 meters / -12 milimeters
             };
 
             biosensor.S0 = 1000 * biosensor.Km;
@@ -20,19 +21,18 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 0.15e-3,
-                    Substrate =
-                    new Substrate
+                    Height = 0.01, //e0 milimiter, e-3 meter
+                    Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
-                        DiffusionCoefficient = 300e-6,
+                        DiffusionCoefficient = 300e-6, //e-6 milimiter, e-12 meter
                         StartConcentration = biosensor.S0,
                         ReactionRate = 1
                     },
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
-                        DiffusionCoefficient = 300e-6,
+                        DiffusionCoefficient = 300e-6, //e-6 milimiter, e-12 meter
                         StartConcentration = biosensor.P0,
                         ReactionRate = 1
                     },

@@ -1,7 +1,6 @@
-﻿using BiosensorSimulator.Parameters.Simulations;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+using BiosensorSimulator.Parameters.Simulations;
 using System;
-using BiosensorSimulator.Parameters.Biosensors;
-using BiosensorSimulator.Parameters.Scheme;
 
 namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
@@ -86,12 +85,12 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                 bP[i] = abP;
                 cP[i] = c;
             }
-            
+
             double cSfirst, cSlast, cPfirst, cPlast, fSfirst, fSlast,
                 fPfirst, fPlast, beta1S, u1S, beta2S, u2S, beta1P, u1P, beta2P, u2P;
             var Vmax = Biosensor.VMax;
             var Km = Biosensor.Km;
-            
+
             for (var i = 1; i < N - 1; i++)
             {
                 cS[i] = 1 + t * (DsOverhh + Vmax / (Km + Sprev[i]));

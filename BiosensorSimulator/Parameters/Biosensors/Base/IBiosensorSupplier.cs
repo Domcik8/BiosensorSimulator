@@ -1,4 +1,4 @@
-﻿namespace  BiosensorSimulator.Parameters.Biosensors
+﻿namespace  BiosensorSimulator.Parameters.Biosensors.Base
 {
     public interface IBiosensorSupplier
     {

@@ -48,9 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculators\SchemeCalculator\CrankNicolsonScheme.cs" />
-    <Compile Include="Parameters\Biosensors\Biosensor.cs" />
+    <Compile Include="Parameters\Biosensors\Base\Biosensor.cs" />
     <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensor.cs" />
-    <Compile Include="Parameters\Biosensors\TwoModelBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\TwoLayerModelBiosensor.cs" />
     <Compile Include="Parameters\Scheme\ExplicitSchemeParameters.cs" />
     <Compile Include="Parameters\Scheme\ImplicitSchemeParameters.cs" />
     <Compile Include="Results\ConsolePrinter.cs" />
@@ -58,12 +58,10 @@
     <Compile Include="Results\IResultPrinter.cs" />
     <Compile Include="Simulations\Simulations1D\SingleLayerSimulation1D.cs" />
     <Compile Include="Simulations\AnalyticSimulation.cs" />
-    <Compile Include="Parameters\Biosensors\SimulationValidation.cs" />
-    <Compile Include="Parameters\Biosensors\ZeroOrderSimulation.cs" />
-    <Compile Include="Parameters\Biosensors\FirstOrderSimulation.cs" />
+    <Compile Include="Parameters\Biosensors\ZeroOrderBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\FirstOrderBiosensor.cs" />
     <Compile Include="Parameters\Simulations\ISimulationParametersSupplier.cs" />
-    <Compile Include="Parameters\Biosensors\IBiosensorSupplier.cs" />
-    <Compile Include="Parameters\Biosensors\BIK04.cs" />
+    <Compile Include="Parameters\Biosensors\Base\IBiosensorSupplier.cs" />
     <Compile Include="Calculators\MatrixCalculator.cs" />
     <Compile Include="Parameters\Simulations\SimulationParametersSuplier1.cs" />
     <Compile Include="Program.cs" />
