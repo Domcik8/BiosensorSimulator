@@ -20,9 +20,24 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             Array.Copy(SCur, SPrev, SCur.Length);
             Array.Copy(PCur, PPrev, PCur.Length);
 
+            var j = 1;
+
             SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
             CalculateMatchingConditions();
             CalculateBoundaryConditions();
+
+
+            if (j == 0)
+            {
+                double[] TestS = new double[SCur.Length];
+                double[] TestP = new double[SCur.Length];
+
+                for (var i = 0; i < SCur.Length; i++)
+                {
+                    TestS[i] = SCur[i] / Biosensor.S0;
+                    TestP[i] = PCur[i] / Biosensor.S0;
+                }
+            }
         }
 
         private void CalculateBoundaryConditions()

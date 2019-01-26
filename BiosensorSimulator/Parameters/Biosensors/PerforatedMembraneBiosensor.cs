@@ -8,16 +8,13 @@ namespace BiosensorSimulator.Parameters.Biosensors
     {
         public Biosensor GetInitiationParameters()
         {
-            //Skaicius pmastyti kaip konvertuoti
-            throw new Exception();
-
             var biosensor = new Biosensor
             {
                 Name = "Biosensor with perforated membrane",
                 P0 = 0,
-                VMax = 1e-6,
-                Km = 100e-6,
-                S0 = 100e-6
+                VMax = 1e-12,
+                Km = 100e-12,
+                S0 = 100e-12
             };
 
             biosensor.Layers = new List<Layer>
@@ -25,7 +22,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
             new Layer
             {
                 Type = LayerType.SelectiveMembrane,
-                Height = 2e-6,
+                Height = 2e-3,
                 Product = new Product
                 {
                     Type = SubstanceType.Product,
@@ -37,7 +34,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
             new Layer
             {
                 Type = LayerType.Enzyme,
-                Height = 4e-6,
+                Height = 4e-3,
                 Substrate = new Substrate
                 {
                     Type = SubstanceType.Substrate,
@@ -56,7 +53,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
             new Layer
             {
                 Type = LayerType.PerforatedMembrane,
-                Height = 8e-6,
+                Height = 8e-3,
                 Substrate = new Substrate
                 {
                     Type = SubstanceType.Substrate,
@@ -75,7 +72,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
             new Layer
             {
                 Type = LayerType.DiffusionLayer,
-                Height = 2e-6,
+                Height = 2e-3,
                 Substrate = new Substrate
                 {
                     Type = SubstanceType.Substrate,
