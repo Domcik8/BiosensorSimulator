@@ -28,8 +28,8 @@ namespace BiosensorSimulator
 
             resultPrinter.Print("====Results====");
 
-            simulation.RunStableCurrentSimulation();
-            //simulation.RunSimulation(30);
+            //simulation.RunStableCurrentSimulation();
+            simulation.RunSimulation();
 
             if (resultPrinter is ConsolePrinter)
             {

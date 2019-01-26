@@ -51,19 +51,20 @@ namespace BiosensorSimulator.Simulations
         // Run simulation for x s
         public void RunSimulation(int simulationTime)
         {
+            var i = 0;
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
             var m = simulationTime / SimulationParameters.t;
 
             //Print result every resultTime seconds
-            var resultTime = 0.5;
+            var resultTime = 1.1;
             // Print result every resulSteps steps
             var resultSteps = (int)(resultTime / SimulationParameters.t);
 
             SetInitialConditions();
 
-            for (var i = 1; i <= m; i++)
+            for (i = 1; i <= m; i++)
             {
                 CalculateNextStep();
 
@@ -72,10 +73,9 @@ namespace BiosensorSimulator.Simulations
                 if (i % resultSteps == 0)
                     PrintSimulationResults(stopWatch, Current, i / resultSteps * resultTime);
             }
-            PrintSimulationResults(stopWatch, Current);
             stopWatch.Stop();
 
-            PrintSimulationResults(stopWatch, Current);
+            PrintSimulationResults(stopWatch, Current, i * SimulationParameters.t);
         }
 
         /// <summary>
@@ -87,11 +87,11 @@ namespace BiosensorSimulator.Simulations
             stopWatch.Start();
 
             SetInitialConditions();
-            var stableCurrent = GetStableCurrent();
+            var stableCurrent = GetStableCurrent(out var i);
 
             stopWatch.Stop();
 
-            PrintSimulationResults(stopWatch, stableCurrent);
+            PrintSimulationResults(stopWatch, stableCurrent, i * SimulationParameters.t);
         }
 
         // Show ZeroCondition and First condition and two model condition
@@ -117,9 +117,9 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Get stable current 
         /// </summary>
-        private double GetStableCurrent()
+        private double GetStableCurrent(out long i)
         {
-            long i = 1;
+            i = 1;
             double iPrev = 0;
 
             while (true)

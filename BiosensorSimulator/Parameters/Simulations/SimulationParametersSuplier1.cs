@@ -17,7 +17,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 DecayRate = 1e-5,
                 F = 96485.33289,
                 ZeroIBond = 1e-25,
-                t = 1e-7
+                t = 7.5e-8
             };
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
