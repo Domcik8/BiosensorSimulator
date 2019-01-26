@@ -16,8 +16,6 @@ namespace BiosensorSimulator.Simulations
 
         protected IResultPrinter ResultPrinter { get; }
 
-        public double CurrentFactor { get; }
-
         public double[] SCur, PCur;
         public double[] SPrev, PPrev;
         public double Current;
@@ -32,9 +30,6 @@ namespace BiosensorSimulator.Simulations
             Biosensor = biosensor;
             SchemeCalculator = schemeCalculator;
             ResultPrinter = resultPrinter;
-
-            var enzymeLayer = biosensor.EnzymeLayer;
-            CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
 
             if (schemeCalculator is ExplicitSchemeCalculator)
                 new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
@@ -187,10 +182,7 @@ namespace BiosensorSimulator.Simulations
             }
         }
 
-        private double GetCurrent()
-        {
-            return PCur[1] * CurrentFactor;
-        }
+        public abstract double GetCurrent();
 
         /// <summary>
         /// Set initial biosensor conditions

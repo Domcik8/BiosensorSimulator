@@ -9,11 +9,17 @@ namespace BiosensorSimulator.Simulations.Simulations1D
 {
     public class SingleLayerSimulation1D : BaseSimulation
     {
+        public double CurrentFactor { get; }
+
         public SingleLayerSimulation1D(
             SimulationParameters simulationParameters,
             Biosensor biosensor,
             ISchemeCalculator schemeCalculator,
-            IResultPrinter resultPrinter) : base(simulationParameters, biosensor, schemeCalculator, resultPrinter) { }
+            IResultPrinter resultPrinter) : base(simulationParameters, biosensor, schemeCalculator, resultPrinter)
+        {
+            var enzymeLayer = biosensor.EnzymeLayer;
+            CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
+        }
 
         public override void CalculateNextStep()
         {
@@ -38,6 +44,11 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                     TestP[i] = PCur[i] / Biosensor.S0;
                 }
             }
+        }
+
+        public override double GetCurrent()
+        {
+            return PCur[1] * CurrentFactor;
         }
 
         private void CalculateBoundaryConditions()
