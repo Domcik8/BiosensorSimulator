@@ -3,6 +3,7 @@ using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BiosensorSimulator.Simulations
@@ -42,13 +43,58 @@ namespace BiosensorSimulator.Simulations
         // Calculate next step of biosensor
         public abstract void CalculateNextStep();
 
-        // Run simulation for x s
+        /// <summary>
+        /// Runs simulation till eternity. Prints result every on specified times.
+        /// </summary>
+        public void RunSimulation(int[] resultTimes)
+        {
+            RunSimulation(int.MaxValue, resultTimes);
+        }
+
+        /// <summary>
+        /// Runs simulation for x seconds. Prints result every on specified times.
+        /// </summary>
+        public void RunSimulation(int simulationTime, int[] resultTimes)
+        {
+            int i, j = 0;
+            var resultTicks = new int[resultTimes.Length];
+            var m = simulationTime / SimulationParameters.t;
+
+            // Calculate when to print results
+            for (var k = 0; k < resultTimes.Length; k++)
+                resultTicks[k] = (int)(resultTimes[k] / SimulationParameters.t);
+
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            
+            SetInitialConditions();
+
+            for (i = 1; i <= m; i++)
+            {
+                CalculateNextStep();
+
+                Current = GetCurrent();
+
+                if (i % resultTicks[j] == 0)
+                    PrintSimulationResults(stopWatch, Current, resultTimes[j++]);
+            }
+            stopWatch.Stop();
+
+            PrintSimulationResults(stopWatch, Current, i * SimulationParameters.t);
+        }
+
+        /// <summary>
+        /// Runs simulation till eternity. Prints result every 0.5s.
+        /// </summary>
         public void RunSimulation()
         {
             RunSimulation(int.MaxValue);
         }
 
-        // Run simulation for x s
+        /// <summary>
+        /// Runs simulation for x seconds. Prints result every 0.5s.
+        /// </summary>
+        /// <param name="simulationTime"></param>
         public void RunSimulation(int simulationTime)
         {
             var stopWatch = new Stopwatch();
@@ -162,15 +208,32 @@ namespace BiosensorSimulator.Simulations
 
         private void PrintSimulationResults(Stopwatch stopwatch, double I, double simulationTime)
         {
-            ResultPrinter.Print($"Simulated biosensor response time: {simulationTime} s");
-            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Steady current = {I } A/mm2");
+            ResultPrinter.Print("");
+            ResultPrinter.Print("----------------------------------------------------");
+            ResultPrinter.Print($"Simulation time: {stopwatch.ElapsedMilliseconds} ms");
+            ResultPrinter.Print($"Response time: {simulationTime} s");
+            ResultPrinter.Print($"Current = {I} A/mm2");
+            PrintSimulationConcentrations();
         }
 
         private void PrintSimulationResults(Stopwatch stopwatch, double I)
         {
-            ResultPrinter.Print($"Simulation lasted {stopwatch.ElapsedMilliseconds} milliseconds");
-            ResultPrinter.Print($"Steady current = {I } A/mm2");
+            ResultPrinter.Print("");
+            ResultPrinter.Print("----------------------------------------------------");
+            ResultPrinter.Print($"Simulation time: {stopwatch.ElapsedMilliseconds} ms");
+            ResultPrinter.Print($"Current = {I} A/mm2");
+            PrintSimulationConcentrations();
+        }
+
+        private void PrintSimulationConcentrations()
+        {
+            ResultPrinter.Print("");
+            for (int i = 0; i < SCur.Length; i++)
+                ResultPrinter.Print($"SCur[{i}] = {SCur[i]}");
+
+            ResultPrinter.Print("");
+            for (int i = 0; i < SPrev.Length; i++)
+                ResultPrinter.Print($"SPrev[{i}] = {SPrev[i]}");
         }
 
         /// <summary>
