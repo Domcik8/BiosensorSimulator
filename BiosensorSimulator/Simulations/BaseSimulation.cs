@@ -46,7 +46,7 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Runs simulation till eternity. Prints result every on specified times.
         /// </summary>
-        public void RunSimulation(int[] resultTimes)
+        public void RunSimulation(double[] resultTimes)
         {
             RunSimulation(int.MaxValue, resultTimes);
         }
@@ -54,7 +54,7 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Runs simulation for x seconds. Prints result every on specified times.
         /// </summary>
-        public void RunSimulation(int simulationTime, int[] resultTimes)
+        public void RunSimulation(double simulationTime, double[] resultTimes, bool normalize = false)
         {
             int i, j = 0;
             var resultTicks = new int[resultTimes.Length];
@@ -75,12 +75,12 @@ namespace BiosensorSimulator.Simulations
 
                 Current = GetCurrent();
 
-                if (i % resultTicks[j] == 0)
-                    PrintSimulationResults(stopWatch, Current, resultTimes[j++]);
+                if (j < resultTimes.Length && i % resultTicks[j] == 0)
+                    PrintSimulationResults(stopWatch, Current, resultTimes[j++], normalize);
             }
             stopWatch.Stop();
 
-            PrintSimulationResults(stopWatch, Current, i * SimulationParameters.t);
+            PrintSimulationResults(stopWatch, Current, i * SimulationParameters.t, normalize);
         }
 
         /// <summary>
@@ -206,34 +206,47 @@ namespace BiosensorSimulator.Simulations
             PCur[SimulationParameters.N - 1] = Biosensor.P0;
         }
 
-        private void PrintSimulationResults(Stopwatch stopwatch, double I, double simulationTime)
+        private void PrintSimulationResults(Stopwatch stopwatch, double I, double simulationTime, bool normalize = false)
         {
             ResultPrinter.Print("");
             ResultPrinter.Print("----------------------------------------------------");
             ResultPrinter.Print($"Simulation time: {stopwatch.ElapsedMilliseconds} ms");
             ResultPrinter.Print($"Response time: {simulationTime} s");
             ResultPrinter.Print($"Current = {I} A/mm2");
-            PrintSimulationConcentrations();
+            PrintSimulationConcentrations(normalize);
         }
 
-        private void PrintSimulationResults(Stopwatch stopwatch, double I)
+        private void PrintSimulationResults(Stopwatch stopwatch, double I, bool normalize = false)
         {
             ResultPrinter.Print("");
             ResultPrinter.Print("----------------------------------------------------");
             ResultPrinter.Print($"Simulation time: {stopwatch.ElapsedMilliseconds} ms");
             ResultPrinter.Print($"Current = {I} A/mm2");
-            PrintSimulationConcentrations();
+            PrintSimulationConcentrations(normalize);
         }
 
-        private void PrintSimulationConcentrations()
+        private void PrintSimulationConcentrations(bool normalize = false)
         {
-            ResultPrinter.Print("");
-            for (int i = 0; i < SCur.Length; i++)
-                ResultPrinter.Print($"SCur[{i}] = {SCur[i]}");
+            if (normalize)
+            {
+                ResultPrinter.Print("");
+                for (var i = 0; i < SCur.Length; i++)
+                    ResultPrinter.Print($"SCur[{i}] = {SCur[i] / Biosensor.S0}");
 
-            ResultPrinter.Print("");
-            for (int i = 0; i < SPrev.Length; i++)
-                ResultPrinter.Print($"SPrev[{i}] = {SPrev[i]}");
+                ResultPrinter.Print("");
+                for (var i = 0; i < PCur.Length; i++)
+                    ResultPrinter.Print($"PCur[{i}] = {PCur[i] / Biosensor.S0}");
+            }
+            else
+            {
+                ResultPrinter.Print("");
+                for (var i = 0; i < SCur.Length; i++)
+                    ResultPrinter.Print($"SCur[{i}] = {SCur[i]}");
+
+                ResultPrinter.Print("");
+                for (var i = 0; i < PCur.Length; i++)
+                    ResultPrinter.Print($"PCur[{i}] = {PCur[i]}");
+            }
         }
 
         /// <summary>

@@ -17,11 +17,14 @@ namespace BiosensorSimulator.Results
             {
                 Directory.CreateDirectory(path);
             }
+
+            OpenStream();
         }
 
         public void Print(string message)
         {
-            File.AppendAllText(_path, message + Environment.NewLine);
+            PrintToStream(message);
+            //File.AppendAllText(_path, message + Environment.NewLine);
         }
 
         public void OpenStream()

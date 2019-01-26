@@ -10,7 +10,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
         {
             var biosensor = new Biosensor
             {
-                Name = "Biosensor with perforated membrane",
+                Name = "Perforated-Membrane-Biosensor",
                 P0 = 0,
                 VMax = 1e-12,
                 Km = 100e-12,

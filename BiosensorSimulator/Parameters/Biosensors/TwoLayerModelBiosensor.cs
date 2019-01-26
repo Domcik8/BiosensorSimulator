@@ -9,7 +9,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
         {
             var biosensor = new Biosensor
             {
-                Name = "Two model biosensor",
+                Name = "Two-Layer-Biosensor",
                 P0 = 0,
                 VMax = 10e-12,
                 Km = 100e-12,
