@@ -41,9 +41,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                 }
             }
         }
-
-        public override void Homogenize() {}
-
+        
         private void CalculateBoundaryConditions()
         {
             var firstLayer = Biosensor.Layers.First();

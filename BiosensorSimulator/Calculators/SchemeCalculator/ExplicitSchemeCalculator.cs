@@ -67,13 +67,15 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
-                var effectiveFermentReactionSpeed = fermentReactionSpeed * Biosensor.EffectiveReactionCoefficent;
+
+                if(Biosensor is BaseHomogenousBiosensor homogenousBiosensor)
+                    fermentReactionSpeed = fermentReactionSpeed * homogenousBiosensor.EffectiveReactionCoefficent;
 
                 sCur[i] = CalculateReactionDiffusionLayerNextLocation(sPrev[i - 1], sPrev[i], sPrev[i + 1],
-                    -effectiveFermentReactionSpeed, layer.Substrate.ExplicitScheme.DiffusionCoefficientOverSpace);
+                    -fermentReactionSpeed, layer.Substrate.ExplicitScheme.DiffusionCoefficientOverSpace);
 
                 pCur[i] = CalculateReactionDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1],
-                    effectiveFermentReactionSpeed, layer.Product.ExplicitScheme.DiffusionCoefficientOverSpace);
+                    fermentReactionSpeed, layer.Product.ExplicitScheme.DiffusionCoefficientOverSpace);
             }
         }
 

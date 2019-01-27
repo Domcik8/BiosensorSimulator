@@ -19,17 +19,6 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base
         public List<Layer> Layers { get; set; }
         public List<Bound> Bounds { get; set; }
 
-        public bool IsHomogenized { get; set; } = false;
-        public bool UseEffectiveDiffusionCoefficent { get; set; } = false;
-        public bool UseEffectiveReactionCoefficent { get; set; } = false;
-
-        public double EffectiveDiffusionCoefficent { get; set; } = 1;
-        public double EffectiveReactionCoefficent { get; set; } = 1;
-
-
-        public double MicroReactorRadius { get; set; }
-        public double UnitRadius { get; set; }
-
         /// <summary>
         /// Full biosensor height
         /// </summary>

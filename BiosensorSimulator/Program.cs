@@ -1,5 +1,6 @@
 ﻿using BiosensorSimulator.Calculators.SchemeCalculator;
 using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using BiosensorSimulator.Simulations;
@@ -27,9 +28,8 @@ namespace BiosensorSimulator
             simulation.ShowValidationValues();
             resultPrinter.Print("====Results====");
 
-            if (biosensor.IsHomogenized)
-                simulation.Homogenize();
-
+            if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
+                biosensor.Homogenize();
 
             simulation.RunStableCurrentSimulation();
 

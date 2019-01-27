@@ -27,51 +27,6 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             CalculateBoundaryConditions();
         }
 
-        public override void Homogenize()
-        {
-            if (Biosensor.UseEffectiveReactionCoefficent)
-                Biosensor.EffectiveReactionCoefficent = GetEffectiveReactionCoefficent(Biosensor);
-
-            if (Biosensor.UseEffectiveDiffusionCoefficent)
-            {
-                Biosensor.EnzymeLayer.Substrate.DiffusionCoefficient = GetEffectiveDiffusionCoefficent(
-                    Biosensor,
-                    Biosensor.EnzymeLayer.Substrate.DiffusionCoefficient,
-                    Biosensor.DiffusionLayer.Substrate.DiffusionCoefficient);
-
-                Biosensor.EnzymeLayer.Product.DiffusionCoefficient = GetEffectiveDiffusionCoefficent(
-                    Biosensor,
-                    Biosensor.EnzymeLayer.Product.DiffusionCoefficient,
-                    Biosensor.DiffusionLayer.Product.DiffusionCoefficient);
-            }
-        }
-
-        private double GetEffectiveReactionCoefficent(BaseBiosensor biosensor)
-        {
-            var microreactorArea = biosensor.MicroReactorRadius * biosensor.MicroReactorRadius;
-            var unitArea = biosensor.UnitRadius * biosensor.UnitRadius;
-
-            return microreactorArea / unitArea;
-        }
-
-        private double GetEffectiveDiffusionCoefficent(BaseBiosensor biosensor,
-            double enzymelayerDiffusionCoefficent1, double diffusionLayerDiffusionCoefficent2)
-        {
-            var unitArea = biosensor.UnitRadius * biosensor.Height;
-            var enzymeArea = biosensor.MicroReactorRadius * biosensor.Height;
-            //var diffusionLayerArea = unitArea - enzymeArea;
-
-            var relativeArea = enzymeArea / unitArea;
-
-            var effectiveDiffusionCoefficentMax = enzymelayerDiffusionCoefficent1 * relativeArea +
-                                                  (1 - relativeArea) * diffusionLayerDiffusionCoefficent2;
-
-            var effectiveDiffusionCoefficentMin =
-                enzymelayerDiffusionCoefficent1 * diffusionLayerDiffusionCoefficent2 / effectiveDiffusionCoefficentMax;
-
-            return Math.Min(effectiveDiffusionCoefficentMin, effectiveDiffusionCoefficentMax);
-        }
-
         private void CalculateBoundaryConditions()
         {
             var firstLayer = Biosensor.Layers.First();

@@ -5,7 +5,7 @@ using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class TwoLayerMicroreactorBiosensor : BaseBiosensor
+    public class TwoLayerMicroreactorBiosensor : BaseMicroreactorBiosensor
     {
         public TwoLayerMicroreactorBiosensor()
         {

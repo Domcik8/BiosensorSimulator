@@ -191,8 +191,6 @@ namespace BiosensorSimulator.Simulations
             return PCur[1] * CurrentFactor;
         }
 
-        public abstract void Homogenize();
-
         /// <summary>
         /// Set initial biosensor conditions
         /// </summary>
@@ -278,16 +276,22 @@ namespace BiosensorSimulator.Simulations
             ResultPrinter.Print($"Decay rate: {SimulationParameters.DecayRate}");
             ResultPrinter.Print("");
 
-            ResultPrinter.Print("*********Homogenization*********");
-            ResultPrinter.Print($"Use Homogenization: {Biosensor.IsHomogenized}");
-            ResultPrinter.Print($"Use EffectiveDiffusionCoefficent: {Biosensor.UseEffectiveDiffusionCoefficent}");
-            ResultPrinter.Print($"Use EffectiveReactionCoefficent: {Biosensor.UseEffectiveReactionCoefficent}");
-            ResultPrinter.Print("");
+            if (Biosensor is BaseHomogenousBiosensor homogenousBiosensor)
+            {
+                ResultPrinter.Print("*********Homogenization*********");
+                ResultPrinter.Print($"Use Homogenization: {homogenousBiosensor.IsHomogenized}");
+                ResultPrinter.Print($"Use EffectiveDiffusionCoefficent: {homogenousBiosensor.UseEffectiveDiffusionCoefficent}");
+                ResultPrinter.Print($"Use EffectiveReactionCoefficent: {homogenousBiosensor.UseEffectiveReactionCoefficent}");
+                ResultPrinter.Print("");
+            }
 
-            ResultPrinter.Print("*********Microreactor parameters*********");
-            ResultPrinter.Print($"Microreactor radius: {Biosensor.MicroReactorRadius}");
-            ResultPrinter.Print($"Unit radius: {Biosensor.UnitRadius}");
-            ResultPrinter.Print("");
+            if (Biosensor is BaseMicroreactorBiosensor microreactorBiosensor)
+            {
+                ResultPrinter.Print("*********Microreactor parameters*********");
+                ResultPrinter.Print($"Microreactor radius: {microreactorBiosensor.MicroReactorRadius}");
+                ResultPrinter.Print($"Unit radius: {microreactorBiosensor.UnitRadius}");
+                ResultPrinter.Print("");
+            }
 
             foreach (var biosensorLayer in Biosensor.Layers)
             {
