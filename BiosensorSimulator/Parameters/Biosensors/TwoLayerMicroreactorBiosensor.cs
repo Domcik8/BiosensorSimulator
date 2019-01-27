@@ -11,31 +11,31 @@ namespace BiosensorSimulator.Parameters.Biosensors
         {
             Name = "Two-Layer-Microreactor-Biosensor";
             P0 = 0;
-            VMax = 100e-3;
-            Km = 100e-3;
-            S0 = 20e-3;
+            VMax = 100e-12;
+            Km = 100e-12;
+            S0 = 20e-12;
 
-            MicroReactorRadius = 0.16e-3;
-            UnitRadius = 0.2e-3;
-            Height = 0.12e-3;
+            MicroReactorRadius = 0.2;
+            UnitRadius = 0.2;
+            Height = 0.12;
 
             Layers = new List<Layer>
             {
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 0.1e-3,
+                    Height = 0.1,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
-                        DiffusionCoefficient = 3e-10,
+                        DiffusionCoefficient = 3e-4,
                         StartConcentration = 0,
                         ReactionRate = 1
                     },
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
-                        DiffusionCoefficient = 3e-10,
+                        DiffusionCoefficient = 3e-4,
                         StartConcentration = 0,
                         ReactionRate = 1
                     }
@@ -43,18 +43,18 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.DiffusionLayer,
-                    Height = 0.02e-3,
+                    Height = 0.02,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
-                        DiffusionCoefficient = 6e-10,
+                        DiffusionCoefficient = 6e-4,
                         StartConcentration = S0,
                         ReactionRate = 0
                     },
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
-                        DiffusionCoefficient = 6e-10,
+                        DiffusionCoefficient = 6e-4,
                         StartConcentration = 0,
                         ReactionRate = 0
                     }

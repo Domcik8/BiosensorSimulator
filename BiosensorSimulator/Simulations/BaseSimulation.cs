@@ -30,7 +30,7 @@ namespace BiosensorSimulator.Simulations
                     return _currentFactor.Value;
 
                 var firstLayer = Biosensor.Layers.First();
-                CurrentFactor = SimulationParameters.ne * SimulationParameters.F * firstLayer.Product.DiffusionCoefficient / firstLayer.H;
+                _currentFactor = SimulationParameters.ne * SimulationParameters.F * firstLayer.Product.DiffusionCoefficient / firstLayer.H;
                 return _currentFactor.Value;
             }
         }

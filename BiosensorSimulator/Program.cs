@@ -14,7 +14,7 @@ namespace BiosensorSimulator
         static void Main()
         {
             // You can choose different starting conditions
-            var biosensor = new TwoLayerAnalyticMicroreactorBiosensor();
+            var biosensor = new TwoLayerMicroreactorBiosensor();
             var simulationParameters = new SimulationParametersSuplier1(biosensor);
 
             //var resultPrinter = new ConsolePrinter();
@@ -24,6 +24,7 @@ namespace BiosensorSimulator
             
             simulation.PrintParameters();
             simulation.ShowValidationValues();
+            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
 
             if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                 biosensor.Homogenize();
@@ -35,7 +36,6 @@ namespace BiosensorSimulator
             else
             {
                 resultPrinter.Print("====Explicit Scheme Calculator====");
-                new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
             }
 
             resultPrinter.Print("====Results====");
