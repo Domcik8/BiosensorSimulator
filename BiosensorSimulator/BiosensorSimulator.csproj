@@ -49,8 +49,10 @@
   <ItemGroup>
     <Compile Include="Calculators\SchemeCalculator\CrankNicolsonScheme.cs" />
     <Compile Include="Parameters\Biosensors\Base\Biosensor.cs" />
+    <Compile Include="Parameters\Biosensors\TwoLayerAnalyticMicroreactorBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\TwoLayerMicroreactorBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensor.cs" />
-    <Compile Include="Parameters\Biosensors\TwoLayerModelBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\TwoLayerBiosensor.cs" />
     <Compile Include="Parameters\Scheme\ExplicitSchemeParameters.cs" />
     <Compile Include="Parameters\Scheme\ImplicitSchemeParameters.cs" />
     <Compile Include="Results\ConsolePrinter.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="Simulations\BaseSimulation.cs" />
     <Compile Include="Parameters\Simulations\SimulationParameters.cs" />
     <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeStabilityChecker.cs" />
+    <Compile Include="Simulations\Simulations1D\CylindricMicroreactors1D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

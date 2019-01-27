@@ -1,39 +1,43 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using System;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class TwoLayerModelBiosensor : IBiosensorSupplier
+    public class TwoLayerMicroreactorBiosensor : IBiosensorSupplier
     {
         public Biosensor GetInitiationParameters()
         {
             var biosensor = new Biosensor
             {
-                Name = "Two-Layer-Biosensor",
+                Name = "Two-Layer-Microreactor-Biosensor",
                 P0 = 0,
-                VMax = 10e-12,
-                Km = 100e-12,
-                S0 = 100e-12
+                VMax = 100e-3,
+                Km = 0.1,
+                S0 = 20e-3
             };
 
-            //biosensor.S0 = 0.01 * biosensor.Km;
+            biosensor.MicroReactorRadius = 0.1e-3;
+            biosensor.UnitRadius = 0.2e-3;
+            biosensor.Height = 0.12e-3;
+
             biosensor.Layers = new List<Layer>
             {
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 100e-3,
+                    Height = 0.1e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
-                        DiffusionCoefficient = 300e-6,
+                        DiffusionCoefficient = 3e-10,
                         StartConcentration = 0,
                         ReactionRate = 1
                     },
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
-                        DiffusionCoefficient = 300e-6,
+                        DiffusionCoefficient = 3e-10,
                         StartConcentration = 0,
                         ReactionRate = 1
                     }
@@ -41,23 +45,27 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.DiffusionLayer,
-                    Height = 100e-3,
+                    Height = 0.02e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
-                        DiffusionCoefficient = 600e-6,
+                        DiffusionCoefficient = 6e-10,
                         StartConcentration = biosensor.S0,
                         ReactionRate = 0
                     },
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
-                        DiffusionCoefficient = 600e-6,
+                        DiffusionCoefficient = 6e-10,
                         StartConcentration = 0,
                         ReactionRate = 0
                     }
                 }
             };
+
+            biosensor.IsHomogenized = true;
+            biosensor.UseEffectiveDiffusionCoefficent = true;
+            biosensor.UseEffectiveReactionCoefficent = true;
 
             return biosensor;
         }

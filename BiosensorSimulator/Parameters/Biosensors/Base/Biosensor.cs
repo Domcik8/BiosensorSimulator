@@ -23,16 +23,18 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base
         public double MicroReactorRadius { get; set; }
         public double UnitRadius { get; set; }
 
+        public bool IsHomogenized { get; set; } = false;
+        public bool UseEffectiveDiffusionCoefficent { get; set; } = false;
+        public bool UseEffectiveReactionCoefficent { get; set; } = false;
+
+        public double EffectiveDiffusionCoefficent { get; set; } = 1;
+        public double EffectiveReactionCoefficent { get; set; } = 1;
+
         /// <summary>
         /// Full biosensor height
         /// </summary>
-        public double BiosensorHeight { get; set; }
-
-        /// <summary>
-        /// BiosensorHeight - ferment layer height
-        /// </summary>
-        public double NerstLayerHeight { get; set; }
-
+        public double Height { get; set; }
+        
         public Layer EnzymeLayer => Layers.First(l => l.Type == LayerType.Enzyme);
         public Layer DiffusionLayer => Layers.First(l => l.Type == LayerType.DiffusionLayer);
     }

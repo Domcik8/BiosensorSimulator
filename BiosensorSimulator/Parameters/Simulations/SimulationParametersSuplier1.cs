@@ -14,10 +14,10 @@ namespace BiosensorSimulator.Parameters.Simulations
             var simulationParameters = new SimulationParameters
             {
                 ne = 2,
-                DecayRate = 1e-2,
+                DecayRate = 1e-6,
                 F = 96485.33289,
                 ZeroIBond = 1e-25,
-                t = 1e-4
+                t = 7.5e-6
             };
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
