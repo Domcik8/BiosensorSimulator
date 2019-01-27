@@ -3,21 +3,18 @@ using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class TwoLayerBiosensor : IBiosensorSupplier
+    public class TwoLayerBiosensor : BaseBiosensor
     {
-        public Biosensor GetInitiationParameters()
+        public TwoLayerBiosensor()
         {
-            var biosensor = new Biosensor
-            {
-                Name = "Two-Layer-Biosensor",
-                P0 = 0,
-                VMax = 10e-12,
-                Km = 100e-12,
-                S0 = 100e-12
-            };
+            Name = "Two-Layer-Biosensor";
+            P0 = 0;
+            VMax = 10e-12;
+            Km = 100e-12;
+            S0 = 100e-12;
 
             //biosensor.S0 = 0.01 * biosensor.Km;
-            biosensor.Layers = new List<Layer>
+            Layers = new List<Layer>
             {
                 new Layer
                 {
@@ -46,7 +43,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     {
                         Type = SubstanceType.Substrate,
                         DiffusionCoefficient = 600e-6,
-                        StartConcentration = biosensor.S0,
+                        StartConcentration = S0,
                         ReactionRate = 0
                     },
                     Product = new Product
@@ -58,8 +55,6 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     }
                 }
             };
-
-            return biosensor;
         }
     }
 }

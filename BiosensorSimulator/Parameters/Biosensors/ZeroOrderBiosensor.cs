@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class ZeroOrderBiosensor : IBiosensorSupplier
+    public class ZeroOrderBiosensor : BaseBiosensor
     {
-        public Biosensor GetInitiationParameters()
+        public ZeroOrderBiosensor()
         {
-            var biosensor = new Biosensor
+            var biosensor = new BaseBiosensor
             {
                 Name = "Zero-Order-Biosensor",
                 P0 = 0,
@@ -40,8 +40,6 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     LastLayer = true
                 }
             };
-
-            return biosensor;
         }
     }
 }

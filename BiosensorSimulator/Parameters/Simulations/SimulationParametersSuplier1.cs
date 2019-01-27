@@ -9,7 +9,7 @@ namespace BiosensorSimulator.Parameters.Simulations
     {
         private List<KeyValuePair<LayerType, long>> LayersSteps { get; set; }
 
-        public SimulationParameters InitiationParameters(Biosensor biosensor)
+        public SimulationParameters InitiationParameters(BaseBiosensor biosensor)
         {
             var simulationParameters = new SimulationParameters
             {

@@ -11,7 +11,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
     {
         public CylindricMicroreactors1D(
             SimulationParameters simulationParameters,
-            Biosensor biosensor,
+            BaseBiosensor biosensor,
             ISchemeCalculator schemeCalculator,
             IResultPrinter resultPrinter) : base(simulationParameters, biosensor, schemeCalculator, resultPrinter) { }
 
@@ -44,7 +44,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             }
         }
 
-        private double GetEffectiveReactionCoefficent(Biosensor biosensor)
+        private double GetEffectiveReactionCoefficent(BaseBiosensor biosensor)
         {
             var microreactorArea = biosensor.MicroReactorRadius * biosensor.MicroReactorRadius;
             var unitArea = biosensor.UnitRadius * biosensor.UnitRadius;
@@ -52,7 +52,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             return microreactorArea / unitArea;
         }
 
-        private double GetEffectiveDiffusionCoefficent(Biosensor biosensor,
+        private double GetEffectiveDiffusionCoefficent(BaseBiosensor biosensor,
             double enzymelayerDiffusionCoefficent1, double diffusionLayerDiffusionCoefficent2)
         {
             var unitArea = biosensor.UnitRadius * biosensor.Height;

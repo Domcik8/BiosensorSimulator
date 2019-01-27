@@ -23,7 +23,7 @@ namespace BiosensorSimulator.Parameters.Scheme
         public double Niu1 { get; set; }
         public double Niu2 { get; set; }
 
-        public ImplicitSchemeParameters(Biosensor biosensor, Layer layer, Substance substance)
+        public ImplicitSchemeParameters(BaseBiosensor biosensor, Layer layer, Substance substance)
         {
             var a = substance.DiffusionCoefficient * layer.R;
             var c = 1 + 2 * a;

@@ -7,7 +7,7 @@ namespace BiosensorSimulator.Simulations
     public class AnalyticSimulation
     {
         //ToDo: kodel neatitinka reiksmiu knygoje?
-        public double GetFirstOrderAnalyticSolution(Biosensor biosensor, SimulationParameters simulationParameters)
+        public double GetFirstOrderAnalyticSolution(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             var S0 = 0.01 * biosensor.Km;
 
@@ -20,7 +20,7 @@ namespace BiosensorSimulator.Simulations
             return iCur;
         }
 
-        public double GetZeroOrderAnalyticSolution(Biosensor biosensor, SimulationParameters simulationParameters)
+        public double GetZeroOrderAnalyticSolution(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             var S0 = 1000 * biosensor.Km;
 
@@ -30,7 +30,7 @@ namespace BiosensorSimulator.Simulations
             return iCur;
         }
 
-        public double GetTwoCompartmentModelAnalyticSolution(Biosensor biosensor, SimulationParameters simulationParameters)
+        public double GetTwoCompartmentModelAnalyticSolution(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             //var S0 = 0.01 * biosensor.Km;
             var S0 = biosensor.S0;

@@ -6,10 +6,10 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class CrankNicolsonScheme : ISchemeCalculator
     {
-        public Biosensor Biosensor { get; }
+        public BaseBiosensor Biosensor { get; }
         public SimulationParameters SimulationParameters { get; }
 
-        public CrankNicolsonScheme(Biosensor biosensor, SimulationParameters simulationParameters)
+        public CrankNicolsonScheme(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             Biosensor = biosensor;
             SimulationParameters = simulationParameters;

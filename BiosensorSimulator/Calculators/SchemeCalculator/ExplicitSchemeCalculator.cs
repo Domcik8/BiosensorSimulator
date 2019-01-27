@@ -6,10 +6,10 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class ExplicitSchemeCalculator : ISchemeCalculator
     {
-        public Biosensor Biosensor { get; }
+        public BaseBiosensor Biosensor { get; }
         public SimulationParameters SimulationParameters { get; }
 
-        public ExplicitSchemeCalculator(Biosensor biosensor, SimulationParameters simulationParameters)
+        public ExplicitSchemeCalculator(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             Biosensor = biosensor;
             SimulationParameters = simulationParameters;

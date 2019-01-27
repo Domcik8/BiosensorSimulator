@@ -11,7 +11,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
     {
         public SingleLayerSimulation1D(
             SimulationParameters simulationParameters,
-            Biosensor biosensor,
+            BaseBiosensor biosensor,
             ISchemeCalculator schemeCalculator,
             IResultPrinter resultPrinter) : base(simulationParameters, biosensor, schemeCalculator, resultPrinter) {}
 

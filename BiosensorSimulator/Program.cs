@@ -13,7 +13,7 @@ namespace BiosensorSimulator
         static void Main()
         {
             // You can choose different starting conditions
-            var biosensor = new TwoLayerAnalyticMicroreactorBiosensor().GetInitiationParameters();
+            var biosensor = new TwoLayerAnalyticMicroreactorBiosensor();
             var simulationParameters = new SimulationParametersSuplier1().InitiationParameters(biosensor);
             var schemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
 

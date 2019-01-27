@@ -4,24 +4,21 @@ using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class TwoLayerAnalyticMicroreactorBiosensor : IBiosensorSupplier
+    public class TwoLayerAnalyticMicroreactorBiosensor : BaseBiosensor
     {
-        public Biosensor GetInitiationParameters()
+        public TwoLayerAnalyticMicroreactorBiosensor()
         {
-            var biosensor = new Biosensor
-            {
-                Name = "Two-Layer-Analytic-Microreactor-Biosensor",
-                P0 = 0,
-                VMax = 100e-3,
-                Km = 100e-3,
-                S0 = 100e-3
-            };
+            Name = "Two-Layer-Analytic-Microreactor-Biosensor";
+            P0 = 0;
+            VMax = 100e-3;
+            Km = 100e-3;
+            S0 = 100e-3;
 
-            biosensor.MicroReactorRadius = 0.08e-3;
-            biosensor.UnitRadius = 0.1e-3;
-            biosensor.Height = 0.12e-3;
+            MicroReactorRadius = 0.08e-3;
+            UnitRadius = 0.1e-3;
+            Height = 0.12e-3;
 
-            biosensor.Layers = new List<Layer>
+            Layers = new List<Layer>
             {
                 new Layer
                 {
@@ -50,7 +47,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     {
                         Type = SubstanceType.Substrate,
                         DiffusionCoefficient = 6e-10,
-                        StartConcentration = biosensor.S0,
+                        StartConcentration = S0,
                         ReactionRate = 0
                     },
                     Product = new Product
@@ -63,11 +60,9 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 }
             };
 
-            biosensor.IsHomogenized = true;
-            biosensor.UseEffectiveDiffusionCoefficent = true;
-            biosensor.UseEffectiveReactionCoefficent = true;
-
-            return biosensor;
+            IsHomogenized = true;
+            UseEffectiveDiffusionCoefficent = true;
+            UseEffectiveReactionCoefficent = true;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
     public class ExplicitSchemeStabilityChecker
     {
-        public void AssertStability(SimulationParameters simulationParameters, Biosensor biosensor)
+        public void AssertStability(SimulationParameters simulationParameters, BaseBiosensor biosensor)
         {
             var isReactionStable = GetReactionStability(biosensor.VMax, biosensor.Km, simulationParameters.t);
 

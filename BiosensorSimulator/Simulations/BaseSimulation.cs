@@ -11,7 +11,7 @@ namespace BiosensorSimulator.Simulations
     public abstract class BaseSimulation
     {
         public SimulationParameters SimulationParameters { get; }
-        public Biosensor Biosensor { get; }
+        public BaseBiosensor Biosensor { get; }
         public ISchemeCalculator SchemeCalculator { get; }
 
         protected IResultPrinter ResultPrinter { get; }
@@ -23,7 +23,7 @@ namespace BiosensorSimulator.Simulations
 
         protected BaseSimulation(
             SimulationParameters simulationParameters,
-            Biosensor biosensor,
+            BaseBiosensor biosensor,
             ISchemeCalculator schemeCalculator,
             IResultPrinter resultPrinter)
         {

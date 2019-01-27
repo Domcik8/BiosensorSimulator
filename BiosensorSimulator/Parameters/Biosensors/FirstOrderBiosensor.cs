@@ -3,20 +3,17 @@ using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class FirstOrderBiosensor : IBiosensorSupplier
+    public class FirstOrderBiosensor : BaseBiosensor
     {
-        public Biosensor GetInitiationParameters()
+        public FirstOrderBiosensor()
         {
-            var biosensor = new Biosensor
-            {
-                Name = "First-Order-Biosensor",
-                P0 = 0,
-                VMax = 100e-6, //-6 decimeters / -3 meters / -12 milimeters
-                Km = 100e-6 //-6 decimeters / -3 meters / -12 milimeters
-            };
+            Name = "First-Order-Biosensor";
+            P0 = 0;
+            VMax = 100e-6; //-6 decimeters / -3 meters / -12 milimeters
+            Km = 100e-6; //-6 decimeters / -3 meters / -12 milimeters
 
-            biosensor.S0 = 0.01 * biosensor.Km;
-            biosensor.Layers = new List<Layer>
+            S0 = 0.01 * Km;
+            Layers = new List<Layer>
             {
                 new Layer
                 {
@@ -26,22 +23,20 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     {
                         Type = SubstanceType.Substrate,
                         DiffusionCoefficient = 300e-6, //e-6 milimiter, e-12 meter
-                        StartConcentration = biosensor.S0,
+                        StartConcentration = S0,
                         ReactionRate = 1
                     },
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
                         DiffusionCoefficient = 300e-6, //e-6 milimiter, e-12 meter
-                        StartConcentration = biosensor.P0,
+                        StartConcentration = P0,
                         ReactionRate = 1
                     },
                     FirstLayer = true,
                     LastLayer = true
                 }
             };
-
-            return biosensor;
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BiosensorSimulator.Parameters.Biosensors.Base
 {
-    public class Biosensor
+    public class BaseBiosensor
     {
         /// <summary>
         /// Biosensor name
