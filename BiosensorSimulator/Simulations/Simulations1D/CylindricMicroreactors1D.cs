@@ -13,8 +13,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
         public CylindricMicroreactors1D(
             SimulationParameters simulationParameters,
             BaseBiosensor biosensor,
-            ISchemeCalculator schemeCalculator,
-            IResultPrinter resultPrinter) : base(simulationParameters, biosensor, schemeCalculator, resultPrinter) { }
+            IResultPrinter resultPrinter) : base(simulationParameters, biosensor, resultPrinter) { }
 
         public override void CalculateBoundaryConditions()
         {

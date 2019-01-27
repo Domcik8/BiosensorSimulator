@@ -1,8 +1,9 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
-using BiosensorSimulator.Parameters.Simulations;
-using System;
+﻿using BiosensorSimulator.Calculators.SchemeParameters;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
+using BiosensorSimulator.Parameters.Simulations;
+using System;
 
 namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
@@ -15,6 +16,16 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         {
             Biosensor = biosensor;
             SimulationParameters = simulationParameters;
+
+            foreach (var layer in biosensor.Layers)
+            {
+                layer.Product.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Product);
+
+                if (layer.Type == LayerType.SelectiveMembrane)
+                    continue;
+
+                layer.Substrate.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Substrate);
+            }
         }
 
         public void CalculateNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
@@ -68,7 +79,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
 
-                if(Biosensor is BaseHomogenousBiosensor homogenousBiosensor)
+                if (Biosensor is BaseHomogenousBiosensor homogenousBiosensor)
                     fermentReactionSpeed = fermentReactionSpeed * homogenousBiosensor.EffectiveReactionCoefficent;
 
                 sCur[i] = CalculateReactionDiffusionLayerNextLocation(sPrev[i - 1], sPrev[i], sPrev[i + 1],

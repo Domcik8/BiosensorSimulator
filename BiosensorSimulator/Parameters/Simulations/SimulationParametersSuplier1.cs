@@ -1,5 +1,4 @@
-﻿using BiosensorSimulator.Calculators.SchemeParameters;
-using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,22 +38,10 @@ namespace BiosensorSimulator.Parameters.Simulations
 
                 lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N;
 
-                if (layer.N != 0)
-                {
-                    layer.H = layer.Height / layer.N;
-                    layer.R = t / (layer.H * layer.H);
-                }
+                if (layer.N == 0) continue;
 
-                layer.Product.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Product);
-                layer.Product.ImplicitScheme = new ImplicitSchemeParameters(biosensor, layer, layer.Product);
-
-                if (layer.Type == LayerType.SelectiveMembrane)
-                {
-                    continue;
-                }
-
-                layer.Substrate.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Substrate);
-                layer.Substrate.ImplicitScheme = new ImplicitSchemeParameters(biosensor, layer, layer.Substrate);
+                layer.H = layer.Height / layer.N;
+                layer.R = t / (layer.H * layer.H);
             }
         }
 

@@ -4,7 +4,6 @@ using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using System;
 using System.Diagnostics;
-using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 
 namespace BiosensorSimulator.Simulations
 {
@@ -12,31 +11,37 @@ namespace BiosensorSimulator.Simulations
     {
         public SimulationParameters SimulationParameters { get; }
         public BaseBiosensor Biosensor { get; }
-        public ISchemeCalculator SchemeCalculator { get; }
+        public ISchemeCalculator SchemeCalculator { get; set; }
 
         protected IResultPrinter ResultPrinter { get; }
 
         public double[] SCur, PCur;
         public double[] SPrev, PPrev;
         public double Current;
-        public double CurrentFactor { get; }
+
+        private double? _currentFactor;
+
+        public double CurrentFactor
+        {
+            get
+            {
+                if (_currentFactor.HasValue)
+                    return _currentFactor.Value;
+
+                var enzymeLayer = Biosensor.EnzymeLayer;
+                _currentFactor = SimulationParameters.ne * SimulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
+                return _currentFactor.Value;
+            }
+        }
 
         protected BaseSimulation(
             SimulationParameters simulationParameters,
             BaseBiosensor biosensor,
-            ISchemeCalculator schemeCalculator,
             IResultPrinter resultPrinter)
         {
             SimulationParameters = simulationParameters;
             Biosensor = biosensor;
-            SchemeCalculator = schemeCalculator;
             ResultPrinter = resultPrinter;
-
-            if (schemeCalculator is ExplicitSchemeCalculator)
-                new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
-
-            var enzymeLayer = biosensor.EnzymeLayer;
-            CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
         }
 
         // Calculate next step of biosensor
@@ -56,7 +61,7 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Runs simulation till eternity. Prints result every on specified times.
         /// </summary>
-            public void RunSimulation(double[] resultTimes)
+        public void RunSimulation(double[] resultTimes)
         {
             RunSimulation(int.MaxValue, resultTimes);
         }
@@ -69,14 +74,14 @@ namespace BiosensorSimulator.Simulations
             int i, j = 0;
             var resultTicks = new int[resultTimes.Length];
             var m = simulationTime / SimulationParameters.t;
-            
+
             // Calculate when to print results
             for (var k = 0; k < resultTimes.Length; k++)
                 resultTicks[k] = (int)(resultTimes[k] / SimulationParameters.t);
 
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            
+
             SetInitialConditions();
 
             for (i = 1; i <= m; i++)
@@ -110,7 +115,7 @@ namespace BiosensorSimulator.Simulations
             var i = 0;
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            
+
             var m = simulationTime / SimulationParameters.t;
 
             //Print result every resultTime seconds
@@ -142,7 +147,7 @@ namespace BiosensorSimulator.Simulations
             double iCur;
             var i = 1;
             double iPrev = 0;
-            
+
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
@@ -170,7 +175,7 @@ namespace BiosensorSimulator.Simulations
                 iPrev = iCur;
                 i++;
             }
-            
+
             stopWatch.Stop();
 
             PrintSimulationResults(stopWatch, iCur, i * SimulationParameters.t, false);
@@ -270,11 +275,6 @@ namespace BiosensorSimulator.Simulations
         {
             ResultPrinter.Print("*********" + Biosensor.Name + "*********");
             ResultPrinter.Print("");
-
-            if (SchemeCalculator is ImplicitSchemeCalculator)
-                ResultPrinter.Print("====Implicit Scheme Calculator====");
-            else
-                ResultPrinter.Print("====Explicit Scheme Calculator====");
 
             ResultPrinter.Print("");
             ResultPrinter.Print("====Parameters====");
