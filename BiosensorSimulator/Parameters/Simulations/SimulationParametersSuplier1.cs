@@ -1,26 +1,22 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
-using BiosensorSimulator.Parameters.Scheme;
+﻿using BiosensorSimulator.Calculators.SchemeParameters;
+using BiosensorSimulator.Parameters.Biosensors.Base;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using System.Collections.Generic;
 using System.Linq;
-using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
-using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
-    public class SimulationParametersSuplier1 : ISimulationParametersSupplier
+    public class SimulationParametersSuplier1 : SimulationParameters
     {
         private List<KeyValuePair<LayerType, long>> LayersSteps { get; set; }
 
-        public SimulationParameters InitiationParameters(BaseBiosensor biosensor)
+        public SimulationParametersSuplier1(BaseBiosensor biosensor)
         {
-            var simulationParameters = new SimulationParameters
-            {
-                ne = 2,
-                DecayRate = 1e-6,
-                F = 96485.33289,
-                ZeroIBond = 1e-25,
-                t = 7.5e-6
-            };
+            ne = 2;
+            DecayRate = 1e-6;
+            F = 96485.33289;
+            ZeroIBond = 1e-25;
+            t = 7.5e-6;
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
             {
@@ -34,7 +30,7 @@ namespace BiosensorSimulator.Parameters.Simulations
             foreach (var layer in biosensor.Layers)
             {
                 layer.N = GetLayerSteps(layer.Type);
-                simulationParameters.N += layer.N;
+                N += layer.N;
 
                 layer.LowerBondIndex = lastLayerMaxIndex;
 
@@ -46,7 +42,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 if (layer.N != 0)
                 {
                     layer.H = layer.Height / layer.N;
-                    layer.R = simulationParameters.t / (layer.H * layer.H);
+                    layer.R = t / (layer.H * layer.H);
                 }
 
                 layer.Product.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Product);
@@ -60,8 +56,6 @@ namespace BiosensorSimulator.Parameters.Simulations
                 layer.Substrate.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Substrate);
                 layer.Substrate.ImplicitScheme = new ImplicitSchemeParameters(biosensor, layer, layer.Substrate);
             }
-
-            return simulationParameters;
         }
 
         private long GetLayerSteps(LayerType layerType)

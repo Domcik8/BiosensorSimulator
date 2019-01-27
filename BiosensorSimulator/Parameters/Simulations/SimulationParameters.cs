@@ -1,6 +1,6 @@
 ﻿namespace BiosensorSimulator.Parameters.Simulations
 {
-    public struct SimulationParameters
+    public class SimulationParameters
     {
         // Simulation1D time, time steps
         public double T, t;
