@@ -65,8 +65,6 @@
     <Compile Include="Calculators\SchemeParameters\ExplicitSchemeParameters.cs" />
     <Compile Include="Calculators\SchemeParameters\ImplicitSchemeParameters.cs" />
     <Compile Include="Parameters\Biosensors\TwoLayerPerforatedMembraneBiosensor.cs" />
-    <Compile Include="Parameters\Scheme\ExplicitSchemeParameters.cs" />
-    <Compile Include="Parameters\Scheme\ImplicitSchemeParameters.cs" />
     <Compile Include="Results\ConsolePrinter.cs" />
     <Compile Include="Results\FilePrinter.cs" />
     <Compile Include="Results\IResultPrinter.cs" />
