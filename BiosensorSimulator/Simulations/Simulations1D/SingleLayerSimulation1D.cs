@@ -1,5 +1,4 @@
-﻿using BiosensorSimulator.Calculators.SchemeCalculator;
-using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
@@ -13,7 +12,6 @@ namespace BiosensorSimulator.Simulations.Simulations1D
         public SingleLayerSimulation1D(
             SimulationParameters simulationParameters,
             BaseBiosensor biosensor,
-            ISchemeCalculator schemeCalculator,
             IResultPrinter resultPrinter) : base(simulationParameters, biosensor, resultPrinter) { }
 
         public override void CalculateBoundaryConditions()
