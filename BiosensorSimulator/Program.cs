@@ -15,7 +15,7 @@ namespace BiosensorSimulator
         {
             // You can choose different starting conditions
             var biosensor = new TwoLayerAnalyticMicroreactorBiosensor();
-            var simulationParameters = new SimulationParametersSuplier1().InitiationParameters(biosensor);
+            var simulationParameters = new SimulationParametersSuplier1(biosensor);
             var schemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
 
             //var resultPrinter = new ConsolePrinter();
