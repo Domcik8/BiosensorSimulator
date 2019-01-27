@@ -16,18 +16,8 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             BaseBiosensor biosensor,
             ISchemeCalculator schemeCalculator,
             IResultPrinter resultPrinter) : base(simulationParameters, biosensor, schemeCalculator, resultPrinter) { }
-
-        public override void CalculateNextStep()
-        {
-            Array.Copy(SCur, SPrev, SCur.Length);
-            Array.Copy(PCur, PPrev, PCur.Length);
-
-            SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
-            CalculateMatchingConditions();
-            CalculateBoundaryConditions();
-        }
-
-        private void CalculateBoundaryConditions()
+        
+        public override void CalculateBoundaryConditions()
         {
             var firstLayer = Biosensor.Layers.First();
 
@@ -59,7 +49,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             PCur[0] = 0;
         }
 
-        private void CalculateMatchingConditions()
+        public override void CalculateMatchingConditions()
         {
             foreach (var layer in Biosensor.Layers)
             {
