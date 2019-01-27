@@ -5,6 +5,7 @@
         public double HoleRadius { get; set; }
         public double EnzymeHoleHeight { get; set; }
         public double HalfDistanceBetweenHoles { get; set; }
+        public double PartitionCoefficient { get; set; } = 1;
 
         public override void Homogenize()
         {
