@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using BiosensorSimulator.Calculators.SchemeCalculator;
+﻿using System.Linq;
 using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
@@ -14,7 +12,6 @@ namespace BiosensorSimulator.Simulations.Simulations1D
         public PerforatedMembrane1D(
             SimulationParameters simulationParameters,
             BaseBiosensor biosensor,
-            ISchemeCalculator schemeCalculator,
             IResultPrinter resultPrinter) : base(simulationParameters, biosensor, resultPrinter) { }
         
         public override void CalculateBoundaryConditions()
