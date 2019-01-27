@@ -5,6 +5,7 @@ using BiosensorSimulator.Results;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 
 namespace BiosensorSimulator.Simulations
 {
@@ -40,12 +41,23 @@ namespace BiosensorSimulator.Simulations
         }
 
         // Calculate next step of biosensor
-        public abstract void CalculateNextStep();
+        public void CalculateNextStep()
+        {
+            Array.Copy(SCur, SPrev, SCur.Length);
+            Array.Copy(PCur, PPrev, PCur.Length);
+
+            SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
+            CalculateMatchingConditions();
+            CalculateBoundaryConditions();
+        }
+
+        public abstract void CalculateMatchingConditions();
+        public abstract void CalculateBoundaryConditions();
 
         /// <summary>
         /// Runs simulation till eternity. Prints result every on specified times.
         /// </summary>
-        public void RunSimulation(double[] resultTimes)
+            public void RunSimulation(double[] resultTimes)
         {
             RunSimulation(int.MaxValue, resultTimes);
         }

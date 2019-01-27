@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
-using BiosensorSimulator.Calculators.SchemeCalculator;
+﻿using BiosensorSimulator.Calculators.SchemeCalculator;
 using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
+using System.Linq;
 
 namespace BiosensorSimulator.Simulations.Simulations1D
 {
@@ -17,28 +16,14 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             ISchemeCalculator schemeCalculator,
             IResultPrinter resultPrinter) : base(simulationParameters, biosensor, schemeCalculator, resultPrinter) { }
 
-        public override void CalculateNextStep()
-        {
-            Array.Copy(SCur, SPrev, SCur.Length);
-            Array.Copy(PCur, PPrev, PCur.Length);
-
-            SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
-            CalculateMatchingConditions();
-            CalculateBoundaryConditions();
-        }
-
-        private void CalculateBoundaryConditions()
+        public override void CalculateBoundaryConditions()
         {
             var firstLayer = Biosensor.Layers.First();
 
             if (firstLayer.Type == LayerType.SelectiveMembrane)
-            {
                 SetBoundaryConditionsWithSelectiveMembrane(firstLayer);
-            }
             else
-            {
                 SetBoundaryConditions();
-            }
         }
 
         private void SetBoundaryConditions()
@@ -59,27 +44,21 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             PCur[0] = 0;
         }
 
-        private void CalculateMatchingConditions()
+        public override void CalculateMatchingConditions()
         {
             foreach (var layer in Biosensor.Layers)
             {
                 var index = Biosensor.Layers.IndexOf(layer);
 
                 if (index == 0)
-                {
                     continue;
-                }
 
                 var previousLayer = Biosensor.Layers[index - 1];
 
                 if (previousLayer.Type == LayerType.SelectiveMembrane)
-                {
                     SetMatchingConditionsWithSelectiveMembrane(layer, previousLayer);
-                }
                 else
-                {
                     SetMatchingConditions(layer, Biosensor.Layers[index - 1]);
-                }
             }
         }
 
