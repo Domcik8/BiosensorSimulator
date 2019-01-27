@@ -3,7 +3,6 @@ using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BiosensorSimulator.Simulations
@@ -290,6 +289,15 @@ namespace BiosensorSimulator.Simulations
                 ResultPrinter.Print("*********Microreactor parameters*********");
                 ResultPrinter.Print($"Microreactor radius: {microreactorBiosensor.MicroReactorRadius}");
                 ResultPrinter.Print($"Unit radius: {microreactorBiosensor.UnitRadius}");
+                ResultPrinter.Print("");
+            }
+
+            if (Biosensor is BasePerforatedMembraneBiosensor basePerforatedMembraneBiosensor)
+            {
+                ResultPrinter.Print("*********Perforated membrane parameters*********");
+                ResultPrinter.Print($"Hole radius: {basePerforatedMembraneBiosensor.HoleRadius}");
+                ResultPrinter.Print($"Half distance between holes: {basePerforatedMembraneBiosensor.HalfDistanceBetweenHoles}");
+                ResultPrinter.Print($"Enzyme height in hole: {basePerforatedMembraneBiosensor.EnzymeHoleHeight}");
                 ResultPrinter.Print("");
             }
 
