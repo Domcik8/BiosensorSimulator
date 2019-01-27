@@ -50,6 +50,7 @@
     <Compile Include="Calculators\SchemeCalculator\CrankNicolsonScheme.cs" />
     <Compile Include="Parameters\Biosensors\Base\BaseBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\Base\BaseHomogenousBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\Base\BasePerforatedMembraneBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\Base\BaseMicroreactorBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\Base\Layers\Bound.cs" />
     <Compile Include="Parameters\Biosensors\Base\Layers\Enums\BoundType.cs" />
@@ -63,9 +64,13 @@
     <Compile Include="Parameters\Biosensors\TwoLayerBiosensor.cs" />
     <Compile Include="Calculators\SchemeParameters\ExplicitSchemeParameters.cs" />
     <Compile Include="Calculators\SchemeParameters\ImplicitSchemeParameters.cs" />
+    <Compile Include="Parameters\Biosensors\TwoLayerPerforatedMembraneBiosensor.cs" />
+    <Compile Include="Parameters\Scheme\ExplicitSchemeParameters.cs" />
+    <Compile Include="Parameters\Scheme\ImplicitSchemeParameters.cs" />
     <Compile Include="Results\ConsolePrinter.cs" />
     <Compile Include="Results\FilePrinter.cs" />
     <Compile Include="Results\IResultPrinter.cs" />
+    <Compile Include="Simulations\Simulations1D\PerforatedMembrane1D.cs" />
     <Compile Include="Simulations\Simulations1D\SingleLayerSimulation1D.cs" />
     <Compile Include="Simulations\AnalyticSimulation.cs" />
     <Compile Include="Parameters\Biosensors\ZeroOrderBiosensor.cs" />
