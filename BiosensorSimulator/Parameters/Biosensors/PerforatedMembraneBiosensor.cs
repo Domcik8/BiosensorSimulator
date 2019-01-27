@@ -1,6 +1,8 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using System;
 using System.Collections.Generic;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {

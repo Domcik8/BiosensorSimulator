@@ -4,6 +4,8 @@ using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using System;
 using System.Linq;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
 namespace BiosensorSimulator.Simulations.Simulations1D
 {

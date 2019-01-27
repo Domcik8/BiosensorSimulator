@@ -49,6 +49,14 @@
   <ItemGroup>
     <Compile Include="Calculators\SchemeCalculator\CrankNicolsonScheme.cs" />
     <Compile Include="Parameters\Biosensors\Base\BaseBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\Base\BaseHomogenousBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\Base\BaseMicroreactorBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\Base\Layers\Bound.cs" />
+    <Compile Include="Parameters\Biosensors\Base\Layers\Enums\BoundType.cs" />
+    <Compile Include="Parameters\Biosensors\Base\Layers\Enums\LayerType.cs" />
+    <Compile Include="Parameters\Biosensors\Base\Layers\Enums\SubstanceType.cs" />
+    <Compile Include="Parameters\Biosensors\Base\Layers\Layer.cs" />
+    <Compile Include="Parameters\Biosensors\Base\Layers\Substance.cs" />
     <Compile Include="Parameters\Biosensors\TwoLayerAnalyticMicroreactorBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\TwoLayerMicroreactorBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensor.cs" />

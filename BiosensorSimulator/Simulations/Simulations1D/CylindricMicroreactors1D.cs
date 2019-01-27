@@ -2,6 +2,8 @@
 using System.Linq;
 using BiosensorSimulator.Calculators.SchemeCalculator;
 using BiosensorSimulator.Parameters.Biosensors.Base;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 
