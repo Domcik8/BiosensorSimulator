@@ -4,6 +4,7 @@ using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 
 namespace BiosensorSimulator.Simulations
@@ -35,8 +36,8 @@ namespace BiosensorSimulator.Simulations
             if (schemeCalculator is ExplicitSchemeCalculator)
                 new ExplicitSchemeStabilityChecker().AssertStability(SimulationParameters, Biosensor);
 
-            var enzymeLayer = biosensor.EnzymeLayer;
-            CurrentFactor = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient / enzymeLayer.H;
+            var firstLayer = biosensor.Layers.First();
+            CurrentFactor = simulationParameters.ne * simulationParameters.F * firstLayer.Product.DiffusionCoefficient / firstLayer.H;
         }
 
         // Calculate next step of biosensor
