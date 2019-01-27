@@ -1,5 +1,4 @@
-﻿using System;
-using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
@@ -13,11 +12,11 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 Name = "Two-Layer-Microreactor-Biosensor",
                 P0 = 0,
                 VMax = 100e-3,
-                Km = 0.1,
+                Km = 100e-3,
                 S0 = 20e-3
             };
 
-            biosensor.MicroReactorRadius = 0.1e-3;
+            biosensor.MicroReactorRadius = 0.16e-3;
             biosensor.UnitRadius = 0.2e-3;
             biosensor.Height = 0.12e-3;
 

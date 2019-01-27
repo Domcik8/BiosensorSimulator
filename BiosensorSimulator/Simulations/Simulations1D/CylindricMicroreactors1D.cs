@@ -19,7 +19,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
         {
             Array.Copy(SCur, SPrev, SCur.Length);
             Array.Copy(PCur, PPrev, PCur.Length);
-            
+
             SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
             CalculateMatchingConditions();
             CalculateBoundaryConditions();
@@ -55,11 +55,11 @@ namespace BiosensorSimulator.Simulations.Simulations1D
         private double GetEffectiveDiffusionCoefficent(Biosensor biosensor,
             double enzymelayerDiffusionCoefficent1, double diffusionLayerDiffusionCoefficent2)
         {
-            //var unitArea = biosensor.UnitRadius * biosensor.Height;
-            //var enzymeArea = biosensor.MicroReactorRadius * biosensor.Height;
+            var unitArea = biosensor.UnitRadius * biosensor.Height;
+            var enzymeArea = biosensor.MicroReactorRadius * biosensor.Height;
             //var diffusionLayerArea = unitArea - enzymeArea;
 
-            var relativeArea = biosensor.MicroReactorRadius / biosensor.UnitRadius;
+            var relativeArea = enzymeArea / unitArea;
 
             var effectiveDiffusionCoefficentMax = enzymelayerDiffusionCoefficent1 * relativeArea +
                                                   (1 - relativeArea) * diffusionLayerDiffusionCoefficent2;
