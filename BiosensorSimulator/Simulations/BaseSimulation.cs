@@ -311,6 +311,7 @@ namespace BiosensorSimulator.Simulations
                 ResultPrinter.Print($"Hole radius: {basePerforatedMembraneBiosensor.HoleRadius}");
                 ResultPrinter.Print($"Half distance between holes: {basePerforatedMembraneBiosensor.HalfDistanceBetweenHoles}");
                 ResultPrinter.Print($"Enzyme height in hole: {basePerforatedMembraneBiosensor.EnzymeHoleHeight}");
+                ResultPrinter.Print($"Partition coeffient: {basePerforatedMembraneBiosensor.PartitionCoefficient}");
                 ResultPrinter.Print("");
             }
 
