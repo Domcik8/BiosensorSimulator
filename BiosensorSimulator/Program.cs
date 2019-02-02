@@ -14,11 +14,11 @@ namespace BiosensorSimulator
         static void Main()
         {
             // You can choose different starting conditions
-            var biosensor = new TwoLayerMicroreactorBiosensor();
+            var biosensor = new TwoLayerAnalyticMicroreactorBiosensor();
             var simulationParameters = new SimulationParametersSuplier1(biosensor);
 
-            //var resultPrinter = new ConsolePrinter();
-            var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
+            var resultPrinter = new ConsolePrinter();
+            //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
             BaseSimulation simulation = new CylindricMicroreactors1D(simulationParameters, biosensor, resultPrinter);
             
@@ -34,9 +34,7 @@ namespace BiosensorSimulator
             if (simulation.SchemeCalculator is ImplicitSchemeCalculator)
                 resultPrinter.Print("====Implicit Scheme Calculator====");
             else
-            {
                 resultPrinter.Print("====Explicit Scheme Calculator====");
-            }
 
             resultPrinter.Print("====Results====");
             simulation.RunStableCurrentSimulation();

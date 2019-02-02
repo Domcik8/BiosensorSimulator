@@ -288,6 +288,9 @@ namespace BiosensorSimulator.Simulations
             ResultPrinter.Print($"Decay rate: {SimulationParameters.DecayRate}");
             ResultPrinter.Print("");
 
+            ResultPrinter.Print($"Diffusion module: " +
+                                $"{Biosensor.VMax * Biosensor.EnzymeLayer.Height * Biosensor.EnzymeLayer.Height / (Biosensor.EnzymeLayer.Substrate.DiffusionCoefficient * Biosensor.Km)}");
+
             if (Biosensor is BaseHomogenousBiosensor homogenousBiosensor)
             {
                 ResultPrinter.Print("*********Homogenization*********");
