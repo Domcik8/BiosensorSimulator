@@ -14,22 +14,23 @@ namespace BiosensorSimulator
         static void Main()
         {
             // You can choose different starting conditions
-            var biosensor = new TwoLayerAnalyticMicroreactorBiosensor();
+            var biosensor = new AnalyticalBiosensor();
             var simulationParameters = new SimulationParametersSuplier1(biosensor);
 
-            var resultPrinter = new ConsolePrinter();
-            //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
+            //var resultPrinter = new ConsolePrinter();
+            var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation simulation = new CylindricMicroreactors1D(simulationParameters, biosensor, resultPrinter);
-            
+            //BaseSimulation simulation = new CylindricMicroreactors1D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, resultPrinter);
+
             simulation.PrintParameters();
             simulation.ShowValidationValues();
-            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
+           // new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
 
-            if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
-                biosensor.Homogenize();
+           /* if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
+                biosensor.Homogenize();*/
 
-            simulation.SchemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
+            simulation.SchemeCalculator = new ImplicitSchemeCalculator(biosensor, simulationParameters);
 
             if (simulation.SchemeCalculator is ImplicitSchemeCalculator)
                 resultPrinter.Print("====Implicit Scheme Calculator====");

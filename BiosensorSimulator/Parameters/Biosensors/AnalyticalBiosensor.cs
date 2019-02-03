@@ -5,22 +5,27 @@ using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class ZeroOrderBiosensor : BaseBiosensor
+    public class AnalyticalBiosensor : BaseBiosensor
     {
-        public ZeroOrderBiosensor()
+        public AnalyticalBiosensor()
         {
-            Name = "Zero-Order-Biosensor";
+            Name = "Analytical-Biosensor";
             P0 = 0;
-            VMax = 100e-12; //-6 decimeters / -3 meters / -12 milimeters
+            VMax = 1000e-12; //-6 decimeters / -3 meters / -12 milimeters
             Km = 100e-12; //-6 decimeters / -3 meters / -12 milimeters
 
-            S0 = 1000 * Km;
+            // First Order
+            // S0 = 0.01 * Km;
+
+            // Zero Order
+            S0 = 1000000 * Km;
+
             Layers = new List<Layer>
             {
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 0.01, //e0 milimiter, e-3 meter
+                    Height = 0.1, //e0 milimiter, e-3 meter
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,

@@ -22,7 +22,7 @@ namespace BiosensorSimulator.Simulations
 
         public double GetZeroOrderAnalyticSolution(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
-            var S0 = 1000 * biosensor.Km;
+            var S0 = 1000000 * biosensor.Km;
 
             var enzymeLayer = biosensor.EnzymeLayer;
             var iCur = simulationParameters.ne * simulationParameters.F * biosensor.VMax * enzymeLayer.Height / 2;
