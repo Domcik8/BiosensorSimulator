@@ -143,7 +143,7 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Simulation stable current 
         /// </summary>
-        public void RunStableCurrentSimulation()
+        public void RunStableCurrentSimulation(int maxTime = int.MaxValue)
         {
             double iCur;
             var i = 1;
@@ -158,6 +158,7 @@ namespace BiosensorSimulator.Simulations
             var resultTime = 0.5;
             // Print result every resulSteps steps
             var resultSteps = (int)(resultTime / SimulationParameters.t);
+            var maxSteps = (int)(maxTime / SimulationParameters.t);
 
             while (true)
             {
@@ -173,6 +174,9 @@ namespace BiosensorSimulator.Simulations
                 if (i % resultSteps == 0)
                     PrintSimulationResults(stopWatch, iCur, i / resultSteps * resultTime, false);
 
+                if (i % maxSteps == 0)
+                    break;
+
                 iPrev = iCur;
                 i++;
             }
@@ -187,18 +191,13 @@ namespace BiosensorSimulator.Simulations
         public void ShowValidationValues()
         {
             var simulation = new AnalyticSimulation();
+            
             var firstOrderCurrent = simulation.GetFirstOrderAnalyticSolution(Biosensor, SimulationParameters);
             var zeroOrderCurrent = simulation.GetZeroOrderAnalyticSolution(Biosensor, SimulationParameters);
 
             ResultPrinter.Print("====Analytic validations====");
             ResultPrinter.Print($"First order current: {firstOrderCurrent } A/mm^2");
             ResultPrinter.Print($"Zero order current: {zeroOrderCurrent } A/mm^2");
-
-            if (Biosensor.Layers.Count == 2)
-            {
-                var twoModelCurrent = simulation.GetTwoCompartmentModelAnalyticSolution(Biosensor, SimulationParameters);
-                ResultPrinter.Print($"Two model current: {twoModelCurrent } A/mm^2");
-            }
 
             ResultPrinter.Print("");
         }

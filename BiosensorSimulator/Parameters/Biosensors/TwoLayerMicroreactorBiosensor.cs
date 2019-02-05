@@ -15,7 +15,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
             Km = 100e-12;
             S0 = 20e-12;
 
-            MicroReactorRadius = 0.0;
+            MicroReactorRadius = 0.02;
             UnitRadius = 0.2;
             Height = 0.12;
 

@@ -6,6 +6,7 @@ using BiosensorSimulator.Results;
 using BiosensorSimulator.Simulations;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
+using Microsoft.SolverFoundation.Services;
 
 namespace BiosensorSimulator
 {
@@ -14,23 +15,23 @@ namespace BiosensorSimulator
         static void Main()
         {
             // You can choose different starting conditions
-            var biosensor = new AnalyticalBiosensor();
+            var biosensor = new TwoLayerBiosensor();
             var simulationParameters = new SimulationParametersSuplier1(biosensor);
 
-            //var resultPrinter = new ConsolePrinter();
-            var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
+            var resultPrinter = new ConsolePrinter();
+            //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
             //BaseSimulation simulation = new CylindricMicroreactors1D(simulationParameters, biosensor, resultPrinter);
             BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();
-           // new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
-
-           /* if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
+            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
+            
+            /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                 biosensor.Homogenize();*/
 
-            simulation.SchemeCalculator = new ImplicitSchemeCalculator(biosensor, simulationParameters);
+            simulation.SchemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
 
             if (simulation.SchemeCalculator is ImplicitSchemeCalculator)
                 resultPrinter.Print("====Implicit Scheme Calculator====");
@@ -39,6 +40,8 @@ namespace BiosensorSimulator
 
             resultPrinter.Print("====Results====");
             simulation.RunStableCurrentSimulation();
+
+            //simulation.RunSimulation(30);
 
             //TwoLayer
             //simulation.RunSimulation(124, new []{6.8, 8.4, 16, 18.3, 27.8}, true);
