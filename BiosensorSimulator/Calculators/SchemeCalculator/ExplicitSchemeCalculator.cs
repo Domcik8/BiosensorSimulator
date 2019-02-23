@@ -51,7 +51,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                     break;
 
                 case LayerType.PerforatedMembrane:
-                    CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                    CalculateReactionDiffusionPerforatedMembraneLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                     break;
 
                 default:
@@ -74,6 +74,20 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         }
 
         public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
+        {
+            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
+            {
+                var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
+
+                sCur[i] = CalculateReactionDiffusionLayerNextLocation(sPrev[i - 1], sPrev[i], sPrev[i + 1],
+                    -fermentReactionSpeed, layer.Substrate.ExplicitScheme.DiffusionCoefficientOverSpace);
+
+                pCur[i] = CalculateReactionDiffusionLayerNextLocation(pPrev[i - 1], pPrev[i], pPrev[i + 1],
+                    fermentReactionSpeed, layer.Product.ExplicitScheme.DiffusionCoefficientOverSpace);
+            }
+        }
+
+        public void CalculateReactionDiffusionPerforatedMembraneLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
             for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
             {

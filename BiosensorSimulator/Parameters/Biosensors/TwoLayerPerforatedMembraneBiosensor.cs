@@ -9,7 +9,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
     {
         public TwoLayerPerforatedMembraneBiosensor()
         {
-            Name = "Two-Layer-perforated membrane biosensor";
+            Name = "Four-Layer-perforated membrane biosensor";
             P0 = 0;
             VMax = 100e-12;
             Km = 100e-12;
@@ -17,7 +17,8 @@ namespace BiosensorSimulator.Parameters.Biosensors
 
             HoleRadius = 0.1e-3;
             HalfDistanceBetweenHoles = 1e-3;
-            EnzymeHoleHeight = 0;
+            EnzymeHoleHeight = 5e-3;
+            PartitionCoefficient = 0.5;
 
             Layers = new List<Layer>
             {
@@ -94,7 +95,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
 
             IsHomogenized = true;
             UseEffectiveDiffusionCoefficent = true;
-            UseEffectiveReactionCoefficent = false;
+            UseEffectiveReactionCoefficent = true;
         }
     }
 }

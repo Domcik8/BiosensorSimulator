@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
@@ -63,6 +64,10 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                 {
                     SetMatchingConditionsWithSelectiveMembrane(layer, previousLayer);
                 }
+                else if (previousLayer.Type == LayerType.Enzyme)
+                {
+                    SetMatchingConditionsWithFerment(layer, previousLayer);
+                }
                 else if (previousLayer.Type == LayerType.PerforatedMembrane)
                 {
                     SetMatchingConditionsWithPerforatedMembrane(layer, previousLayer);
@@ -76,7 +81,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
 
         private void SetMatchingConditions(Layer layer, Layer previousLayer)
         {
-
+            throw new Exception();
             SCur[layer.LowerBondIndex] =
                 (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
                  SCur[layer.LowerBondIndex - 1]) / (layer.H * previousLayer.Substrate.DiffusionCoefficient + previousLayer.H * layer.Substrate.DiffusionCoefficient);
@@ -100,9 +105,29 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                 (previousLayer.H * bio.PartitionCoefficient * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
                  SCur[layer.LowerBondIndex - 1]) / (layer.H * previousLayer.Substrate.DiffusionCoefficient + previousLayer.H * bio.PartitionCoefficient * layer.Substrate.DiffusionCoefficient);
 
+            //PCur[layer.LowerBondIndex] =
+            //    (previousLayer.H * bio.PartitionCoefficient * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1] + layer.H * previousLayer.Product.DiffusionCoefficient *
+            //     PCur[layer.LowerBondIndex - 1]) / (layer.H * previousLayer.Product.DiffusionCoefficient + previousLayer.H * bio.PartitionCoefficient * layer.Product.DiffusionCoefficient);
+
             PCur[layer.LowerBondIndex] =
-                (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1] + layer.H * bio.PartitionCoefficient * previousLayer.Product.DiffusionCoefficient *
-                 PCur[layer.LowerBondIndex - 1]) / (layer.H * bio.PartitionCoefficient * previousLayer.Product.DiffusionCoefficient + previousLayer.H * layer.Product.DiffusionCoefficient);
+                (previousLayer.H * bio.PartitionCoefficient * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1] + layer.H * previousLayer.Product.DiffusionCoefficient *
+                 PCur[layer.LowerBondIndex - 1]) / (layer.H  * previousLayer.Product.DiffusionCoefficient + previousLayer.H * bio.PartitionCoefficient * layer.Product.DiffusionCoefficient);
+        }
+
+        private void SetMatchingConditionsWithFerment(Layer layer, Layer previousLayer)
+        {
+            var bio = Biosensor as BasePerforatedMembraneBiosensor;
+            SCur[layer.LowerBondIndex] =
+                (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1] + layer.H * bio.PartitionCoefficient * previousLayer.Substrate.DiffusionCoefficient *
+                 SCur[layer.LowerBondIndex - 1]) / (layer.H * previousLayer.Substrate.DiffusionCoefficient * bio.PartitionCoefficient + previousLayer.H * layer.Substrate.DiffusionCoefficient);
+
+            //PCur[layer.LowerBondIndex] =
+            //    (previousLayer.H * bio.PartitionCoefficient * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1] + layer.H * previousLayer.Product.DiffusionCoefficient *
+            //     PCur[layer.LowerBondIndex - 1]) / (layer.H * previousLayer.Product.DiffusionCoefficient + previousLayer.H * bio.PartitionCoefficient * layer.Product.DiffusionCoefficient);
+
+            PCur[layer.LowerBondIndex] =
+                (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1] + bio.PartitionCoefficient * layer.H * previousLayer.Product.DiffusionCoefficient *
+                 PCur[layer.LowerBondIndex - 1]) / (layer.H * previousLayer.Product.DiffusionCoefficient * bio.PartitionCoefficient + previousLayer.H * layer.Product.DiffusionCoefficient);
         }
     }
 }

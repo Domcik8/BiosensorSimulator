@@ -171,7 +171,7 @@ namespace BiosensorSimulator.Simulations
                     break;
 
                 if (i % resultSteps == 0)
-                    PrintSimulationResults(stopWatch, iCur, i / resultSteps * resultTime, false);
+                    PrintSimulationResultsSimple(iCur);
 
                 iPrev = iCur;
                 i++;
@@ -220,6 +220,11 @@ namespace BiosensorSimulator.Simulations
 
             SCur[SimulationParameters.N - 1] = Biosensor.S0;
             PCur[SimulationParameters.N - 1] = Biosensor.P0;
+        }
+
+        private void PrintSimulationResultsSimple(double I)
+        {
+            ResultPrinter.Print(I.ToString());
         }
 
         private void PrintSimulationResults(Stopwatch stopwatch, double I, double simulationTime, bool printConcentrations = true, bool normalize = false)
