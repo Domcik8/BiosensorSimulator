@@ -6,6 +6,7 @@ using BiosensorSimulator.Results;
 using BiosensorSimulator.Simulations;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
+using BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors;
 using Microsoft.SolverFoundation.Services;
 
 namespace BiosensorSimulator
@@ -14,12 +15,11 @@ namespace BiosensorSimulator
     {
         static void Main()
         {
-            // You can choose different starting conditions
-            var biosensor = new TwoLayerBiosensor();
+            var biosensor = new TwoLayerAnalyticalBiosensor();
             var simulationParameters = new SimulationParametersSuplier1(biosensor);
 
-            var resultPrinter = new ConsolePrinter();
-            //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
+            //var resultPrinter = new ConsolePrinter();
+            var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
             //BaseSimulation simulation = new CylindricMicroreactors1D(simulationParameters, biosensor, resultPrinter);
             BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, resultPrinter);

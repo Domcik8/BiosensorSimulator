@@ -20,7 +20,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                     continue;
 
                 var Dmax = Math.Max(layer.Substrate.DiffusionCoefficient, layer.Product.DiffusionCoefficient);
-                var isLayerStable = Math.Abs(layer.H) < 0.0000000001 || GetDiffusionStability(Dmax, layer.H, simulationParameters.t);
+                var isLayerStable = GetDiffusionStability(Dmax, layer.H, simulationParameters.t);
 
                 if (!isLayerStable)
                     throw new Exception("Simulation scheme is not stable");

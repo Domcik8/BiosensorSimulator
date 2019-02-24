@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
-namespace BiosensorSimulator.Parameters.Biosensors
+namespace BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors
 {
-    public class AnalyticalBiosensor : BaseBiosensor
+    public class SingleLayerAnalyticalBiosensor : BaseBiosensor
     {
-        public AnalyticalBiosensor()
+        public SingleLayerAnalyticalBiosensor()
         {
-            Name = "Analytical-Biosensor";
+            Name = "Single-Layer-Analytical-Biosensor";
             P0 = 0;
             VMax = 1000e-12; //-6 decimeters / -3 meters / -12 milimeters
             Km = 100e-12; //-6 decimeters / -3 meters / -12 milimeters

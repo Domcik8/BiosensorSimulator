@@ -32,7 +32,15 @@ namespace BiosensorSimulator.Simulations
 
         private static double GetFirstOrderAnalyticSolutionForTwoLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
-            return 0;
+            var enzymeLayer = biosensor.EnzymeLayer;
+            var diffusionLayer = biosensor.DiffusionLayer;
+            var iCur = simulationParameters.ne * simulationParameters.F * biosensor.VMax * enzymeLayer.Height *
+                       (diffusionLayer.Product.DiffusionCoefficient * diffusionLayer.Height +
+                        2 * enzymeLayer.Product.DiffusionCoefficient * diffusionLayer.Height) /
+                       (2 * (diffusionLayer.Product.DiffusionCoefficient * diffusionLayer.Height +
+                             enzymeLayer.Product.DiffusionCoefficient * diffusionLayer.Height));
+            
+            return iCur;
         }
 
         public double GetZeroOrderAnalyticSolution(BaseBiosensor biosensor, SimulationParameters simulationParameters)
