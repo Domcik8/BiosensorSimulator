@@ -74,17 +74,25 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                 var index = Biosensor.Layers.IndexOf(layer);
 
                 if (index == 0)
+                {
                     continue;
+                }
 
                 var previousLayer = Biosensor.Layers[index - 1];
 
-                if (previousLayer.Type == layer.Type)
+                if (previousLayer.Type == LayerType.DiffusionSmallLayer && layer.Type == LayerType.DiffusionLayer)
+                {
                     continue;
+                }
 
                 if (previousLayer.Type == LayerType.SelectiveMembrane)
+                {
                     SetMatchingConditionsWithSelectiveMembrane(layer, previousLayer);
+                }
                 else
+                {
                     SetMatchingConditions(layer, Biosensor.Layers[index - 1]);
+                }
             }
         }
 

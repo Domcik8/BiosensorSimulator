@@ -18,13 +18,12 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
             foreach (var layer in biosensor.Layers)
             {
-                if (layer.N == 0 || layer.H == 0 ||layer.Type == LayerType.SelectiveMembrane)
+                if (layer.N == 0 || layer.H == 0 || layer.Type == LayerType.SelectiveMembrane)
                 {
                     continue;
                 }
 
-                var index = biosensor.Layers.IndexOf(layer);
-                if (index != biosensor.Layers.Count - 1 && layer.Type == LayerType.DiffusionLayer)
+                if (layer.Type == LayerType.DiffusionSmallLayer)
                 {
                     continue;
                 }

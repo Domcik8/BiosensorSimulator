@@ -72,7 +72,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 //},
                 new Layer
                 {
-                    Type = LayerType.DiffusionLayer,
+                    Type = LayerType.DiffusionSmallLayer,
                     Height = 10e-3,
                     Width = 0.1e-3,
                     Substrate = new Substrate

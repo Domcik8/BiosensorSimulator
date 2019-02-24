@@ -11,8 +11,8 @@ namespace BiosensorSimulator.Parameters.Biosensors
         {
             Name = "First-Order-Biosensor";
             P0 = 0;
-            VMax = 100e-6; //-6 decimeters / -3 meters / -12 milimeters
-            Km = 100e-6; //-6 decimeters / -3 meters / -12 milimeters
+            VMax = 100e-12; //-6 decimeters / -3 meters / -12 milimeters
+            Km = 100e-12; //-6 decimeters / -3 meters / -12 milimeters
 
             S0 = 0.01 * Km;
             Layers = new List<Layer>

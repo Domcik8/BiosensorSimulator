@@ -30,9 +30,10 @@ namespace BiosensorSimulator.Simulations
                     return _currentFactor.Value;
 
                 var firstLayer = Biosensor.Layers.First();
-                _currentFactor = SimulationParameters.ne * SimulationParameters.F * firstLayer.Product.DiffusionCoefficient * (2 / (firstLayer.Width * firstLayer.Width) * firstLayer.W);
-
-
+                _currentFactor = SimulationParameters.ne * SimulationParameters.F * firstLayer.Product.DiffusionCoefficient * (2 / (firstLayer.Width * firstLayer.Width));
+                ResultPrinter.Print("H" + firstLayer.H.ToString());
+                ResultPrinter.Print("W" + firstLayer.W.ToString());
+                ResultPrinter.Print(_currentFactor.Value.ToString());
 
                 return _currentFactor.Value;
             }
@@ -151,6 +152,7 @@ namespace BiosensorSimulator.Simulations
             double iCur;
             var i = 1;
             double iPrev = 0;
+            var firstLayer = Biosensor.Layers.First();
 
             var stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -166,18 +168,55 @@ namespace BiosensorSimulator.Simulations
             {
                 CalculateNextStep();
 
-                iCur = GetCurrent();
+                double sum = 0;
+                double sum2 = 0;
+                double sum3 = 0;
+
+                for (int j = 0; j < SCur.GetLength(1)-1; j++)
+                {
+                    sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2) * (firstLayer.W);
+                    //sum2 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W * j;
+                   // sum3 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W;
+                    //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2);
+                }
+
+                iCur = sum * CurrentFactor;
+
+                //iCur = GetCurrent();
 
                 if (iCur > 0 && iPrev > 0
                              && iCur > SimulationParameters.ZeroIBond
                              && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
                 {
+                    for (int k = 0; k < 2; k++)
+                    {
+                        for (int l = 0; l < SCur.GetLength(1); l++)
+                        {
+                            ResultPrinter.Print(PCur[k, l].ToString());
+                        }
+                        ResultPrinter.Print("");
+                    }
                     break;
                 }
-                    
+
 
                 if (i % resultSteps == 0)
-                    PrintSimulationResults(stopWatch, iCur, i / resultSteps * resultTime, false);
+                {
+                    for (int k = 0; k < 2; k++)
+                    {
+                        for (int l = 0; l < SCur.GetLength(1); l++)
+                        {
+                            ResultPrinter.Print(PCur[k, l].ToString());
+                        }
+                        ResultPrinter.Print("");
+                    }
+
+                    ResultPrinter.Print("Resultssss");
+                    PrintSimulationResultsSimple(iCur);
+                    ResultPrinter.Print(sum.ToString());
+                    //ResultPrinter.Print(sum3.ToString());
+                    ResultPrinter.Print("");
+                }
 
                 iPrev = iCur;
                 i++;
@@ -247,6 +286,12 @@ namespace BiosensorSimulator.Simulations
 
             if (printConcentrations)
                 PrintSimulationConcentrations(normalize);
+        }
+
+
+        private void PrintSimulationResultsSimple(double I)
+        {
+            ResultPrinter.Print(I.ToString());
         }
 
         private void PrintSimulationResults(Stopwatch stopwatch, double I, bool printConcentrations = true, bool normalize = false)

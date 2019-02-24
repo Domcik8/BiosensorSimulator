@@ -5,6 +5,7 @@
         SelectiveMembrane,
         Enzyme,
         PerforatedMembrane,
-        DiffusionLayer
+        DiffusionLayer,
+        DiffusionSmallLayer
     }
 }

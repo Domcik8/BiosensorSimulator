@@ -19,13 +19,14 @@ namespace BiosensorSimulator.Parameters.Simulations
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
             {
-                new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 30),
+                new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 20),
                 new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 100),
-                new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 30),
-                new KeyValuePair<LayerType, long>(LayerType.Enzyme, 30)
+                new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 20),
+                new KeyValuePair<LayerType, long>(LayerType.DiffusionSmallLayer, 20),
+                new KeyValuePair<LayerType, long>(LayerType.Enzyme, 20)
             };
 
-            var widthSteps = 30;
+            var widthSteps = 20;
             M = widthSteps;
 
             long lastLayerMaxIndex = 0;
