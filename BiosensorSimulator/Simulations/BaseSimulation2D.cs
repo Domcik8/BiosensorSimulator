@@ -174,7 +174,8 @@ namespace BiosensorSimulator.Simulations
 
                 for (int j = 0; j < SCur.GetLength(1)-1; j++)
                 {
-                    sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2) * (firstLayer.W);
+                    sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * (j * firstLayer.W) * (firstLayer.W);
+                    //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2) * (firstLayer.W);
                     //sum2 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W * j;
                    // sum3 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W;
                     //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2);

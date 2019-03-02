@@ -67,15 +67,32 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                 for (var j = 1; j < sCur.GetLength(1) - 1; j++)
                 {
                     sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
-                                  CalculateDiffusionLayerNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.Substrate.ExplicitScheme.H2));
+                                 (CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
+                                  CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H));
 
                     pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
-                                  CalculateDiffusionLayerNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.Product.ExplicitScheme.H2));
+                                 (CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
+                                  CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H));
                 }
             }
         }
+
+        //public void CalculateFirstDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        //{
+        //    for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex + 1; i++)
+        //    {
+        //        for (var j = 1; j < sCur.GetLength(1) - 1; j++)
+        //        {
+        //            sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
+        //                         (CalculateDiffusionLayerNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
+        //                          CalculateDiffusionLayerNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.Substrate.ExplicitScheme.H2));
+
+        //            pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
+        //                         (CalculateDiffusionLayerNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
+        //                          CalculateDiffusionLayerNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.Product.ExplicitScheme.H2));
+        //        }
+        //    }
+        //}
 
         public void CalculateFirstDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
@@ -84,20 +101,39 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                 for (var j = 1; j < sCur.GetLength(1) - 1; j++)
                 {
                     sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
-                                  CalculateDiffusionLayerNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.Substrate.ExplicitScheme.H2));
+                                 (CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
+                                  CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H));
 
                     pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
-                                  CalculateDiffusionLayerNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.Product.ExplicitScheme.H2));
+                                 (CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
+                                  CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H));
                 }
             }
         }
 
-        private double CalculateDiffusionLayerNextLocation(double previous, double current, double next, double step, int j)
+        private double CalculateDiffusionLayerCoordinateRNextLocation(
+            double previous, double current, double next, double step, int j)
         {
-            return (j + 0.5) * step * ((next - current) / step) / (step * (step * j)) - (j - 0.5) * step * ((current - previous) / step) / (step * (step * j));
+            var firstStep = (j + 0.5) * step;
+            var first = (next - current) / step;
+            var secondStep = (j - 0.5) * step;
+            var second = (current - previous) / step;
+            var dalyba = step * step * j;
+
+            return (firstStep * first - secondStep * second) / dalyba;
+
+            //return (j + 0.5) * step * ((next - current) / step) / (step * (step * j)) - (j - 0.5) * step * ((current - previous) / step) / (step * (step * j));
         }
+
+        private double CalculateDiffusionLayerCoordinateZNextLocation(
+            double previous, double current, double next, double step)
+        {
+            var first = (next - current) / step;
+            var second = (current - previous) / step;
+
+            return (first - second) / step;
+        }
+
 
         //public void CalculateDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         //{
@@ -141,10 +177,10 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         //    }
         //}
 
-        private double CalculateDiffusionLayerNextLocation(double previous, double current, double next, double step)
-        {
-            return (next - 2 * current + previous) / step;
-        }
+        //private double CalculateDiffusionLayerNextLocation(double previous, double current, double next, double step)
+        //{
+        //    return (next - 2 * current + previous) / step;
+        //}
 
         public void CalculateReactionDiffusionLayerNextStep(Layer layer, Layer prevLayer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
@@ -154,21 +190,23 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                 {
                     var fermentReactionSpeed = SimulationParameters.t * (Biosensor.VMax * sPrev[i, j] / (Biosensor.Km + sPrev[i, j]));
 
-                    sCur[i, j] = sPrev[i, j] + SimulationParameters.t * layer.Substrate.DiffusionCoefficient *
-                                 (CalculateDiffusionLayerNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
-                                  CalculateReactionDiffusionLayerNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.Substrate.ExplicitScheme.H2)) - fermentReactionSpeed;
+                    sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
+                                  CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H))
+                        - fermentReactionSpeed;
 
-                    pCur[i, j] = pPrev[i, j] + SimulationParameters.t * layer.Product.DiffusionCoefficient *
-                                 (CalculateDiffusionLayerNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
-                                  CalculateReactionDiffusionLayerNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.Product.ExplicitScheme.H2)) + fermentReactionSpeed;
+                    pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
+                                  CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)) 
+                        + fermentReactionSpeed;
                 }
             }
         }
 
-        private double CalculateReactionDiffusionLayerNextLocation(double previous, double current, double next, double step)
-        {
-            return (next - 2 * current + previous) / step;
-        }
+        //private double CalculateReactionDiffusionLayerNextLocation(double previous, double current, double next, double step)
+        //{
+        //    return (next - 2 * current + previous) / step;
+        //}
 
         //public void CalculateDiffusionLayerWithOnlyProductNextStep(Layer layer, double[,] pCur, double[,] pPrev)
         //{
@@ -192,8 +230,8 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
                 for (var j = 1; j < pCur.GetLength(1) - 1; j++)
                 {
                     pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
-                                 CalculateDiffusionLayerNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.Product.ExplicitScheme.H2));
+                                 (CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
+                                  CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H));
                 }
             }
         }

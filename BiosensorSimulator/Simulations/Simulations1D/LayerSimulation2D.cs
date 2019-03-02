@@ -9,10 +9,15 @@ namespace BiosensorSimulator.Simulations.Simulations1D
 {
     public class LayerSimulation2D : BaseSimulation2D
     {
+        private int temp; 
         public LayerSimulation2D(
             SimulationParameters simulationParameters,
             BaseBiosensor biosensor,
-            IResultPrinter resultPrinter) : base(simulationParameters, biosensor, resultPrinter) { }
+            IResultPrinter resultPrinter) : base(simulationParameters, biosensor, resultPrinter)
+        {
+            var doub = (1e-3 - 0.1e-3) * 20 / 1e-3;
+            temp = (int) doub;
+        }
 
         public override void CalculateBoundaryConditions()
         {
@@ -35,6 +40,8 @@ namespace BiosensorSimulator.Simulations.Simulations1D
 
         private void SetBoundaryConditionsWithSelectiveMembrane(Layer selectiveMembraneLayer)
         {
+            var enzyme = Biosensor.EnzymeLayer;
+            var diffusion = Biosensor.DiffusionLayer;
             for (int j = 0; j < SCur.GetLength(1); j++)
             {
                 SCur[SimulationParameters.N - 1, j] = Biosensor.S0;
@@ -65,6 +72,15 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                 PCur[i, 0] = PCur[i, 1];
                 PCur[i, SimulationParameters.M - 1] = PCur[i, SimulationParameters.M - 2];
             }
+
+            //for (int j = 20 - temp; j < PCur.GetLength(1); j++)
+            //{
+            //    SCur[enzyme.UpperBondIndex, j] = SCur[enzyme.UpperBondIndex - 1, j];
+            //    PCur[enzyme.UpperBondIndex, j] = PCur[enzyme.UpperBondIndex - 1, j];
+
+            //    SCur[diffusion.LowerBondIndex, j] = SCur[diffusion.LowerBondIndex + 1, j];
+            //    PCur[diffusion.LowerBondIndex, j] = PCur[diffusion.LowerBondIndex + 1, j];
+            //}
         }
 
         public override void CalculateMatchingConditions()
