@@ -5,14 +5,14 @@
         public double HoleRadius { get; set; }
         public double EnzymeHoleHeight { get; set; }
         public double HalfDistanceBetweenHoles { get; set; }
-        public double PartitionCoefficient { get; set; } = 1;
+        public double PartitionCoefficient { get; set; }
 
         public override void Homogenize()
         {
-            //if (Biosensor.UseEffectiveReactionCoefficent)
-            //{
-            //    Biosensor.EffectiveReactionCoefficent = GetEffectiveReactionCoefficent(Biosensor);
-            //}
+            if (UseEffectiveReactionCoefficent)
+            {
+                EffectiveReactionCoefficent = GetEffectiveReactionCoefficient();
+            }
 
             if (UseEffectiveDiffusionCoefficent)
             {
@@ -26,13 +26,10 @@
             }
         }
 
-        //private double GetEffectiveReactionCoefficent(Biosensor biosensor)
-        //{
-        //    var microreactorArea = biosensor.MicroReactorRadius * biosensor.MicroReactorRadius;
-        //    var unitArea = biosensor.UnitRadius * biosensor.UnitRadius;
-
-        //    return microreactorArea / unitArea;
-        //}
+        private double GetEffectiveReactionCoefficient()
+        {
+            return GetAlpha() * GetBeta();
+        }
 
         private double GetEffectiveDiffusionCoefficient(double enzymeLayerDiffusionCoefficient, double diffusionLayerDiffusionCoefficient)
         {
@@ -40,6 +37,16 @@
             var alfa = (HoleRadius * HoleRadius) / (HalfDistanceBetweenHoles * HalfDistanceBetweenHoles);
             var insideHole = beta * enzymeLayerDiffusionCoefficient + (1 - beta) * diffusionLayerDiffusionCoefficient;
             return alfa * insideHole;
+        }
+
+        private double GetAlpha()
+        {
+            return (HoleRadius * HoleRadius) / (HalfDistanceBetweenHoles * HalfDistanceBetweenHoles);
+        }
+
+        private double GetBeta()
+        {
+            return EnzymeHoleHeight / PerforatedMembraneLayer.Height;
         }
     }
 }

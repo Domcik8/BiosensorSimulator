@@ -5,20 +5,15 @@ using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class TwoLayerPerforatedMembraneBiosensor : BasePerforatedMembraneBiosensor
+    public class TwoLayerPerforatedMembraneBiosensor2D : BaseBiosensor
     {
-        public TwoLayerPerforatedMembraneBiosensor()
+        public TwoLayerPerforatedMembraneBiosensor2D()
         {
-            Name = "Four-Layer-perforated membrane biosensor";
+            Name = "Two-Layer-perforated membrane biosensor 2D";
             P0 = 0;
             VMax = 100e-12;
             Km = 100e-12;
             S0 = 100e-12;
-
-            HoleRadius = 0.1e-3;
-            HalfDistanceBetweenHoles = 1e-3;
-            EnzymeHoleHeight = 5e-3;
-            PartitionCoefficient = 0.5;
 
             Layers = new List<Layer>
             {
@@ -26,6 +21,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 {
                     Type = LayerType.SelectiveMembrane,
                     Height = 2e-3,
+                    Width = 1e-3,
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
@@ -38,6 +34,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 {
                     Type = LayerType.Enzyme,
                     Height = 2e-3,
+                    Width = 1e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
@@ -53,21 +50,42 @@ namespace BiosensorSimulator.Parameters.Biosensors
                         ReactionRate = 1
                     }
                 },
+                //new Layer
+                //{
+                //    Type = LayerType.Enzyme,
+                //    Height = 0,
+                //    Width = 0.1e-3,
+                //    Substrate = new Substrate
+                //    {
+                //        Type = SubstanceType.Substrate,
+                //        DiffusionCoefficient = 300e-6,
+                //        StartConcentration = 0,
+                //        ReactionRate = 1
+                //    },
+                //    Product = new Product
+                //    {
+                //        Type = SubstanceType.Product,
+                //        DiffusionCoefficient = 300e-6,
+                //        StartConcentration = 0,
+                //        ReactionRate = 1
+                //    }
+                //},
                 new Layer
                 {
-                    Type = LayerType.PerforatedMembrane,
+                    Type = LayerType.DiffusionSmallLayer,
                     Height = 10e-3,
+                    Width = 0.1e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
-                        DiffusionCoefficient = 0,
-                        StartConcentration = 0,
+                        DiffusionCoefficient = 600e-6,
+                        StartConcentration = S0,
                         ReactionRate = 0
                     },
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
-                        DiffusionCoefficient = 0,
+                        DiffusionCoefficient = 600e-6,
                         StartConcentration = 0,
                         ReactionRate = 0
                     }
@@ -76,6 +94,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 {
                     Type = LayerType.DiffusionLayer,
                     Height = 2e-3,
+                    Width = 1e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
@@ -92,10 +111,6 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     }
                 }
             };
-
-            IsHomogenized = true;
-            UseEffectiveDiffusionCoefficent = true;
-            UseEffectiveReactionCoefficent = true;
         }
     }
 }

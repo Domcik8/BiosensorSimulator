@@ -14,8 +14,14 @@ namespace BiosensorSimulator.Calculators.SchemeParameters
         /// </summary>
         public double DiffusionCoefficientOverSpace { get; set; }
 
+        public double H2 { get; set; }
+        public double W2 { get; set; }
+
         public ExplicitSchemeParameters(Layer layer, Substance substance)
         {
+            H2 = layer.H * layer.H;
+            W2 = layer.W * layer.W;
+
             DiffusionCoefficientOverR = substance.DiffusionCoefficient * layer.R;
             DiffusionCoefficientOverSpace = substance.DiffusionCoefficient / (layer.H * layer.H);
         }
