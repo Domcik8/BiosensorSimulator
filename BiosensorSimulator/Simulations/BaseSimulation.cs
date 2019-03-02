@@ -115,50 +115,7 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Simulation stable current 
         /// </summary>
-        public abstract void RunStableCurrentSimulation();
-        public void RunStableCurrentSimulation(int maxTime = int.MaxValue)
-        {
-            double iCur;
-            var i = 1;
-            double iPrev = 0;
-
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            SetInitialConditions();
-
-            //Print result every resultTime seconds
-            var resultTime = 0.5;
-            // Print result every resulSteps steps
-            var resultSteps = (int)(resultTime / SimulationParameters.t);
-            var maxSteps = (int)(maxTime / SimulationParameters.t);
-
-            while (true)
-            {
-                CalculateNextStep();
-
-                iCur = GetCurrent();
-
-                if (iCur > 0 && iPrev > 0
-                    && iCur > SimulationParameters.ZeroIBond
-                    && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
-                    break;
-
-                if (i % resultSteps == 0)
-                    PrintSimulationResults(stopWatch, iCur, i / resultSteps * resultTime, false);
-
-                if (i % maxSteps == 0)
-                    break;
-
-                iPrev = iCur;
-                i++;
-            }
-
-            stopWatch.Stop();
-
-            PrintSimulationResults(stopWatch, iCur, i * SimulationParameters.t, false);
-            Current = iCur;
-        }
+        public abstract void RunStableCurrentSimulation(int maxTime = int.MaxValue);
 
         // Show ZeroCondition and First condition and two model condition
         public void ShowValidationValues()
