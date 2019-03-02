@@ -6,12 +6,12 @@ using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
 namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
-    public class CrankNicolsonScheme1D : ISchemeCalculator1D
+    public class CrankNicolsonScheme : ISchemeCalculator
     {
         public BaseBiosensor Biosensor { get; }
         public SimulationParameters SimulationParameters { get; }
 
-        public CrankNicolsonScheme1D(BaseBiosensor biosensor, SimulationParameters simulationParameters)
+        public CrankNicolsonScheme(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             Biosensor = biosensor;
             SimulationParameters = simulationParameters;
