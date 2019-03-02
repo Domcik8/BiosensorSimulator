@@ -1,14 +1,9 @@
 ﻿using BiosensorSimulator.Calculators.SchemeCalculator;
-using BiosensorSimulator.Parameters.Biosensors;
-using BiosensorSimulator.Parameters.Biosensors.Base;
+using BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
-using BiosensorSimulator.Simulations;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
-using BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors;
-using Microsoft.SolverFoundation.Services;
-using BiosensorSimulator.Simulations.Simulations2D;
 
 namespace BiosensorSimulator
 {
@@ -22,12 +17,13 @@ namespace BiosensorSimulator
             var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation1D simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();
-            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
             
+            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
+
             /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                 biosensor.Homogenize();*/
 

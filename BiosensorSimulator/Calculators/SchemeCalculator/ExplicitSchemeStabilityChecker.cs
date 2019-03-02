@@ -1,7 +1,7 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using System;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
-using System;
 
 namespace BiosensorSimulator.Calculators.SchemeCalculator
 {
