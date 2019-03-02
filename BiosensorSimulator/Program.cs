@@ -8,6 +8,7 @@ using BiosensorSimulator.Simulations.Simulations1D;
 using System;
 using BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors;
 using Microsoft.SolverFoundation.Services;
+using BiosensorSimulator.Simulations.Simulations2D;
 
 namespace BiosensorSimulator
 {
@@ -18,8 +19,8 @@ namespace BiosensorSimulator
             var biosensor = new TwoLayerAnalyticalBiosensor();
             var simulationParameters = new SimulationParametersSuplier1(biosensor);
 
-            //var resultPrinter = new ConsolePrinter();
-            var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
+            var resultPrinter = new ConsolePrinter();
+            //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
             BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, resultPrinter);
 
