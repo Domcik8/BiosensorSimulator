@@ -12,9 +12,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
             var isReactionStable = GetReactionStability(biosensor.VMax, biosensor.Km, simulationParameters.t);
 
             if (!isReactionStable)
-            {
                 throw new Exception("Simulation scheme is not stable");
-            }
 
             foreach (var layer in biosensor.Layers)
             {

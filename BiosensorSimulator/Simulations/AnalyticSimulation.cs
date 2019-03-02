@@ -6,8 +6,18 @@ namespace BiosensorSimulator.Simulations
 {
     public class AnalyticSimulation
     {
-        //ToDo: kodel neatitinka reiksmiu knygoje?
         public double GetFirstOrderAnalyticSolution(BaseBiosensor biosensor, SimulationParameters simulationParameters)
+        {
+            if (biosensor.Layers.Count == 1)
+                return GetFirstOrderAnalyticSolutionForSingleLayerModel(biosensor, simulationParameters);
+
+            if (biosensor.Layers.Count == 2)
+                return GetFirstOrderAnalyticSolutionForTwoLayerModel(biosensor, simulationParameters);
+
+            return 0;
+        }
+
+        private static double GetFirstOrderAnalyticSolutionForSingleLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             var S0 = 0.01 * biosensor.Km;
 
@@ -15,24 +25,45 @@ namespace BiosensorSimulator.Simulations
             var alpha = Math.Sqrt(biosensor.VMax / (biosensor.Km * enzymeLayer.Substrate.DiffusionCoefficient));
 
             var iCur = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient *
-                S0 / enzymeLayer.Height * (1 - 1 / Math.Cosh(alpha * enzymeLayer.Height));
+                       S0 / enzymeLayer.Height * (1 - 1 / Math.Cosh(alpha * enzymeLayer.Height));
 
+            return iCur;
+        }
+
+        private static double GetFirstOrderAnalyticSolutionForTwoLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
+        {
+            var enzymeLayer = biosensor.EnzymeLayer;
+            var diffusionLayer = biosensor.DiffusionLayer;
+            var iCur = simulationParameters.ne * simulationParameters.F * biosensor.VMax * enzymeLayer.Height *
+                       (diffusionLayer.Product.DiffusionCoefficient * diffusionLayer.Height +
+                        2 * enzymeLayer.Product.DiffusionCoefficient * diffusionLayer.Height) /
+                       (2 * (diffusionLayer.Product.DiffusionCoefficient * diffusionLayer.Height +
+                             enzymeLayer.Product.DiffusionCoefficient * diffusionLayer.Height));
+            
             return iCur;
         }
 
         public double GetZeroOrderAnalyticSolution(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
-            var S0 = 1000 * biosensor.Km;
+            if (biosensor.Layers.Count == 1)
+                return GetZeroOrderAnalyticalSolutionForSingleLayerModel(biosensor, simulationParameters);
 
+            if (biosensor.Layers.Count == 2)
+                return GetZeroOrderAnalyticalSolutionForTwoLayerModel(biosensor, simulationParameters);
+
+            return 0;
+        }
+
+        private static double GetZeroOrderAnalyticalSolutionForSingleLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
+        {
             var enzymeLayer = biosensor.EnzymeLayer;
             var iCur = simulationParameters.ne * simulationParameters.F * biosensor.VMax * enzymeLayer.Height / 2;
 
             return iCur;
         }
 
-        public double GetTwoCompartmentModelAnalyticSolution(BaseBiosensor biosensor, SimulationParameters simulationParameters)
+        public double GetZeroOrderAnalyticalSolutionForTwoLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
-            //var S0 = 0.01 * biosensor.Km;
             var S0 = biosensor.S0;
 
             var enzymeLayer = biosensor.EnzymeLayer;
@@ -43,7 +74,7 @@ namespace BiosensorSimulator.Simulations
 
             var firstMultiplier = simulationParameters.ne * simulationParameters.F *
                                   enzymeLayer.Product.DiffusionCoefficient *
-                                  (S0 / (enzymeLayer.Height + diffusionLayer.Height));
+                                  S0 / (enzymeLayer.Height + diffusionLayer.Height);
 
             var secondMultiplier = enzymeLayer.Height + diffusionLayer.Height *
                                    (diffusionLayer.Substrate.DiffusionCoefficient - alpha *

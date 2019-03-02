@@ -61,7 +61,7 @@
     <Compile Include="Parameters\Biosensors\TwoLayerAnalyticMicroreactorBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\TwoLayerMicroreactorBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensor.cs" />
-    <Compile Include="Parameters\Biosensors\TwoLayerBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\AnalyticalBiosensors\TwoLayerAnalyticalBiosensor.cs" />
     <Compile Include="Calculators\SchemeParameters\ExplicitSchemeParameters.cs" />
     <Compile Include="Calculators\SchemeParameters\ImplicitSchemeParameters.cs" />
     <Compile Include="Parameters\Biosensors\TwoLayerPerforatedMembraneBiosensor.cs" />
@@ -71,8 +71,7 @@
     <Compile Include="Simulations\Simulations1D\PerforatedMembrane1D.cs" />
     <Compile Include="Simulations\Simulations1D\SingleLayerSimulation1D.cs" />
     <Compile Include="Simulations\AnalyticSimulation.cs" />
-    <Compile Include="Parameters\Biosensors\ZeroOrderBiosensor.cs" />
-    <Compile Include="Parameters\Biosensors\FirstOrderBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\AnalyticalBiosensors\SingleLayerAnalyticalBiosensor.cs" />
     <Compile Include="Calculators\MatrixCalculator.cs" />
     <Compile Include="Parameters\Simulations\SimulationParametersSuplier1.cs" />
     <Compile Include="Program.cs" />

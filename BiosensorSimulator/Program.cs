@@ -6,6 +6,8 @@ using BiosensorSimulator.Results;
 using BiosensorSimulator.Simulations;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
+using BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors;
+using Microsoft.SolverFoundation.Services;
 
 namespace BiosensorSimulator
 {
@@ -13,33 +15,32 @@ namespace BiosensorSimulator
     {
         static void Main()
         {
-            // You can choose different starting conditions
-            var biosensor = new TwoLayerMicroreactorBiosensor();
+            var biosensor = new TwoLayerAnalyticalBiosensor();
             var simulationParameters = new SimulationParametersSuplier1(biosensor);
 
             //var resultPrinter = new ConsolePrinter();
             var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation simulation = new CylindricMicroreactors1D(simulationParameters, biosensor, resultPrinter);
-            
+            BaseSimulation simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, resultPrinter);
+
             simulation.PrintParameters();
             simulation.ShowValidationValues();
             new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
-
-            if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
-                biosensor.Homogenize();
+            
+            /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
+                biosensor.Homogenize();*/
 
             simulation.SchemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
 
             if (simulation.SchemeCalculator is ImplicitSchemeCalculator)
                 resultPrinter.Print("====Implicit Scheme Calculator====");
             else
-            {
                 resultPrinter.Print("====Explicit Scheme Calculator====");
-            }
 
             resultPrinter.Print("====Results====");
             simulation.RunStableCurrentSimulation();
+
+            //simulation.RunSimulation(30);
 
             //TwoLayer
             //simulation.RunSimulation(124, new []{6.8, 8.4, 16, 18.3, 27.8}, true);

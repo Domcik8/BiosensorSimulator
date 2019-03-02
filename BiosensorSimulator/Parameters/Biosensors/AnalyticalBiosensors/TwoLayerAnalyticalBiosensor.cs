@@ -1,19 +1,24 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 
-namespace BiosensorSimulator.Parameters.Biosensors
+namespace BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors
 {
-    public class TwoLayerBiosensor : BaseBiosensor
+    public class TwoLayerAnalyticalBiosensor : BaseBiosensor
     {
-        public TwoLayerBiosensor()
+        public TwoLayerAnalyticalBiosensor()
         {
-            Name = "Two-Layer-Biosensor";
+            Name = "Two-Layer-Analytical-Biosensor";
             P0 = 0;
-            VMax = 10e-12;
+            VMax = 1e-12;
             Km = 100e-12;
-            S0 = 100e-12;
+
+            // First Order
+            //S0 = 0.01 * Km;
+
+            // Zero Order
+            S0 = 1000000 * Km;
 
             //biosensor.S0 = 0.01 * biosensor.Km;
             Layers = new List<Layer>
@@ -21,7 +26,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 100e-3,
+                    Height = 0.1,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
@@ -40,7 +45,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.DiffusionLayer,
-                    Height = 500e-3,
+                    Height = 0.1,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
