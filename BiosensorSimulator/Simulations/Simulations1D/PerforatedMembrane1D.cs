@@ -7,7 +7,7 @@ using BiosensorSimulator.Results;
 
 namespace BiosensorSimulator.Simulations.Simulations1D
 {
-    public class PerforatedMembrane1D : BaseSimulation
+    public class PerforatedMembrane1D : BaseSimulation1D
     {
         public PerforatedMembrane1D(
             SimulationParameters simulationParameters,

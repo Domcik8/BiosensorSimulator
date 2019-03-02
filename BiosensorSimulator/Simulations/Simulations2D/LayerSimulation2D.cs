@@ -1,11 +1,11 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using System.Linq;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
-using System.Linq;
 
-namespace BiosensorSimulator.Simulations.Simulations1D
+namespace BiosensorSimulator.Simulations.Simulations2D
 {
     public class LayerSimulation2D : BaseSimulation2D
     {

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace BiosensorSimulator.Simulations.Simulations1D
 {
-    public class CylindricMicroreactors1D : BaseSimulation
+    public class CylindricMicroreactors1D : BaseSimulation1D
     {
         public CylindricMicroreactors1D(
             SimulationParameters simulationParameters,

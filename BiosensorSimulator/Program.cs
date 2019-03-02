@@ -6,6 +6,7 @@ using BiosensorSimulator.Results;
 using BiosensorSimulator.Simulations;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
+using BiosensorSimulator.Simulations.Simulations2D;
 
 namespace BiosensorSimulator
 {
