@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calculators\SchemeCalculator\CrankNicolsonScheme.cs" />
+    <Compile Include="Calculators\SchemeCalculator\CrankNicolsonScheme1D.cs" />
     <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeCalculator2D.cs" />
     <Compile Include="Calculators\SchemeCalculator\ExplicitSchemeStabilityChecker2D.cs" />
     <Compile Include="Calculators\SchemeCalculator\ISchemeCalculator2d.cs" />
