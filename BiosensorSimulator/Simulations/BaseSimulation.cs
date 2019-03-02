@@ -1,10 +1,7 @@
-﻿using BiosensorSimulator.Calculators.SchemeCalculator;
-using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
-using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace BiosensorSimulator.Simulations
 {
@@ -121,7 +118,7 @@ namespace BiosensorSimulator.Simulations
         public void ShowValidationValues()
         {
             var simulation = new AnalyticSimulation();
-            
+
             var firstOrderCurrent = simulation.GetFirstOrderAnalyticSolution(Biosensor, SimulationParameters);
             var zeroOrderCurrent = simulation.GetZeroOrderAnalyticSolution(Biosensor, SimulationParameters);
 

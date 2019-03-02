@@ -1,7 +1,7 @@
-﻿using BiosensorSimulator.Calculators.SchemeCalculator;
-using BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors;
+﻿using BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
+using BiosensorSimulator.Schemes.Calculators1D;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
 
@@ -21,7 +21,7 @@ namespace BiosensorSimulator
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();
-            
+
             new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
 
             /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)

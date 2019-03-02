@@ -3,7 +3,7 @@ using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
 using System;
 
-namespace BiosensorSimulator.Calculators.SchemeCalculator
+namespace BiosensorSimulator.Schemes.Calculators2D
 {
     public class ExplicitSchemeStabilityChecker2D
     {

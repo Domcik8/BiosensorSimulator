@@ -1,4 +1,4 @@
-﻿namespace BiosensorSimulator.Calculators.SchemeCalculator
+﻿namespace BiosensorSimulator.Schemes.Calculators2D
 {
     public interface ISchemeCalculator2D
     {

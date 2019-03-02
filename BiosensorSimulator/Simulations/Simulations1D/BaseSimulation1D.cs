@@ -1,10 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using BiosensorSimulator.Calculators.SchemeCalculator;
-using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
+using BiosensorSimulator.Schemes.Calculators1D;
+using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace BiosensorSimulator.Simulations.Simulations1D
 {

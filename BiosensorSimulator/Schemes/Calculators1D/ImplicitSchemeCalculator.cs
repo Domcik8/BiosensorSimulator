@@ -1,11 +1,12 @@
-﻿using BiosensorSimulator.Calculators.SchemeParameters;
+﻿using BiosensorSimulator.Calculators;
+using BiosensorSimulator.Calculators.SchemeParameters;
 using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
 using System;
 
-namespace BiosensorSimulator.Calculators.SchemeCalculator
+namespace BiosensorSimulator.Schemes.Calculators1D
 {
     public class ImplicitSchemeCalculator : ISchemeCalculator
     {

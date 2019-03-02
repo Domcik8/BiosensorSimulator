@@ -5,7 +5,7 @@ using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
 using System;
 
-namespace BiosensorSimulator.Calculators.SchemeCalculator
+namespace BiosensorSimulator.Schemes.Calculators2D
 {
     public class ExplicitSchemeCalculator2D : ISchemeCalculator2D
     {
@@ -197,7 +197,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
 
                     pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
                                  (CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j) +
-                                  CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)) 
+                                  CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H))
                         + fermentReactionSpeed;
                 }
             }
