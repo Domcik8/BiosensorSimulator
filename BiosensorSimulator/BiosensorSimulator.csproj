@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Schemes\Calculators1D\CrankNicolsonScheme.cs" />
     <Compile Include="Schemes\Calculators2D\ExplicitSchemeCalculator2D.cs" />
-    <Compile Include="Schemes\Calculators2D\ExplicitSchemeStabilityChecker2D.cs" />
     <Compile Include="Schemes\Calculators2D\ISchemeCalculator2d.cs" />
     <Compile Include="Parameters\Biosensors\Base\BaseBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\Base\BaseHomogenousBiosensor.cs" />
@@ -89,7 +88,7 @@
     <Compile Include="Schemes\Calculators1D\ExplicitSchemeCalculator.cs" />
     <Compile Include="Simulations\BaseSimulation.cs" />
     <Compile Include="Parameters\Simulations\SimulationParameters.cs" />
-    <Compile Include="Schemes\Calculators1D\ExplicitSchemeStabilityChecker.cs" />
+    <Compile Include="Schemes\ExplicitSchemeStabilityChecker.cs" />
     <Compile Include="Simulations\Simulations1D\CylindricMicroreactors1D.cs" />
   </ItemGroup>
   <ItemGroup>
