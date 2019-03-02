@@ -10,7 +10,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
 {
     public abstract class BaseSimulation1D : BaseSimulation
     {
-        public ISchemeCalculator SchemeCalculator { get; set; }
+        public ISchemeCalculator1D SchemeCalculator1D { get; set; }
 
         public double[] SCur, PCur;
         public double[] SPrev, PPrev;
@@ -42,7 +42,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             Array.Copy(SCur, SPrev, SCur.Length);
             Array.Copy(PCur, PPrev, PCur.Length);
 
-            SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
+            SchemeCalculator1D.CalculateNextStep(SCur, PCur, SPrev, PPrev);
             CalculateMatchingConditions();
             CalculateBoundaryConditions();
         }

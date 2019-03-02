@@ -29,9 +29,9 @@ namespace BiosensorSimulator
             /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                 biosensor.Homogenize();*/
 
-            simulation.SchemeCalculator = new ExplicitSchemeCalculator(biosensor, simulationParameters);
+            simulation.SchemeCalculator1D = new ExplicitSchemeCalculator1D(biosensor, simulationParameters);
 
-            if (simulation.SchemeCalculator is ImplicitSchemeCalculator)
+            if (simulation.SchemeCalculator1D is ImplicitSchemeCalculator1D)
                 resultPrinter.Print("====Implicit Scheme Calculator====");
             else
                 resultPrinter.Print("====Explicit Scheme Calculator====");

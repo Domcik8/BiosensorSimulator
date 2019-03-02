@@ -7,12 +7,12 @@ using System;
 
 namespace BiosensorSimulator.Schemes.Calculators1D
 {
-    public class CrankNicolsonScheme : ISchemeCalculator
+    public class CrankNicolsonScheme1D : ISchemeCalculator1D
     {
         public BaseBiosensor Biosensor { get; }
         public SimulationParameters SimulationParameters { get; }
 
-        public CrankNicolsonScheme(BaseBiosensor biosensor, SimulationParameters simulationParameters)
+        public CrankNicolsonScheme1D(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             Biosensor = biosensor;
             SimulationParameters = simulationParameters;

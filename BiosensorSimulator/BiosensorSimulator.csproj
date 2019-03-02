@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Schemes\Calculators1D\CrankNicolsonScheme.cs" />
+    <Compile Include="Schemes\Calculators1D\CrankNicolsonScheme1D.cs" />
     <Compile Include="Schemes\Calculators2D\ExplicitSchemeCalculator2D.cs" />
     <Compile Include="Schemes\Calculators2D\ISchemeCalculator2d.cs" />
     <Compile Include="Parameters\Biosensors\Base\BaseBiosensor.cs" />
@@ -83,9 +83,9 @@
     <Compile Include="Parameters\Simulations\SimulationParametersSuplier1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schemes\Calculators1D\ImplicitSchemeCalculator.cs" />
-    <Compile Include="Schemes\Calculators1D\ISchemeCalculator.cs" />
-    <Compile Include="Schemes\Calculators1D\ExplicitSchemeCalculator.cs" />
+    <Compile Include="Schemes\Calculators1D\ImplicitSchemeCalculator1D.cs" />
+    <Compile Include="Schemes\Calculators1D\ISchemeCalculator1D.cs" />
+    <Compile Include="Schemes\Calculators1D\ExplicitSchemeCalculator1D.cs" />
     <Compile Include="Simulations\BaseSimulation.cs" />
     <Compile Include="Parameters\Simulations\SimulationParameters.cs" />
     <Compile Include="Schemes\ExplicitSchemeStabilityChecker.cs" />

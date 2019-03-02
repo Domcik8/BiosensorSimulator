@@ -8,12 +8,12 @@ using System;
 
 namespace BiosensorSimulator.Schemes.Calculators1D
 {
-    public class ImplicitSchemeCalculator : ISchemeCalculator
+    public class ImplicitSchemeCalculator1D : ISchemeCalculator1D
     {
         public BaseBiosensor Biosensor { get; }
         public SimulationParameters SimulationParameters { get; }
 
-        public ImplicitSchemeCalculator(BaseBiosensor biosensor, SimulationParameters simulationParameters)
+        public ImplicitSchemeCalculator1D(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             Biosensor = biosensor;
             SimulationParameters = simulationParameters;
