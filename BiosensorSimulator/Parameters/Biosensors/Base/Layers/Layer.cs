@@ -45,5 +45,11 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base.Layers
 
         public bool FirstLayer { get; set; } = false;
         public bool LastLayer { get; set; } = false;
+
+        public double Width { get; set; }
+
+        public double W { get; set; }
+
+        public long M { get; set; }
     }
 }
