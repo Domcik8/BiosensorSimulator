@@ -1,13 +1,13 @@
-﻿using System;
-using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
+using System;
 
 namespace BiosensorSimulator.Schemes.Calculators1D
 {
     public class ExplicitSchemeStabilityChecker
     {
-        public void AssertStability(SimulationParameters simulationParameters, BaseBiosensor biosensor)
+        public void AssertStability(SimulationParameters simulationParameters, BaseBiosensor biosensor, bool is2D)
         {
             var isReactionStable = GetReactionStability(biosensor.VMax, biosensor.Km, simulationParameters.t);
 
@@ -16,19 +16,29 @@ namespace BiosensorSimulator.Schemes.Calculators1D
 
             foreach (var layer in biosensor.Layers)
             {
-                if (layer.N == 0 || layer.Type == LayerType.SelectiveMembrane)
+                if (layer.Type == LayerType.SelectiveMembrane || layer.Type == LayerType.DiffusionSmallLayer)
+                    continue;
+
+                if (layer.N == 0)
                     continue;
 
                 var Dmax = Math.Max(layer.Substrate.DiffusionCoefficient, layer.Product.DiffusionCoefficient);
-                var isLayerStable = GetDiffusionStability(Dmax, layer.H, simulationParameters.t);
+                if (!GetDiffusionStability(Dmax, layer.H, simulationParameters.t))
+                    throw new Exception("Simulation scheme is not stable");
 
-                if (!isLayerStable)
+                if (!is2D) continue;
+
+                if (layer.W == 0)
+                    continue;
+
+                if (!GetDiffusionStability(Dmax, layer.W, simulationParameters.t))
                     throw new Exception("Simulation scheme is not stable");
             }
         }
 
         public bool GetDiffusionStability(double D, double h, double t)
         {
+            // Why we tried to change 0.25 to 0.083333333333333?
             return D * t / (h * h) <= 0.25;
         }
 

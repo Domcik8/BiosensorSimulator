@@ -22,7 +22,7 @@ namespace BiosensorSimulator
             simulation.PrintParameters();
             simulation.ShowValidationValues();
 
-            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor);
+            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, false);
 
             /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                 biosensor.Homogenize();*/

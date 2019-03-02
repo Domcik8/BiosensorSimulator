@@ -15,14 +15,24 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base.Layers
         public double Height { get; set; }
 
         /// <summary>
-        /// Quantity of layer space steps
+        /// Quantity of layer space steps in axis Y
         /// </summary>
         public long N { get; set; }
 
         /// <summary>
-        /// Layer space step
+        /// Quantity of layer space steps in axis Y
+        /// </summary>
+        public long M { get; set; }
+
+        /// <summary>
+        /// Layer space step in axis Y
         /// </summary>
         public double H { get; set; }
+
+        /// <summary>
+        /// Layer space step in axis X
+        /// </summary>
+        public long W { get; set; }
 
         /// <summary>
         /// Layer upper bond index
@@ -47,9 +57,5 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base.Layers
         public bool LastLayer { get; set; } = false;
 
         public double Width { get; set; }
-
-        public double W { get; set; }
-
-        public long M { get; set; }
     }
 }
