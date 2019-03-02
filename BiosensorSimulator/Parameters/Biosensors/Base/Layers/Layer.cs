@@ -32,7 +32,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base.Layers
         /// <summary>
         /// Layer space step in axis X
         /// </summary>
-        public long W { get; set; }
+        public double W { get; set; }
 
         /// <summary>
         /// Layer upper bond index
