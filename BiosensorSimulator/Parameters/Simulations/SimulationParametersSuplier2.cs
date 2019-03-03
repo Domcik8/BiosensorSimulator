@@ -48,6 +48,12 @@ namespace BiosensorSimulator.Parameters.Simulations
                 lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N;
 
                 layer.M = widthSteps;
+
+                if (layer.Type == LayerType.DiffusionSmallLayer)
+                {
+                    layer.M = 2;
+                }
+
                 layer.W = layer.Width / layer.M;
               
                 if (layer.N == 0) continue;
