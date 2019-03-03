@@ -98,7 +98,7 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         {
             for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex + 1; i++)
             {
-                for (var j = 1; j < sCur.GetLength(1) - 1; j++)
+                for (var j = 1; j < 2; j++)
                 {
                     sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
                                  (CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
@@ -177,10 +177,10 @@ namespace BiosensorSimulator.Calculators.SchemeCalculator
         //    }
         //}
 
-        //private double CalculateDiffusionLayerNextLocation(double previous, double current, double next, double step)
-        //{
-        //    return (next - 2 * current + previous) / step;
-        //}
+        private double CalculateDiffusionLayerNextLocation(double previous, double current, double next, double step)
+        {
+            return (next - 2 * current + previous) / step;
+        }
 
         public void CalculateReactionDiffusionLayerNextStep(Layer layer, Layer prevLayer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {

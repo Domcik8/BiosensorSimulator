@@ -68,19 +68,25 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             for (int i = 0; i < PCur.GetLength(0); i++)
             {
                 SCur[i, 0] = SCur[i, 1];
-                SCur[i, SimulationParameters.M - 1] = SCur[i, SimulationParameters.M - 2];
                 PCur[i, 0] = PCur[i, 1];
+                SCur[i, SimulationParameters.M - 1] = SCur[i, SimulationParameters.M - 2];
                 PCur[i, SimulationParameters.M - 1] = PCur[i, SimulationParameters.M - 2];
             }
 
-            //for (int j = 20 - temp; j < PCur.GetLength(1); j++)
-            //{
-            //    SCur[enzyme.UpperBondIndex, j] = SCur[enzyme.UpperBondIndex - 1, j];
-            //    PCur[enzyme.UpperBondIndex, j] = PCur[enzyme.UpperBondIndex - 1, j];
+            for (long i = enzyme.UpperBondIndex; i < diffusion.LowerBondIndex; i++)
+            {
+                SCur[i, 2] = SCur[i, 1];
+                PCur[i, 2] = PCur[i, 1];
+            }
 
-            //    SCur[diffusion.LowerBondIndex, j] = SCur[diffusion.LowerBondIndex + 1, j];
-            //    PCur[diffusion.LowerBondIndex, j] = PCur[diffusion.LowerBondIndex + 1, j];
-            //}
+            for (int j = 2; j < PCur.GetLength(1); j++)
+            {
+                SCur[enzyme.UpperBondIndex, j] = SCur[enzyme.UpperBondIndex - 1, j];
+                PCur[enzyme.UpperBondIndex, j] = PCur[enzyme.UpperBondIndex - 1, j];
+
+                SCur[diffusion.LowerBondIndex, j] = SCur[diffusion.LowerBondIndex + 1, j];
+                PCur[diffusion.LowerBondIndex, j] = PCur[diffusion.LowerBondIndex + 1, j];
+            }
         }
 
         public override void CalculateMatchingConditions()
@@ -105,6 +111,10 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                 {
                     SetMatchingConditionsWithSelectiveMembrane(layer, previousLayer);
                 }
+                else if (previousLayer.Type == LayerType.Enzyme)
+                {
+                    SetMatchingConditionsEnzyme(layer, previousLayer);
+                }
                 else
                 {
                     SetMatchingConditions(layer, Biosensor.Layers[index - 1]);
@@ -115,6 +125,20 @@ namespace BiosensorSimulator.Simulations.Simulations1D
         private void SetMatchingConditions(Layer layer, Layer previousLayer)
         {
             for (int j = 0; j < SCur.GetLength(1); j++)
+            {
+                SCur[layer.LowerBondIndex, j] =
+                    (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
+                     SCur[layer.LowerBondIndex - 1, j]) / (layer.H * previousLayer.Substrate.DiffusionCoefficient + previousLayer.H * layer.Substrate.DiffusionCoefficient);
+
+                PCur[layer.LowerBondIndex, j] =
+                    (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Product.DiffusionCoefficient *
+                     PCur[layer.LowerBondIndex - 1, j]) / (layer.H * previousLayer.Product.DiffusionCoefficient + previousLayer.H * layer.Product.DiffusionCoefficient);
+            }
+        }
+
+        private void SetMatchingConditionsEnzyme(Layer layer, Layer previousLayer)
+        {
+            for (int j = 0; j < 2; j++)
             {
                 SCur[layer.LowerBondIndex, j] =
                     (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
