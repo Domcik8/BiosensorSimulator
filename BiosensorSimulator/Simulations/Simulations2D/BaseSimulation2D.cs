@@ -26,10 +26,6 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
                 var firstLayer = Biosensor.Layers.First();
                 _currentFactor = SimulationParameters.ne * SimulationParameters.F * firstLayer.Product.DiffusionCoefficient * (2 / (firstLayer.Width * firstLayer.Width));
-                ResultPrinter.Print("H" + firstLayer.H.ToString());
-                ResultPrinter.Print("W" + firstLayer.W.ToString());
-                ResultPrinter.Print(_currentFactor.Value.ToString());
-
                 return _currentFactor.Value;
             }
         }
@@ -40,6 +36,23 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             IResultPrinter resultPrinter)
             : base(simulationParameters, biosensor, resultPrinter) { }
 
+        public override void PrintParameters()
+        {
+            base.PrintParameters();
+            ResultPrinter.Print("====2D Parameters====");
+            ResultPrinter.Print($"Radius steps: {SimulationParameters.M}");
+            ResultPrinter.Print("");
+
+            foreach (var biosensorLayer in Biosensor.Layers)
+            {
+                ResultPrinter.Print($"{biosensorLayer.Type}:");
+                ResultPrinter.Print($"Width: {biosensorLayer.Width} m");
+                ResultPrinter.Print($"Radius steps count: {biosensorLayer.M}");
+                ResultPrinter.Print($"Radius step: {biosensorLayer.W} M");
+                ResultPrinter.Print("");
+            }
+        }
+
         // Calculate next step of biosensor
         public override void CalculateNextStep()
         {
@@ -49,7 +62,10 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
             CalculateMatchingConditions();
             CalculateBoundaryConditions();
+            CalculateNonLeakageConditions();
         }
+
+        public abstract void CalculateNonLeakageConditions();
 
         /// <summary>
         /// Simulation stable current 
@@ -59,8 +75,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             double iCur;
             var i = 1;
             double iPrev = 0;
-            var firstLayer = Biosensor.Layers.First();
-
+            
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
@@ -68,6 +83,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
             //Print result every resultTime seconds
             var resultTime = 0.5;
+
             // Print result every resulSteps steps
             var resultSteps = (int)(resultTime / SimulationParameters.t);
             var maxSteps = (int)(maxTime / SimulationParameters.t);
@@ -75,56 +91,27 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             while (true)
             {
                 CalculateNextStep();
-
-                double sum = 0;
-                double sum2 = 0;
-                double sum3 = 0;
-
-                for (int j = 0; j < SCur.GetLength(1) - 1; j++)
-                {
-                    sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * (j * firstLayer.W) * (firstLayer.W);
-                    //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2) * (firstLayer.W);
-                    //sum2 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W * j;
-                    // sum3 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W;
-                    //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2);
-                }
-
-                iCur = sum * CurrentFactor;
-
-                //iCur = GetCurrent();
+                iCur = GetCurrent();
 
                 if (iCur > 0 && iPrev > 0
                              && iCur > SimulationParameters.ZeroIBond
                              && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
                 {
-                    for (int k = 0; k < 2; k++)
-                    {
-                        for (int l = 0; l < SCur.GetLength(1); l++)
-                        {
-                            ResultPrinter.Print(PCur[k, l].ToString());
-                        }
-                        ResultPrinter.Print("");
-                    }
                     break;
                 }
 
-
                 if (i % resultSteps == 0)
                 {
-                    for (int k = 0; k < 2; k++)
-                    {
-                        for (int l = 0; l < SCur.GetLength(1); l++)
-                        {
-                            ResultPrinter.Print(PCur[k, l].ToString());
-                        }
-                        ResultPrinter.Print("");
-                    }
+                    PrintSimulationResults(stopWatch, iCur, i / resultSteps * resultTime, false);
 
-                    ResultPrinter.Print("Resultssss");
-                    PrintSimulationResultsSimple(iCur);
-                    ResultPrinter.Print(sum.ToString());
-                    //ResultPrinter.Print(sum3.ToString());
-                    ResultPrinter.Print("");
+                    //for (int k = 0; k < 2; k++)
+                    //{
+                    //    for (int l = 0; l < SCur.GetLength(1); l++)
+                    //    {
+                    //        ResultPrinter.Print(PCur[k, l].ToString());
+                    //    }
+                    //    ResultPrinter.Print("");
+                    //}
                 }
 
                 if (i % maxSteps == 0)
@@ -135,7 +122,6 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             }
 
             stopWatch.Stop();
-
             PrintSimulationResults(stopWatch, iCur, i * SimulationParameters.t, false);
             Current = iCur;
         }
@@ -143,10 +129,15 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         public override double GetCurrent()
         {
             double sum = 0;
+            var firstLayer = Biosensor.Layers.First();
 
-            for (int j = 0; j < SCur.GetLength(1); j++)
+            for (int j = 0; j < SCur.GetLength(1) - 1; j++)
             {
-                sum += PCur[1, j];
+                sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * (j * firstLayer.W) * (firstLayer.W);
+                //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2) * (firstLayer.W);
+                //sum2 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W * j;
+                // sum3 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W;
+                //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2);
             }
 
             return sum * CurrentFactor;

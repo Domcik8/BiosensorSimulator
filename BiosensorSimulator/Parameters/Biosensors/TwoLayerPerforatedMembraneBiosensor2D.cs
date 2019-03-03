@@ -22,6 +22,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     Type = LayerType.SelectiveMembrane,
                     Height = 2e-3,
                     Width = 1e-3,
+                    FullWidth = 1e-3,
                     Product = new Product
                     {
                         Type = SubstanceType.Product,
@@ -35,6 +36,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     Type = LayerType.Enzyme,
                     Height = 2e-3,
                     Width = 1e-3,
+                    FullWidth = 1e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
@@ -75,6 +77,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     Type = LayerType.DiffusionSmallLayer,
                     Height = 10e-3,
                     Width = 0.1e-3,
+                    FullWidth = 1e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
@@ -95,6 +98,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     Type = LayerType.DiffusionLayer,
                     Height = 2e-3,
                     Width = 1e-3,
+                    FullWidth = 1e-3,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,

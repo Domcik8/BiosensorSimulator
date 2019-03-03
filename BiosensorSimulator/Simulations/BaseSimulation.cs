@@ -28,7 +28,7 @@ namespace BiosensorSimulator.Simulations
         public abstract void CalculateNextStep();
         public abstract void CalculateMatchingConditions();
         public abstract void CalculateBoundaryConditions();
-
+  
         /// <summary>
         /// Runs simulation till eternity. Prints result every on specified times.
         /// </summary>
@@ -169,7 +169,7 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Write parameters for result
         /// </summary>
-        public void PrintParameters()
+        public virtual void PrintParameters()
         {
             ResultPrinter.Print("*********" + Biosensor.Name + "*********");
             ResultPrinter.Print("");

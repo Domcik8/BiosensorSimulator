@@ -49,7 +49,13 @@ namespace BiosensorSimulator.Parameters.Simulations
 
                 layer.M = widthSteps;
                 layer.W = layer.Width / layer.M;
-              
+
+                if (layer.Type == LayerType.DiffusionSmallLayer)
+                {
+                    layer.M = widthSteps;
+                    layer.W = layer.Width / layer.M;
+                }
+
                 if (layer.N == 0) continue;
 
                 layer.H = layer.Height / layer.N;
