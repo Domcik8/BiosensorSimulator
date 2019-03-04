@@ -42,7 +42,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
                 switch (layer.Type)
                 {
                     case LayerType.Enzyme:
-                        CalculateReactionDiffusionLayerNextStep(layer, Biosensor.Layers[index - 1], sCur, pCur, sPrev, pPrev);
+                        CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
                     case LayerType.DiffusionLayer:
                         CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
@@ -182,7 +182,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         //    return (next - 2 * current + previous) / step;
         //}
 
-        public void CalculateReactionDiffusionLayerNextStep(Layer layer, Layer prevLayer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
             for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
             {
