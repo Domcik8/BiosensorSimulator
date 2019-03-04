@@ -77,7 +77,7 @@
     <Compile Include="Simulations\Simulations1D\PerforatedMembrane1D.cs" />
     <Compile Include="Simulations\Simulations2D\PerforatedMembrane2D.cs" />
     <Compile Include="Simulations\Simulations2D\LayerSimulation2D.cs" />
-    <Compile Include="Simulations\Simulations1D\SingleLayerSimulation1D.cs" />
+    <Compile Include="Simulations\Simulations1D\Simulation1D.cs" />
     <Compile Include="Simulations\AnalyticSimulation.cs" />
     <Compile Include="Parameters\Biosensors\AnalyticalBiosensors\SingleLayerAnalyticalBiosensor.cs" />
     <Compile Include="Schemes\MatrixCalculator.cs" />

@@ -4,6 +4,7 @@ using BiosensorSimulator.Results;
 using BiosensorSimulator.Schemes.Calculators1D;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
+using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Schemes;
 
 namespace BiosensorSimulator
@@ -12,13 +13,13 @@ namespace BiosensorSimulator
     {
         static void Main()
         {
-            var biosensor = new TwoLayerAnalyticalBiosensor();
+            var biosensor = new TwoLayerAnalyticalBiosensor(); 
             var simulationParameters = new SimulationParametersSuplier1(biosensor);
 
             var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation1D simulation = new SingleLayerSimulation1D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation1D simulation = new Simulation1D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();
