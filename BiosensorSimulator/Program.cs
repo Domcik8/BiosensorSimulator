@@ -6,6 +6,7 @@ using BiosensorSimulator.Simulations.Simulations1D;
 using System;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Schemes;
+using BiosensorSimulator.Schemes.Calculators2D;
 using BiosensorSimulator.Simulations.Simulations2D;
 
 namespace BiosensorSimulator
@@ -20,20 +21,20 @@ namespace BiosensorSimulator
             var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation1D simulation = new SimpleSimulation2D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation2D simulation = new SimpleSimulation2D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();
 
-            var isSimulation2d = false;
+            var isSimulation2d = true;
             new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, isSimulation2d);
 
             /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                 biosensor.Homogenize();*/
 
-            simulation.SchemeCalculator1D = new ExplicitSchemeCalculator1D(biosensor, simulationParameters);
+            simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
 
-            if (simulation.SchemeCalculator1D is ImplicitSchemeCalculator1D)
+            if (simulation.SchemeCalculator is ImplicitSchemeCalculator1D)
                 resultPrinter.Print("====Implicit Scheme Calculator====");
             else
                 resultPrinter.Print("====Explicit Scheme Calculator====");
