@@ -40,7 +40,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
                 switch (layer.Type)
                 {
                     case LayerType.Enzyme:
-                        CalculateReactionDiffusionLayerNextStep(layer, Biosensor.Layers[index - 1], sCur, pCur, sPrev, pPrev);
+                        CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
                     case LayerType.DiffusionLayer:
                         CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
