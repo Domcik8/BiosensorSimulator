@@ -13,8 +13,8 @@ namespace BiosensorSimulator
     {
         static void Main()
         {
-            var biosensor = new TwoLayerAnalyticalBiosensor(); 
-            var simulationParameters = new SimulationParametersSuplier1(biosensor);
+            var biosensor = new SingleLayerAnalyticalBiosensor();
+            var simulationParameters = new SimulationParametersSupplier2(biosensor);
 
             var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");

@@ -15,12 +15,12 @@ namespace BiosensorSimulator.Parameters.Simulations
             DecayRate = 1e-2;
             F = 96485.33289;
             ZeroIBond = 1e-25;
-            t = 7.5e-8;
+            t = 8.3e-4;
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
             {
                 new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 20),
-                new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 100),
+                new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 20),
                 new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 20),
                 new KeyValuePair<LayerType, long>(LayerType.DiffusionSmallLayer, 20),
                 new KeyValuePair<LayerType, long>(LayerType.Enzyme, 20)

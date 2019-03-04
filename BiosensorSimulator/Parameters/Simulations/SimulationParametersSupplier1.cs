@@ -5,17 +5,17 @@ using System.Linq;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
-    public class SimulationParametersSuplier1 : SimulationParameters
+    public class SimulationParametersSupplier1 : SimulationParameters
     {
         private List<KeyValuePair<LayerType, long>> LayersSteps { get; set; }
 
-        public SimulationParametersSuplier1(BaseBiosensor biosensor)
+        public SimulationParametersSupplier1(BaseBiosensor biosensor)
         {
             ne = 2;
             DecayRate = 1e-2;
             F = 96485.33289;
             ZeroIBond = 1e-25;
-            t = 7.5e-8;
+            t = 8.3e-4;
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
             {

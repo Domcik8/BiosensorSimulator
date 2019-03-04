@@ -11,7 +11,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors
         {
             Name = "Single-Layer-Analytical-Biosensor";
             P0 = 0;
-            VMax = 1000e-12; //-6 decimeters / -3 meters / -12 milimeters
+            VMax = 1e-12; //-6 decimeters / -3 meters / -12 milimeters
             Km = 100e-12; //-6 decimeters / -3 meters / -12 milimeters
 
             // First Order
@@ -25,7 +25,8 @@ namespace BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors
                 new Layer
                 {
                     Type = LayerType.Enzyme,
-                    Height = 0.1, //e0 milimiter, e-3 meter
+                    Height = 0.1, //e0 milimiter, e-3 meter,
+                    Width = 0.1,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
