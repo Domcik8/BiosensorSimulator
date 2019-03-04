@@ -113,7 +113,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
             return (first - second) / step;
         }
 
-        public void CalculateReactionDiffusionLayerNextStep(Layer layer, Layer prevLayer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
             for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
             {
