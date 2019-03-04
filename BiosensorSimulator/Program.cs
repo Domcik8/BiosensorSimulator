@@ -6,6 +6,7 @@ using BiosensorSimulator.Simulations.Simulations1D;
 using System;
 using BiosensorSimulator.Parameters.Biosensors;
 using BiosensorSimulator.Schemes;
+using BiosensorSimulator.Simulations.Simulations2D;
 
 namespace BiosensorSimulator
 {
@@ -19,7 +20,7 @@ namespace BiosensorSimulator
             var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation1D simulation = new Simulation1D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation1D simulation = new SimpleSimulation2D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();

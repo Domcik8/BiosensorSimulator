@@ -5,9 +5,9 @@ using BiosensorSimulator.Results;
 
 namespace BiosensorSimulator.Simulations.Simulations2D
 {
-    public class LayerSimulation2D : BaseSimulation2D
+    public class SimpleSimulation2D : BaseSimulation2D
     {
-        public LayerSimulation2D(
+        public SimpleSimulation2D(
             SimulationParameters simulationParameters,
             BaseBiosensor biosensor,
             IResultPrinter resultPrinter) : base(simulationParameters, biosensor, resultPrinter) { }
