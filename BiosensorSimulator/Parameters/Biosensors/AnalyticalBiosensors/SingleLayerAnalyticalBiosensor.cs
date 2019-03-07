@@ -15,7 +15,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors
             Km = 100e-12; //-6 decimeters / -3 meters / -12 milimeters
 
             // First Order
-            // S0 = 0.01 * Km;
+            //S0 = 0.01 * Km;
 
             // Zero Order
             S0 = 1000000 * Km;
