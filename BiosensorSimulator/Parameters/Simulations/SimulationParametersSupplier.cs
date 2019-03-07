@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
-    public class SimulationParametersSupplier2 : SimulationParameters
+    public class SimulationParametersSupplier : SimulationParameters
     {
         private List<KeyValuePair<LayerType, long>> LayersSteps { get; set; }
 
-        public SimulationParametersSupplier2(BaseBiosensor biosensor)
+        public SimulationParametersSupplier(BaseBiosensor biosensor)
         {
             ne = 2;
             DecayRate = 1e-2;
@@ -32,11 +32,6 @@ namespace BiosensorSimulator.Parameters.Simulations
             long lastLayerMaxIndex = 0;
             foreach (var layer in biosensor.Layers)
             {
-                if (layer.Height == 0)
-                {
-                    continue;
-                }
-
                 layer.N = GetLayerSteps(layer.Type);
                 N += layer.N;
 
