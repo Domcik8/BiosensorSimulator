@@ -3,13 +3,13 @@ using System.IO;
 
 namespace BiosensorSimulator.Results
 {
-    public class FilePrinter : IResultPrinter
+    public class ConsoleFilePrinter : IResultPrinter
     {
         private const string FileName = "Simulation_result_";
         private readonly string _path;
         private StreamWriter _streamWriter;
 
-        public FilePrinter(string path)
+        public ConsoleFilePrinter(string path)
         {
             _path = Path.Combine(path, FileName + DateTime.Now.ToString("yyyy-MM-dd_HH_mm_ss") + ".txt");
 
@@ -31,6 +31,7 @@ namespace BiosensorSimulator.Results
 
         public void PrintToStream(string message)
         {
+            Console.WriteLine(message);
             _streamWriter.WriteLine(message);
         }
 

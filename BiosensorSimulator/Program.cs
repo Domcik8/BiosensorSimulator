@@ -15,24 +15,25 @@ namespace BiosensorSimulator
     {
         static void Main()
         {
-            var biosensor = new SingleLayerAnalyticalBiosensor();
+            var biosensor = new TwoLayerAnalyticalBiosensor();
             var simulationParameters = new SimulationParametersSupplier(biosensor);
 
-            var resultPrinter = new ConsolePrinter();
+            var resultPrinter = new ConsoleFilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
+            //var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation2D simulation = new SimpleSimulation2D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();
 
-            var isSimulation2d = false;
+            var isSimulation2d = true;
             new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, isSimulation2d);
 
             /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                 biosensor.Homogenize();*/
 
-            simulation.SchemeCalculator = new ExplicitSchemeCalculator1D(biosensor, simulationParameters);
+            simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
 
             if (simulation.SchemeCalculator is ImplicitSchemeCalculator1D)
                 resultPrinter.Print("====Implicit Scheme Calculator====");
@@ -50,11 +51,10 @@ namespace BiosensorSimulator
             //First Order
             //simulation.RunSimulation(24.5, new[] { 0.5, 1, 3 });
 
-            if (resultPrinter is ConsolePrinter)
+            if (!(resultPrinter is FilePrinter))
             {
-                Console.ReadKey();
-                Console.ReadKey();
-                Console.ReadKey();
+                while(true)
+                    Console.ReadKey();
             }
             else
                 resultPrinter.CloseStream();

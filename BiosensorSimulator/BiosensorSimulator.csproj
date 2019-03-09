@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Results\ConsoleFilePrinter.cs" />
     <Compile Include="Schemes\Calculators1D\CrankNicolsonScheme1D.cs" />
     <Compile Include="Schemes\Calculators2D\ExplicitSchemeCalculator2D.cs" />
     <Compile Include="Schemes\Calculators2D\ISchemeCalculator2d.cs" />
