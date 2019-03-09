@@ -21,18 +21,18 @@ namespace BiosensorSimulator
             var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation2D simulation = new SimpleSimulation2D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();
 
-            var isSimulation2d = true;
+            var isSimulation2d = false;
             new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, isSimulation2d);
 
             /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                 biosensor.Homogenize();*/
 
-            simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
+            simulation.SchemeCalculator = new ExplicitSchemeCalculator1D(biosensor, simulationParameters);
 
             if (simulation.SchemeCalculator is ImplicitSchemeCalculator1D)
                 resultPrinter.Print("====Implicit Scheme Calculator====");

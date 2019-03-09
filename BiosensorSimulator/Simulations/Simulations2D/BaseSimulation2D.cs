@@ -95,10 +95,10 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                 iCur = GetCurrent();
 
                 if (iCur > 0 && iPrev > 0
-                             && iCur > SimulationParameters.ZeroIBond
-                             && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
+                    && iCur > SimulationParameters.ZeroIBond
+                    && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
                     break;
-
+                
                 if (i % resultSteps == 0)
                     PrintSimulationResults(stopWatch, iCur, i / resultSteps * resultTime, false);
 
@@ -118,11 +118,12 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         { 
             double sum = 0;
             var firstLayer = Biosensor.Layers.First();
+            var spaceStepR = firstLayer.W / firstLayer.H * firstLayer.W;
 
             for (var j = 0; j < SCur.GetLength(1) - 1; j++)
             {
-                //sum += PCur[1, j + 1] * firstLayer.H;
-                sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * (j * firstLayer.W) * (firstLayer.W);
+                sum += PCur[1, j] * spaceStepR * (j + 1);
+                //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * (j + 1) * firstLayer.W * firstLayer.W;
                 //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2) * (firstLayer.W);
                 //sum2 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W * j;
                 // sum3 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W;
