@@ -5,38 +5,35 @@ using System.Linq;
 
 namespace BiosensorSimulator.Parameters.Simulations
 {
-    public class SimulationParametersSupplier2 : SimulationParameters
+    public class SimulationParametersSupplier : SimulationParameters
     {
         private List<KeyValuePair<LayerType, long>> LayersSteps { get; set; }
 
-        public SimulationParametersSupplier2(BaseBiosensor biosensor)
+        public SimulationParametersSupplier(BaseBiosensor biosensor)
         {
             ne = 2;
             DecayRate = 1e-2;
             F = 96485.33289;
             ZeroIBond = 1e-25;
-            t = 2.5e-7;
+            t = 8.3e-4;
+            //t = 4.166665e-4;
+            //t = 4.6295296296296314E-05;
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
             {
-                new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 40),
-                new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 40),
-                new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 40),
-                new KeyValuePair<LayerType, long>(LayerType.DiffusionSmallLayer, 40),
-                new KeyValuePair<LayerType, long>(LayerType.Enzyme, 40)
+                new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 100),
+                new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 100),
+                new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 100),
+                new KeyValuePair<LayerType, long>(LayerType.DiffusionSmallLayer, 100),
+                new KeyValuePair<LayerType, long>(LayerType.Enzyme, 100)
             };
 
-            var widthSteps = 40;
+            var widthSteps = 100;
             M = widthSteps;
 
             long lastLayerMaxIndex = 0;
             foreach (var layer in biosensor.Layers)
             {
-                if (layer.Height == 0)
-                {
-                    continue;
-                }
-
                 layer.N = GetLayerSteps(layer.Type);
                 N += layer.N;
 

@@ -31,31 +31,28 @@ namespace BiosensorSimulator.Schemes.Calculators1D
         public void CalculateNextStep(double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
             foreach (var layer in Biosensor.Layers)
-                CalculateNextStep(layer, sCur, pCur, sPrev, pPrev);
-        }
-
-        public void CalculateNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
-        {
-            switch (layer.Type)
             {
-                case LayerType.Enzyme:
-                    CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
-                    break;
+                switch (layer.Type)
+                {
+                    case LayerType.Enzyme:
+                        CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                        break;
 
-                case LayerType.DiffusionLayer:
-                    CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
-                    break;
+                    case LayerType.DiffusionLayer:
+                        CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                        break;
 
-                case LayerType.SelectiveMembrane:
-                    CalculateDiffusionLayerWithOnlyProductNextStep(layer, pCur, pPrev);
-                    break;
+                    case LayerType.SelectiveMembrane:
+                        CalculateDiffusionLayerWithOnlyProductNextStep(layer, pCur, pPrev);
+                        break;
 
-                case LayerType.PerforatedMembrane:
-                    CalculateReactionDiffusionPerforatedMembraneLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
-                    break;
+                    case LayerType.PerforatedMembrane:
+                        CalculateReactionDiffusionPerforatedMembraneLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                        break;
 
-                default:
-                    throw new ArgumentOutOfRangeException();
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 

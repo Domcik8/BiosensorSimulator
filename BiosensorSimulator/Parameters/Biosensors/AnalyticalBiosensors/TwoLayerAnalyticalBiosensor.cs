@@ -27,6 +27,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors
                 {
                     Type = LayerType.Enzyme,
                     Height = 0.1,
+                    Width = 0.1,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,
@@ -46,6 +47,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors
                 {
                     Type = LayerType.DiffusionLayer,
                     Height = 0.1,
+                    Width = 0.1,
                     Substrate = new Substrate
                     {
                         Type = SubstanceType.Substrate,

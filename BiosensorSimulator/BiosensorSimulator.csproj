@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Results\ConsoleFilePrinter.cs" />
     <Compile Include="Schemes\Calculators1D\CrankNicolsonScheme1D.cs" />
     <Compile Include="Schemes\Calculators2D\ExplicitSchemeCalculator2D.cs" />
     <Compile Include="Schemes\Calculators2D\ISchemeCalculator2d.cs" />
@@ -60,7 +61,6 @@
     <Compile Include="Parameters\Biosensors\Base\Layers\Enums\SubstanceType.cs" />
     <Compile Include="Parameters\Biosensors\Base\Layers\Layer.cs" />
     <Compile Include="Parameters\Biosensors\Base\Layers\Substance.cs" />
-    <Compile Include="Parameters\Biosensors\TwoLayerAnalyticMicroreactorBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\TwoLayerMicroreactorBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\AnalyticalBiosensors\TwoLayerAnalyticalBiosensor.cs" />
@@ -68,7 +68,7 @@
     <Compile Include="Schemes\Parameters\ImplicitSchemeParameters.cs" />
     <Compile Include="Parameters\Biosensors\TwoLayerPerforatedMembraneBiosensor2D.cs" />
     <Compile Include="Parameters\Biosensors\TwoLayerPerforatedMembraneBiosensor.cs" />
-    <Compile Include="Parameters\Simulations\SimulationParametersSuplier2.cs" />
+    <Compile Include="Parameters\Simulations\SimulationParametersSupplier.cs" />
     <Compile Include="Results\ConsolePrinter.cs" />
     <Compile Include="Results\FilePrinter.cs" />
     <Compile Include="Results\IResultPrinter.cs" />
@@ -76,12 +76,11 @@
     <Compile Include="Simulations\Simulations2D\BaseSimulation2D.cs" />
     <Compile Include="Simulations\Simulations1D\PerforatedMembrane1D.cs" />
     <Compile Include="Simulations\Simulations2D\PerforatedMembrane2D.cs" />
-    <Compile Include="Simulations\Simulations2D\LayerSimulation2D.cs" />
-    <Compile Include="Simulations\Simulations1D\SingleLayerSimulation1D.cs" />
+    <Compile Include="Simulations\Simulations2D\SimpleSimulation2D.cs" />
+    <Compile Include="Simulations\Simulations1D\SimpleSimulation1D.cs" />
     <Compile Include="Simulations\AnalyticSimulation.cs" />
     <Compile Include="Parameters\Biosensors\AnalyticalBiosensors\SingleLayerAnalyticalBiosensor.cs" />
     <Compile Include="Schemes\MatrixCalculator.cs" />
-    <Compile Include="Parameters\Simulations\SimulationParametersSuplier1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemes\Calculators1D\ImplicitSchemeCalculator1D.cs" />

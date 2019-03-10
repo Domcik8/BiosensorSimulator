@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace BiosensorSimulator.Simulations.Simulations1D
 {
-    public class SingleLayerSimulation1D : BaseSimulation1D
+    public class SimpleSimulation1D : BaseSimulation1D
     {
-        public SingleLayerSimulation1D(
+        public SimpleSimulation1D(
             SimulationParameters simulationParameters,
             BaseBiosensor biosensor,
             IResultPrinter resultPrinter) : base(simulationParameters, biosensor, resultPrinter) { }

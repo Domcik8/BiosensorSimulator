@@ -10,7 +10,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
 {
     public abstract class BaseSimulation1D : BaseSimulation
     {
-        public ISchemeCalculator1D SchemeCalculator1D { get; set; }
+        public ISchemeCalculator1D SchemeCalculator { get; set; }
 
         public double[] SCur, PCur;
         public double[] SPrev, PPrev;
@@ -25,7 +25,8 @@ namespace BiosensorSimulator.Simulations.Simulations1D
                     return _currentFactor.Value;
 
                 var firstLayer = Biosensor.Layers.First();
-                _currentFactor = SimulationParameters.ne * SimulationParameters.F * firstLayer.Product.DiffusionCoefficient / firstLayer.H;
+                _currentFactor = SimulationParameters.ne * SimulationParameters.F
+                    * firstLayer.Product.DiffusionCoefficient / firstLayer.H;
                 return _currentFactor.Value;
             }
         }
@@ -42,7 +43,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             Array.Copy(SCur, SPrev, SCur.Length);
             Array.Copy(PCur, PPrev, PCur.Length);
 
-            SchemeCalculator1D.CalculateNextStep(SCur, PCur, SPrev, PPrev);
+            SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
             CalculateMatchingConditions();
             CalculateBoundaryConditions();
         }
