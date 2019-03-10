@@ -15,18 +15,18 @@ namespace BiosensorSimulator.Parameters.Simulations
             DecayRate = 1e-2;
             F = 96485.33289;
             ZeroIBond = 1e-25;
-            t = 7.5e-8;
+            t = 2.5e-7;
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
             {
-                new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 20),
-                new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 100),
-                new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 20),
-                new KeyValuePair<LayerType, long>(LayerType.DiffusionSmallLayer, 20),
-                new KeyValuePair<LayerType, long>(LayerType.Enzyme, 20)
+                new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 40),
+                new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 40),
+                new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 40),
+                new KeyValuePair<LayerType, long>(LayerType.DiffusionSmallLayer, 40),
+                new KeyValuePair<LayerType, long>(LayerType.Enzyme, 40)
             };
 
-            var widthSteps = 20;
+            var widthSteps = 40;
             M = widthSteps;
 
             long lastLayerMaxIndex = 0;
@@ -52,8 +52,9 @@ namespace BiosensorSimulator.Parameters.Simulations
 
                 if (layer.Type == LayerType.DiffusionSmallLayer)
                 {
-                    layer.M = widthSteps;
-                    layer.W = layer.Width / layer.M;
+                    var smallSteps = layer.Width * widthSteps / layer.FullWidth;
+                    layer.M = (int)smallSteps;
+                    layer.W = layer.FullWidth / widthSteps;
                 }
 
                 if (layer.N == 0) continue;

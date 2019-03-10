@@ -48,7 +48,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
                         CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
                     case LayerType.DiffusionSmallLayer:
-                        CalculateFirstDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                        CalculateDiffusionSmallLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
                     case LayerType.SelectiveMembrane:
                         CalculateDiffusionLayerWithOnlyProductNextStep(layer, pCur, pPrev);
@@ -77,7 +77,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
             }
         }
 
-        //public void CalculateFirstDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        //public void CalculateDiffusionSmallLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         //{
         //    for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex + 1; i++)
         //    {
@@ -94,11 +94,11 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         //    }
         //}
 
-        public void CalculateFirstDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        public void CalculateDiffusionSmallLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
             for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex + 1; i++)
             {
-                for (var j = 1; j < sCur.GetLength(1) - 1; j++)
+                for (var j = 1; j < layer.M; j++)
                 {
                     sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
                                  (CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j) +
@@ -156,7 +156,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         //    }
         //}
 
-        //public void CalculateFirstDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        //public void CalculateDiffusionSmallLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         //{
         //    for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex + 1; i++)
         //    {
@@ -177,10 +177,10 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         //    }
         //}
 
-        //private double CalculateDiffusionLayerNextLocation(double previous, double current, double next, double step)
-        //{
-        //    return (next - 2 * current + previous) / step;
-        //}
+        private double CalculateDiffusionLayerNextLocation(double previous, double current, double next, double step)
+        {
+            return (next - 2 * current + previous) / step;
+        }
 
         public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {

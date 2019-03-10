@@ -35,6 +35,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         {
             var enzyme = Biosensor.EnzymeLayer;
             var diffusion = Biosensor.DiffusionLayer;
+            var diffusionSmall = Biosensor.DiffusionSmallLayer;
 
             //for (int j = 0; j < SCur.GetLength(1); j++)
             //{
@@ -59,13 +60,13 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                 PCur[i, SimulationParameters.M - 1] = PCur[i, SimulationParameters.M - 2];
             }
 
-            for (long i = enzyme.UpperBondIndex; i < diffusion.LowerBondIndex; i++)
+            for (long i = enzyme.UpperBondIndex + 1; i < diffusion.LowerBondIndex; i++)
             {
-                SCur[i, 2] = SCur[i, 1];
-                PCur[i, 2] = PCur[i, 1];
+                SCur[i, diffusionSmall.M] = SCur[i, diffusionSmall.M - 1];
+                PCur[i, diffusionSmall.M] = PCur[i, diffusionSmall.M - 1];
             }
 
-            for (int j = 2; j < PCur.GetLength(1); j++)
+            for (long j = diffusionSmall.M + 1; j < SimulationParameters.M; j++)
             {
                 SCur[enzyme.UpperBondIndex, j] = SCur[enzyme.UpperBondIndex - 1, j];
                 PCur[enzyme.UpperBondIndex, j] = PCur[enzyme.UpperBondIndex - 1, j];
@@ -97,6 +98,10 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                 {
                     SetMatchingConditionsWithSelectiveMembrane(layer, previousLayer);
                 }
+                else if (previousLayer.Type == LayerType.Enzyme)
+                {
+                    SetMatchingConditionsEnzyme(layer, previousLayer);
+                }
                 else
                 {
                     SetMatchingConditions(layer, Biosensor.Layers[index - 1]);
@@ -120,7 +125,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         private void SetMatchingConditionsEnzyme(Layer layer, Layer previousLayer)
         {
-            for (int j = 0; j < 2; j++)
+            for (int j = 0; j <= layer.M; j++)
             {
                 SCur[layer.LowerBondIndex, j] =
                     (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
