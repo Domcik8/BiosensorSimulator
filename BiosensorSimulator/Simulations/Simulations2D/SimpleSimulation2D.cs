@@ -46,9 +46,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                 var index = Biosensor.Layers.IndexOf(layer);
 
                 if (index == 0)
-                {
                     continue;
-                }
 
                 SetMatchingConditions(layer, Biosensor.Layers[index - 1]);
             }

@@ -117,6 +117,9 @@ namespace BiosensorSimulator.Simulations
         // Show ZeroCondition and First condition and two model condition
         public void ShowValidationValues()
         {
+            if (Biosensor is BaseMicroreactorBiosensor)
+                return;
+
             var simulation = new AnalyticSimulation();
 
             var firstOrderCurrent = simulation.GetFirstOrderAnalyticSolution(Biosensor, SimulationParameters);
@@ -186,8 +189,6 @@ namespace BiosensorSimulator.Simulations
             ResultPrinter.Print("");
 
             ResultPrinter.Print("====Main parameters====");
-            ResultPrinter.Print($"Diffusion module: " +
-                                $"{Biosensor.VMax * Biosensor.EnzymeLayer.Height * Biosensor.EnzymeLayer.Height / (Biosensor.EnzymeLayer.Substrate.DiffusionCoefficient * Biosensor.Km)}");
             ResultPrinter.Print("");
 
             if (Biosensor is BaseHomogenousBiosensor homogenousBiosensor)
@@ -217,16 +218,16 @@ namespace BiosensorSimulator.Simulations
                 ResultPrinter.Print("");
             }
 
-            foreach (var biosensorLayer in Biosensor.Layers)
-            {
-                ResultPrinter.Print($"{biosensorLayer.Type}:");
-                ResultPrinter.Print($"Height: {biosensorLayer.Height} m");
-                ResultPrinter.Print($"Dp: {biosensorLayer.Product.DiffusionCoefficient} m2/s");
-                ResultPrinter.Print($"Ds: {biosensorLayer.Substrate?.DiffusionCoefficient} m2/s");
-                ResultPrinter.Print($"Steps count: {biosensorLayer.N}");
-                ResultPrinter.Print($"Step: {biosensorLayer.H} M");
-                ResultPrinter.Print("");
-            }
+            //foreach (var biosensorLayer in Biosensor.Layers)
+            //{
+            //    ResultPrinter.Print($"{biosensorLayer.Type}:");
+            //    ResultPrinter.Print($"Height: {biosensorLayer.Height} m");
+            //    ResultPrinter.Print($"Dp: {biosensorLayer.Product.DiffusionCoefficient} m2/s");
+            //    ResultPrinter.Print($"Ds: {biosensorLayer.Substrate?.DiffusionCoefficient} m2/s");
+            //    ResultPrinter.Print($"Steps count: {biosensorLayer.N}");
+            //    ResultPrinter.Print($"Step: {biosensorLayer.H} M");
+            //    ResultPrinter.Print("");
+            //}
         }
     }
 }

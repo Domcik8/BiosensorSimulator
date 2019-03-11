@@ -3,21 +3,23 @@
     public class SimulationParameters
     {
         // Simulation1D time, time steps
-        public double T, t;
+        public double T { get; set; }
+        public double t { get; set; }
 
-        // Simulation number of space steps and time steps
-        public long N, M;
-        
+        // Simulation number of space steps and time steWps
+        public long N { get; set; }
+        public long M { get; set; }
+
         // Number of electrons involved in charge transfer
-        public int ne;
+        public double ne { get; set; }
 
         // Response time decay rate
-        public double DecayRate;
+        public double DecayRate { get; set; }
 
         // Faraday Constant
-        public double F;
-        
+        public double F { get; set; }
+
         // Lowest allowed current threshold
-        public double ZeroIBond;   
+        public double ZeroIBond { get; set; }
     }
 }

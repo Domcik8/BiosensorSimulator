@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace BiosensorSimulator.Parameters.Biosensors
 {
-    public class TwoLayerMicroreactorBiosensor : BaseMicroreactorBiosensor
+    public class TwoLayerAnalyticalMicroreactorBiosensor : BaseMicroreactorBiosensor
     {
-        public TwoLayerMicroreactorBiosensor()
+        public TwoLayerAnalyticalMicroreactorBiosensor()
         {
             Name = "Two-Layer-Microreactor-Biosensor";
             P0 = 0;

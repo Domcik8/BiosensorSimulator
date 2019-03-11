@@ -17,7 +17,7 @@ namespace BiosensorSimulator.Calculators.SchemeParameters
         public double H2 { get; set; }
         public double W2 { get; set; }
 
-        public ExplicitSchemeParameters(Layer layer, Substance substance)
+        public ExplicitSchemeParameters(Area layer, Substance substance)
         {
             H2 = layer.H * layer.H;
             W2 = layer.W * layer.W;

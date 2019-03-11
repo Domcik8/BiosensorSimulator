@@ -22,7 +22,8 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base
         /// Full biosensor height
         /// </summary>
         public double Height { get; set; }
-        
+
+        public Layer NonHomogenousLayer => Layers.First(l => l.Type == LayerType.NonHomogenousLayer);
         public Layer EnzymeLayer => Layers.First(l => l.Type == LayerType.Enzyme);
         public Layer DiffusionLayer => Layers.First(l => l.Type == LayerType.DiffusionLayer);
         public Layer PerforatedMembraneLayer => Layers.First(l => l.Type == LayerType.PerforatedMembrane);

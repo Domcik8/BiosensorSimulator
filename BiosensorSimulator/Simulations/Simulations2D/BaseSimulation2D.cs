@@ -25,8 +25,8 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                     return _currentFactor.Value;
 
                 var firstLayer = Biosensor.Layers.First();
-                _currentFactor = SimulationParameters.ne * SimulationParameters.F * firstLayer.Product.DiffusionCoefficient
-                    * 2 / (firstLayer.Width * firstLayer.Width);
+                _currentFactor = SimulationParameters.ne * SimulationParameters.F * 2
+                    / (firstLayer.Width * firstLayer.Width);
                 return _currentFactor.Value;
             }
         }
@@ -121,16 +121,9 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             var spaceStepR = firstLayer.W / firstLayer.H * firstLayer.W;
 
             for (var j = 0; j < SCur.GetLength(1) - 1; j++)
-            {
                 sum += PCur[1, j] * spaceStepR * (j + 1);
-                //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * (j + 1) * firstLayer.W * firstLayer.W;
-                //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2) * (firstLayer.W);
-                //sum2 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W * j;
-                // sum3 += (PCur[1, j]) / (firstLayer.H) * firstLayer.W;
-                //sum += (PCur[1, j] + PCur[1, j + 1]) / (2 * firstLayer.H) * ((j * firstLayer.W + (j + 1) * firstLayer.W) / 2);
-            }
 
-            return sum * CurrentFactor;
+            return sum * CurrentFactor * firstLayer.Product.DiffusionCoefficient;
         }
 
         /// <summary>
@@ -144,9 +137,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             PPrev = new double[SimulationParameters.N, SimulationParameters.M];
 
             for (int j = 0; j < SCur.GetLength(1); j++)
-            {
                 SCur[SimulationParameters.N - 1, j] = Biosensor.S0;
-            }
         }
 
         public override void PrintSimulationConcentrations(bool normalize = false)

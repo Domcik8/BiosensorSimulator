@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parameters\Biosensors\Base\Layers\Area.cs" />
+    <Compile Include="Parameters\Biosensors\Base\Layers\LayerWithSubAreas.cs" />
+    <Compile Include="Parameters\Biosensors\TwoLayerAnalyticalMicroreactorBiosensor.cs" />
     <Compile Include="Results\ConsoleFilePrinter.cs" />
     <Compile Include="Schemes\Calculators1D\CrankNicolsonScheme1D.cs" />
     <Compile Include="Schemes\Calculators2D\ExplicitSchemeCalculator2D.cs" />
@@ -76,6 +79,7 @@
     <Compile Include="Simulations\Simulations2D\BaseSimulation2D.cs" />
     <Compile Include="Simulations\Simulations1D\PerforatedMembrane1D.cs" />
     <Compile Include="Simulations\Simulations2D\PerforatedMembrane2D.cs" />
+    <Compile Include="Simulations\Simulations2D\MicroreactorSimulation2D.cs" />
     <Compile Include="Simulations\Simulations2D\SimpleSimulation2D.cs" />
     <Compile Include="Simulations\Simulations1D\SimpleSimulation1D.cs" />
     <Compile Include="Simulations\AnalyticSimulation.cs" />
@@ -89,7 +93,6 @@
     <Compile Include="Simulations\BaseSimulation.cs" />
     <Compile Include="Parameters\Simulations\SimulationParameters.cs" />
     <Compile Include="Schemes\ExplicitSchemeStabilityChecker.cs" />
-    <Compile Include="Simulations\Simulations1D\CylindricMicroreactors1D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
