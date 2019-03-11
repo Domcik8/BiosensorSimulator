@@ -19,6 +19,16 @@ namespace BiosensorSimulator.Schemes.Calculators2D
 
             foreach (var layer in biosensor.Layers)
             {
+                if (layer.Type == LayerType.NonHomogenousLayer)
+                {
+                    foreach (var area in ((LayerWithSubAreas) layer).SubAreas)
+                    {
+                        area.Product.ExplicitScheme = new ExplicitSchemeParameters(area, area.Product);
+                        area.Product.ExplicitScheme = new ExplicitSchemeParameters(area, area.Substrate);
+                    }
+                    continue;
+                }
+
                 layer.Product.ExplicitScheme = new ExplicitSchemeParameters(layer, layer.Product);
 
                 if (layer.Type == LayerType.SelectiveMembrane)
@@ -31,69 +41,80 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         public void CalculateNextStep(double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
             foreach (var layer in Biosensor.Layers)
+                CalculateNextStepBasedOnLayerType(layer, sCur, pCur, sPrev, pPrev);
+        }
+
+        private void CalculateNextStepBasedOnLayerType(
+            Area area, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        {
+            switch (area.Type)
             {
-                if (layer.H == 0)
-                    continue;
+                case LayerType.Enzyme:
+                    CalculateReactionDiffusionLayerNextStep(area, sCur, pCur, sPrev, pPrev);
+                    break;
+                case LayerType.DiffusionLayer:
+                    CalculateDiffusionLayerNextStep(area, sCur, pCur, sPrev, pPrev);
+                    break;
+                case LayerType.DiffusionSmallLayer:
+                    CalculateSmallDiffusionLayerNextStep(area, sCur, pCur, sPrev, pPrev);
+                    break;
+                case LayerType.SelectiveMembrane:
+                    CalculateDiffusionLayerWithOnlyProductNextStep(area, pCur, pPrev);
+                    break;
+                case LayerType.NonHomogenousLayer:
+                    CalculateNonHomogenousLayerNextStep((LayerWithSubAreas)area, sCur, pCur, sPrev, pPrev);
+                    break;
 
-                var index = Biosensor.Layers.IndexOf(layer);
-
-                switch (layer.Type)
-                {
-                    case LayerType.Enzyme:
-                        CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
-                        break;
-                    case LayerType.DiffusionLayer:
-                        CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
-                        break;
-                    case LayerType.DiffusionSmallLayer:
-                        CalculateSmallDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
-                        break;
-                    case LayerType.SelectiveMembrane:
-                        CalculateDiffusionLayerWithOnlyProductNextStep(layer, pCur, pPrev);
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
-        public void CalculateDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        private void CalculateNonHomogenousLayerNextStep(
+            LayerWithSubAreas layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
-            {
-                for (var j = 1; j < sCur.GetLength(1) - 1; j++)
-                {
-                    sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H)
-                                 + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j));
+            foreach (var area in layer.SubAreas)
+                CalculateNextStepBasedOnLayerType(area, sCur, pCur, sPrev, pPrev);
+        }
 
-                    pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)
-                                 + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j));
+        public void CalculateDiffusionLayerNextStep(
+            Area area, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        {
+            for (var i = area.LowerBondIndex + 1; i < area.UpperBondIndex; i++)
+            {
+                for (var j = area.LeftBondIndex + 1; j < area.RightBondIndex; j++)
+                {
+                    sCur[i, j] = sPrev[i, j] + area.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], area.H)
+                                 + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], area.W, j));
+
+                    pCur[i, j] = pPrev[i, j] + area.Product.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], area.H)
+                                 + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], area.W, j));
                 }
             }
         }
         
-        public void CalculateSmallDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        public void CalculateSmallDiffusionLayerNextStep(
+            Area area, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex + 1; i++)
+            for (var i = area.LowerBondIndex + 1; i < area.UpperBondIndex + 1; i++)
             {
-                for (var j = 1; j < sCur.GetLength(1) - 1; j++)
+                for (var j = area.LeftBondIndex + 1; j < area.RightBondIndex; j++)
                 {
-                    sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H)
-                                 + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j));
+                    sCur[i, j] = sPrev[i, j] + area.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], area.H)
+                                 + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], area.W, j));
 
-                    pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)
-                                 + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j));
+                    pCur[i, j] = pPrev[i, j] + area.Product.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], area.H)
+                                 + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], area.W, j));
                 }
             }
         }
 
         private double CalculateDiffusionLayerCoordinateRNextLocation(
-            double previous, double current, double next, double step, int j)
+            double previous, double current, double next, double step, long j)
         {
             var firstStep = (j + 0.5) * step;
             var first = (next - current) / step;
@@ -113,36 +134,38 @@ namespace BiosensorSimulator.Schemes.Calculators2D
             return (first - second) / step;
         }
 
-        public void CalculateReactionDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        public void CalculateReactionDiffusionLayerNextStep(
+            Area area, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
+            for (var i = area.LowerBondIndex + 1; i < area.UpperBondIndex; i++)
             {
-                for (var j = 1; j < sCur.GetLength(1) - 1; j++)
+                for (var j = area.LeftBondIndex + 1; j < area.RightBondIndex; j++)
                 {
                     var fermentReactionSpeed = SimulationParameters.t * (Biosensor.VMax * sPrev[i, j] / (Biosensor.Km + sPrev[i, j]));
 
-                    sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H)
-                                 + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j))
+                    sCur[i, j] = sPrev[i, j] + area.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], area.H)
+                                 + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], area.W, j))
                         - fermentReactionSpeed;
 
-                    pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)
-                                 + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j))
+                    pCur[i, j] = pPrev[i, j] + area.Product.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], area.H)
+                                 + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], area.W, j))
                         + fermentReactionSpeed;
                 }
             }
         }
 
-        public void CalculateDiffusionLayerWithOnlyProductNextStep(Layer layer, double[,] pCur, double[,] pPrev)
+        public void CalculateDiffusionLayerWithOnlyProductNextStep(
+            Area area, double[,] pCur, double[,] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
+            for (var i = area.LowerBondIndex + 1; i < area.UpperBondIndex; i++)
             {
-                for (var j = 1; j < pCur.GetLength(1) - 1; j++)
+                for (var j = area.LeftBondIndex + 1; j < area.RightBondIndex; j++)
                 {
-                    pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
-                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)
-                                 + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j));
+                    pCur[i, j] = pPrev[i, j] + area.Product.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], area.H)
+                                 + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], area.W, j));
                 }
             }
         }
