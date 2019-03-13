@@ -132,12 +132,18 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             for (var j = previousLayer.LeftBondIndex; j < previousLayer.RightBondIndex; j++)
             {
                 SCur[layer.LowerBondIndex, j] =
-                (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
-                 SCur[layer.LowerBondIndex - 1, j]) / (layer.H * previousLayer.Substrate.DiffusionCoefficient + previousLayer.H * layer.Substrate.DiffusionCoefficient);
+                (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j]
+                + layer.H * previousLayer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex - 1, j])
+                /
+                (layer.H * previousLayer.Substrate.DiffusionCoefficient
+                + previousLayer.H * layer.Substrate.DiffusionCoefficient);
 
                 PCur[layer.LowerBondIndex, j] =
-                (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Product.DiffusionCoefficient *
-                 PCur[layer.LowerBondIndex - 1, j]) / (layer.H * previousLayer.Product.DiffusionCoefficient + previousLayer.H * layer.Product.DiffusionCoefficient);
+                (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1, j]
+                + layer.H * previousLayer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex - 1, j])
+                /
+                (layer.H * previousLayer.Product.DiffusionCoefficient
+                + previousLayer.H * layer.Product.DiffusionCoefficient);
             }
         }
 
@@ -151,21 +157,19 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
             for (var i = layer.LowerBondIndex; i < layer.UpperBondIndex; i++)
             {
-                SCur[i, firstArea.RightBondIndex] = (firstArea.W * firstArea.Substrate.DiffusionCoefficient
-                                                     * SCur[i, firstArea.RightBondIndex - 1] + secondArea.W *
-                                                     secondArea.Substrate.DiffusionCoefficient
-                                                     * SCur[i, secondArea.RightBondIndex + 1]) /
-                                                    (firstArea.W * secondArea.Substrate.DiffusionCoefficient
-                                                     + firstArea.H * firstArea.H *
-                                                     layer.Substrate.DiffusionCoefficient);
+                SCur[i, firstArea.RightBondIndex] =
+                    (firstArea.W * secondArea.Substrate.DiffusionCoefficient * SCur[i, firstArea.RightBondIndex - 1]
+                    + secondArea.W * firstArea.Substrate.DiffusionCoefficient * SCur[i, secondArea.LeftBondIndex + 1])
+                    /
+                    (secondArea.W * firstArea.Substrate.DiffusionCoefficient
+                    + firstArea.H * secondArea.H * firstArea.Substrate.DiffusionCoefficient);
 
-                PCur[i, firstArea.RightBondIndex] = (firstArea.W * firstArea.Product.DiffusionCoefficient
-                                                     * PCur[i, firstArea.RightBondIndex - 1] + secondArea.W *
-                                                     secondArea.Product.DiffusionCoefficient
-                                                     * PCur[i, secondArea.RightBondIndex + 1]) /
-                                                    (firstArea.W * secondArea.Product.DiffusionCoefficient
-                                                     + firstArea.H * firstArea.H *
-                                                     layer.Product.DiffusionCoefficient);
+                PCur[i, firstArea.RightBondIndex] =
+                    (firstArea.W * secondArea.Product.DiffusionCoefficient * PCur[i, firstArea.RightBondIndex - 1]
+                    + secondArea.W * firstArea.Product.DiffusionCoefficient * PCur[i, secondArea.LeftBondIndex + 1])
+                    /
+                    (secondArea.W * firstArea.Product.DiffusionCoefficient
+                    + firstArea.H * secondArea.H * firstArea.Product.DiffusionCoefficient);
             }
         }
     }

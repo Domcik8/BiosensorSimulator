@@ -62,14 +62,19 @@ namespace BiosensorSimulator.Simulations.Simulations1D
 
         private void SetMatchingConditions(Layer layer, Layer previousLayer)
         {
-
             SCur[layer.LowerBondIndex] =
-                (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
-                 SCur[layer.LowerBondIndex - 1]) / (layer.H * previousLayer.Substrate.DiffusionCoefficient + previousLayer.H * layer.Substrate.DiffusionCoefficient);
+                (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1]
+                + layer.H * previousLayer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex - 1])
+                / 
+                (layer.H * previousLayer.Substrate.DiffusionCoefficient
+                + previousLayer.H * layer.Substrate.DiffusionCoefficient);
 
             PCur[layer.LowerBondIndex] =
-                (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1] + layer.H * previousLayer.Product.DiffusionCoefficient *
-                 PCur[layer.LowerBondIndex - 1]) / (layer.H * previousLayer.Product.DiffusionCoefficient + previousLayer.H * layer.Product.DiffusionCoefficient);
+                (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1]
+                + layer.H * previousLayer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex - 1])
+                /
+                (layer.H * previousLayer.Product.DiffusionCoefficient
+                + previousLayer.H * layer.Product.DiffusionCoefficient);
         }
 
         private void SetMatchingConditionsWithSelectiveMembrane(Layer layer, Layer previousLayer)
