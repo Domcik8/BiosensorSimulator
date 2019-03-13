@@ -142,7 +142,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         public override void PrintSimulationConcentrations(bool normalize = false)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

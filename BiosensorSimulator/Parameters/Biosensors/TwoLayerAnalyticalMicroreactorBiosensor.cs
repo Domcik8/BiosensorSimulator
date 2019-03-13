@@ -9,18 +9,17 @@ namespace BiosensorSimulator.Parameters.Biosensors
     {
         public TwoLayerAnalyticalMicroreactorBiosensor()
         {
-            Name = "Two-Layer-Microreactor-Biosensor";
+            Name = "Two-Layer-Analytical-Microreactor-Biosensor";
             P0 = 0;
-            VMax = 100e-12;
+            VMax = 1e-12;
             Km = 100e-12;
-            //S0 = 20e-12;
-            S0 = 100e-12;
+            S0 = 1000000 * Km;
 
             //MicroReactorRadius = 0.1;
             //UnitRadius = 0.1;
             MicroReactorRadius = 0.1;
             UnitRadius = 0.1;
-            Height = 0.12;
+            Height = 0.1;
 
             Layers = new List<Layer>
             {
@@ -29,6 +28,20 @@ namespace BiosensorSimulator.Parameters.Biosensors
                     Type = LayerType.NonHomogenousLayer,
                     Height = 0.1,
                     Width = UnitRadius,
+                    Substrate = new Substrate
+                    {
+                        Type = SubstanceType.Substrate,
+                        DiffusionCoefficient = 3e-4,
+                        StartConcentration = 0,
+                        ReactionRate = 1
+                    },
+                    Product = new Product
+                    {
+                        Type = SubstanceType.Product,
+                        DiffusionCoefficient = 3e-4,
+                        StartConcentration = 0,
+                        ReactionRate = 1
+                    },
                     SubAreas = new List<Area>
                     {
                         new Area
@@ -70,11 +83,12 @@ namespace BiosensorSimulator.Parameters.Biosensors
                             }
                         }
                     },
-                },
+                }
+                ,
                 new Layer
                 {
                     Type = LayerType.DiffusionLayer,
-                    Height = 0.2,
+                    Height = 0.1,
                     Width = UnitRadius,
                     Substrate = new Substrate
                     {

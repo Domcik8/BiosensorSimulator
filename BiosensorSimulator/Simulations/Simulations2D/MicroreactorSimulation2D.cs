@@ -16,9 +16,17 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         public override double GetCurrent()
         {
+            if (Biosensor is BaseMicroreactorBiosensor)
+                return GetCurrentForMicroreactorBiosensor();
+            else
+                return GetCurrentForBiosensor();
+        }
+
+        public double GetCurrentForMicroreactorBiosensor()
+        {
             double enzimeAreaCurrent = 0;
             double diffusionAreaCurrent = 0;
-            var firstLayer = (LayerWithSubAreas) Biosensor.Layers.First();
+            var firstLayer = (LayerWithSubAreas)Biosensor.Layers.First();
             var firstArea = firstLayer.SubAreas.First();
             var secondArea = firstLayer.SubAreas.Last();
             var spaceStepR = firstLayer.W / firstLayer.H * firstLayer.W;
@@ -28,9 +36,21 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
             for (var j = secondArea.LeftBondIndex; j < secondArea.RightBondIndex; j++)
                 diffusionAreaCurrent += PCur[1, j] * spaceStepR * (j + 1);
-            
+
             return CurrentFactor * (enzimeAreaCurrent * firstArea.Product.DiffusionCoefficient
-                + diffusionAreaCurrent * secondArea.Product.DiffusionCoefficient);
+                                    + diffusionAreaCurrent * secondArea.Product.DiffusionCoefficient);
+        }
+
+        public double GetCurrentForBiosensor()
+        {
+            double sum = 0;
+            var firstLayer = Biosensor.Layers.First();
+            var spaceStepR = firstLayer.W / firstLayer.H * firstLayer.W;
+
+            for (var j = 0; j < SCur.GetLength(1) - 1; j++)
+                sum += PCur[1, j] * spaceStepR * (j + 1);
+
+            return sum * CurrentFactor * firstLayer.Product.DiffusionCoefficient;
         }
 
         public override void CalculateBoundaryConditions()
@@ -64,8 +84,10 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         {
             foreach (var layer in Biosensor.Layers)
             {
-                var index = Biosensor.Layers.IndexOf(layer);
+                if (layer.Type == LayerType.NonHomogenousLayer)
+                    SetMatchingConditionsVertically((LayerWithSubAreas)layer);
 
+                var index = Biosensor.Layers.IndexOf(layer);
                 if (index == 0)
                     continue;
 
@@ -75,16 +97,15 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
                     SetMatchingConditions(layerWithSubAreas.SubAreas.First(),
                         Biosensor.Layers[index - 1]);
+                    
                     SetMatchingConditions(layerWithSubAreas.SubAreas.Last(),
-                        Biosensor.Layers[index - 1]);
-
-                    SetMatchingConditionsVertically((LayerWithSubAreas)layer);
+                            Biosensor.Layers[index - 1]);
                 }
                 if (Biosensor.Layers[index - 1].Type == LayerType.NonHomogenousLayer)
                 {
-                    SetMatchingConditions(layer,
+                    SetMatchingConditionsWithNonHomogenousLayer(layer,
                         ((LayerWithSubAreas)Biosensor.Layers[index - 1]).SubAreas.First());
-                    SetMatchingConditions(layer,
+                    SetMatchingConditionsWithNonHomogenousLayer(layer,
                         ((LayerWithSubAreas)Biosensor.Layers[index - 1]).SubAreas.Last());
                 }
                 else
@@ -106,10 +127,27 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             }
         }
 
+        private void SetMatchingConditionsWithNonHomogenousLayer(Area layer, Area previousLayer)
+        {
+            for (var j = previousLayer.LeftBondIndex; j < previousLayer.RightBondIndex; j++)
+            {
+                SCur[layer.LowerBondIndex, j] =
+                (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
+                 SCur[layer.LowerBondIndex - 1, j]) / (layer.H * previousLayer.Substrate.DiffusionCoefficient + previousLayer.H * layer.Substrate.DiffusionCoefficient);
+
+                PCur[layer.LowerBondIndex, j] =
+                (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Product.DiffusionCoefficient *
+                 PCur[layer.LowerBondIndex - 1, j]) / (layer.H * previousLayer.Product.DiffusionCoefficient + previousLayer.H * layer.Product.DiffusionCoefficient);
+            }
+        }
+
         private void SetMatchingConditionsVertically(LayerWithSubAreas layer)
         {
             var firstArea = layer.SubAreas.First();
             var secondArea = layer.SubAreas.Last();
+
+            if (secondArea.Width == 0)
+                return;
 
             for (var i = layer.LowerBondIndex; i < layer.UpperBondIndex; i++)
             {

@@ -18,7 +18,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
 
             //MicroReactorRadius = 0.1;
             //UnitRadius = 0.1;
-            MicroReactorRadius = 0.1;
+            MicroReactorRadius = 0.08;
             UnitRadius = 0.1;
             Height = 0.12;
 
@@ -74,7 +74,7 @@ namespace BiosensorSimulator.Parameters.Biosensors
                 new Layer
                 {
                     Type = LayerType.DiffusionLayer,
-                    Height = 0.2,
+                    Height = 0.02,
                     Width = UnitRadius,
                     Substrate = new Substrate
                     {
