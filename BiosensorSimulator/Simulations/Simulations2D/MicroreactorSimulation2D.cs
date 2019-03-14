@@ -158,18 +158,18 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             for (var i = layer.LowerBondIndex; i < layer.UpperBondIndex; i++)
             {
                 SCur[i, firstArea.RightBondIndex] =
-                    (firstArea.W * secondArea.Substrate.DiffusionCoefficient * SCur[i, firstArea.RightBondIndex - 1]
-                    + secondArea.W * firstArea.Substrate.DiffusionCoefficient * SCur[i, secondArea.LeftBondIndex + 1])
+                    (firstArea.W * secondArea.Substrate.DiffusionCoefficient * SCur[i, firstArea.RightBondIndex + 1]
+                    + secondArea.W * firstArea.Substrate.DiffusionCoefficient * SCur[i, firstArea.RightBondIndex - 1])
                     /
                     (secondArea.W * firstArea.Substrate.DiffusionCoefficient
-                    + firstArea.H * secondArea.H * firstArea.Substrate.DiffusionCoefficient);
+                    + firstArea.W * secondArea.Substrate.DiffusionCoefficient);
 
                 PCur[i, firstArea.RightBondIndex] =
-                    (firstArea.W * secondArea.Product.DiffusionCoefficient * PCur[i, firstArea.RightBondIndex - 1]
-                    + secondArea.W * firstArea.Product.DiffusionCoefficient * PCur[i, secondArea.LeftBondIndex + 1])
+                    (firstArea.W * secondArea.Product.DiffusionCoefficient * PCur[i, firstArea.RightBondIndex + 1]
+                    + secondArea.W * firstArea.Product.DiffusionCoefficient * PCur[i, firstArea.RightBondIndex - 1])
                     /
                     (secondArea.W * firstArea.Product.DiffusionCoefficient
-                    + firstArea.H * secondArea.H * firstArea.Product.DiffusionCoefficient);
+                    + firstArea.W * secondArea.Product.DiffusionCoefficient);
             }
         }
     }

@@ -53,7 +53,7 @@ namespace BiosensorSimulator
 
             if (!(resultPrinter is FilePrinter))
             {
-                while(true)
+                for(var i = 0; i < 10; i++)
                     Console.ReadKey();
             }
             else
