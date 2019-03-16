@@ -16,6 +16,7 @@ namespace BiosensorSimulator.Parameters.Simulations
             DecayRate = 1e-2;
             F = 96485.33289;
             ZeroIBond = 1e-25;
+            //t = 4.166666666666665E-06;
             t = 1.6665E-05;
             //t = 8.3e-4;
             //t = 4.166665e-4;
