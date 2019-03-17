@@ -11,7 +11,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.AnalyticalBiosensors
         {
             Name = "Single-Layer-Analytical-Biosensor";
             P0 = 0;
-            VMax = 10e-12; //-6 decimeters / -3 meters / -12 milimeters
+            VMax = 1e-12; //-6 decimeters / -3 meters / -12 milimeters
             Km = 100e-12; //-6 decimeters / -3 meters / -12 milimeters
 
             // First Order

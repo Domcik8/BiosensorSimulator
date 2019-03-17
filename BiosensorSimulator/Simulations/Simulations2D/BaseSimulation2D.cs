@@ -131,10 +131,10 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         /// </summary>
         public override void SetInitialConditions()
         {
-            SCur = new double[SimulationParameters.N, SimulationParameters.M];
-            PCur = new double[SimulationParameters.N, SimulationParameters.M];
-            SPrev = new double[SimulationParameters.N, SimulationParameters.M];
-            PPrev = new double[SimulationParameters.N, SimulationParameters.M];
+            SCur = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
+            PCur = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
+            SPrev = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
+            PPrev = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
 
             for (int j = 0; j < SCur.GetLength(1); j++)
                 SCur[SimulationParameters.N, j] = Biosensor.S0;
