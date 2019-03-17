@@ -15,14 +15,23 @@ namespace BiosensorSimulator
     {
         static void Main()
         {
-            var biosensor = new SingleLayerAnalyticalBiosensor();
+            Console.WriteLine("S0: ");
+            var s0 = double.Parse(Console.ReadLine());
+            Console.WriteLine("Microreactor size(mm): ");
+            var ms = double.Parse(Console.ReadLine());
+
+            var biosensor = new TwoLayerMicroreactorBiosensor();
+            biosensor.S0 = s0;
+            biosensor.MicroReactorRadius = ms;
+
+
             var simulationParameters = new SimulationParametersSupplier(biosensor);
 
             var resultPrinter = new ConsoleFilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
             //var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation2D simulation = new SimpleSimulation2D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation2D simulation = new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();

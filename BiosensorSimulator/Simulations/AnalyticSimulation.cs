@@ -81,7 +81,9 @@ namespace BiosensorSimulator.Simulations
             return iCur;
         }
 
-        public double GetZeroOrderAnalyticalSolutionForTwoLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
+        public double 
+            
+            GetZeroOrderAnalyticalSolutionForTwoLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
             var enzymeLayer = biosensor.EnzymeLayer;
             var diffusionLayer = biosensor.DiffusionLayer;
