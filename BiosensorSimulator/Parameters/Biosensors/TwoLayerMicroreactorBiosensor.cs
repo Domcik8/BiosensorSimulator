@@ -1,4 +1,5 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using System;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using System.Collections.Generic;
@@ -9,17 +10,25 @@ namespace BiosensorSimulator.Parameters.Biosensors
     {
         public TwoLayerMicroreactorBiosensor()
         {
+            Console.WriteLine("S0: ");
+            var s0 = double.Parse(Console.ReadLine());
+            Console.WriteLine("Microreactor radius (mm): ");
+            var mr = double.Parse(Console.ReadLine());
+            Console.WriteLine("Unit radius (mm): ");
+            var ur = double.Parse(Console.ReadLine());
+
             Name = "Two-Layer-Microreactor-Biosensor";
             P0 = 0;
             VMax = 100e-12;
             Km = 100e-12;
             //S0 = 20e-12;
-            S0 = 100e-12;
+            //S0 = 100e-12;
+            S0 = s0;
 
             //MicroReactorRadius = 0.1;
             //UnitRadius = 0.1;
-            MicroReactorRadius = 0.1;
-            UnitRadius = 0.1;
+            MicroReactorRadius = mr;
+            UnitRadius = ur;
             Height = 0.12;
 
             Layers = new List<Layer>
