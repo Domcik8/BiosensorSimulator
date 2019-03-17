@@ -39,16 +39,13 @@ namespace BiosensorSimulator.Parameters.Simulations
             foreach (var layer in biosensor.Layers)
             {
                 layer.LeftBondIndex = 0;
-                layer.RightBondIndex = M - 1;
+                layer.RightBondIndex = M;
 
                 layer.N = GetLayerSteps(layer.Type);
                 N += layer.N;
 
                 layer.LowerBondIndex = lastLayerMaxIndex;
-
-                if (lastLayerMaxIndex == 0)
-                    lastLayerMaxIndex--;
-
+                
                 lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N;
                 
                 layer.M = M;
@@ -75,9 +72,9 @@ namespace BiosensorSimulator.Parameters.Simulations
                     diffusionArea.M = layer.M - enzymeArea.M;
 
                     enzymeArea.LeftBondIndex = 0;
-                    enzymeArea.RightBondIndex = enzymeArea.M - 1;
+                    enzymeArea.RightBondIndex = enzymeArea.M;
                     diffusionArea.LeftBondIndex = enzymeArea.RightBondIndex;
-                    diffusionArea.RightBondIndex = layer.M - 1;
+                    diffusionArea.RightBondIndex = layer.M;
 
                     enzymeArea.R = diffusionArea.R = layer.R;
                     enzymeArea.N = diffusionArea.N = layer.N;

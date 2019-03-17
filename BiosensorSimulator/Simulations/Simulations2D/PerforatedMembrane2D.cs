@@ -24,10 +24,10 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         {
             for (int j = 0; j < SCur.GetLength(1); j++)
             {
-                SCur[SimulationParameters.N - 1, j] = Biosensor.S0;
+                SCur[SimulationParameters.N, j] = Biosensor.S0;
                 SCur[selectiveMembraneLayer.UpperBondIndex, j] = SCur[selectiveMembraneLayer.UpperBondIndex + 1, j];
                 PCur[0, j] = 0;
-                PCur[SimulationParameters.N - 1, j] = 0;
+                PCur[SimulationParameters.N, j] = 0;
             }
         }
 
@@ -48,7 +48,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
             //for (int j = 0; j < PCur.GetLength(1); j++)
             //{
-            //    PCur[SimulationParameters.N - 1, j] = 0;
+            //    PCur[SimulationParameters.N, j] = 0;
             //}
 
             for (int i = 0; i < PCur.GetLength(0); i++)

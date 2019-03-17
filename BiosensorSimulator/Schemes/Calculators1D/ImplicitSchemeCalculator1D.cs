@@ -60,9 +60,8 @@ namespace BiosensorSimulator.Schemes.Calculators1D
         private void CalculateReactionDiffusionLayerNextStep(Layer layer, double[] sCur, double[] pCur, double[] sPrev, double[] pPrev)
         {
             var f = new double[layer.N];
-
-            //ToDo: think why we use sPrev and also make these 2 for loops more effective
-            for (var i = 1; i < layer.N - 1; i++)
+            
+            for (var i = 1; i < layer.N; i++)
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
                 f[i] = -sPrev[i] + SimulationParameters.t * fermentReactionSpeed;
@@ -70,7 +69,7 @@ namespace BiosensorSimulator.Schemes.Calculators1D
 
             CalculateNextStep(layer, layer.Substrate, sCur, f);
 
-            for (var i = 1; i < layer.N - 1; i++)
+            for (var i = 1; i < layer.N; i++)
             {
                 var fermentReactionSpeed = Biosensor.VMax * sPrev[i] / (Biosensor.Km + sPrev[i]);
                 f[i] = -pPrev[i] - SimulationParameters.t * fermentReactionSpeed;
@@ -134,12 +133,12 @@ namespace BiosensorSimulator.Schemes.Calculators1D
             //parameters.Beta1 =
             //(layer.R * layer.Substrate.DiffusionCoefficient / 2) / 1 + t * //(DsOverhh + Vmax / (Km + Sprev[1]));
 
-            //parameters.A[layer.N - 1] = -parameters.Beta2;
+            //parameters.A[layer.N] = -parameters.Beta2;
             //parameters.B[0] = -parameters.Beta1;
 
             parameters.F = f;
             parameters.F[0] = parameters.Niu1;
-            parameters.F[layer.N - 1] = parameters.Niu2;
+            parameters.F[layer.N] = parameters.Niu2;
         }
     }
 }

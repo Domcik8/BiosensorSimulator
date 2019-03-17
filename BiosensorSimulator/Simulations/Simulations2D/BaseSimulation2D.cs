@@ -137,7 +137,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             PPrev = new double[SimulationParameters.N, SimulationParameters.M];
 
             for (int j = 0; j < SCur.GetLength(1); j++)
-                SCur[SimulationParameters.N - 1, j] = Biosensor.S0;
+                SCur[SimulationParameters.N, j] = Biosensor.S0;
         }
 
         public override void PrintSimulationConcentrations(bool normalize = false)

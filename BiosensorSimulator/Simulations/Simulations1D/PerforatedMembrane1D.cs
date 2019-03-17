@@ -30,19 +30,19 @@ namespace BiosensorSimulator.Simulations.Simulations1D
 
         private void SetBoundaryConditions()
         {
-            SCur[SimulationParameters.N - 1] = Biosensor.S0;
+            SCur[SimulationParameters.N] = Biosensor.S0;
             SCur[0] = SCur[1];
 
-            PCur[SimulationParameters.N - 1] = Biosensor.P0;
+            PCur[SimulationParameters.N] = Biosensor.P0;
             PCur[0] = 0;
         }
 
         private void SetBoundaryConditionsWithSelectiveMembrane(Layer selectiveMembraneLayer)
         {
-            SCur[SimulationParameters.N - 1] = Biosensor.S0;
+            SCur[SimulationParameters.N] = Biosensor.S0;
             SCur[selectiveMembraneLayer.UpperBondIndex] = SCur[selectiveMembraneLayer.UpperBondIndex + 1];
 
-            PCur[SimulationParameters.N - 1] = Biosensor.P0;
+            PCur[SimulationParameters.N] = Biosensor.P0;
             PCur[0] = 0;
         }
 

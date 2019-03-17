@@ -62,10 +62,10 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         {
             for (int j = 0; j < SCur.GetLength(1); j++)
             {
-                SCur[SimulationParameters.N - 1, j] = Biosensor.S0;
+                SCur[SimulationParameters.N, j] = Biosensor.S0;
                 SCur[0, j] = SCur[1, j];
                 PCur[0, j] = 0;
-                PCur[SimulationParameters.N - 1, j] = 0;
+                PCur[SimulationParameters.N, j] = 0;
             }
         }
 
