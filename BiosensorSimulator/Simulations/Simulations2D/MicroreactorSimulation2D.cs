@@ -105,7 +105,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                 {
                     SetMatchingConditionsWithNonHomogenousLayer(layer,
                         ((LayerWithSubAreas)Biosensor.Layers[index - 1]).SubAreas.First());
-                    CalculateDiffusionLayersMatchinCondition(layer,
+                    SetMatchingConditionsWithNonHomogenousLayer(layer,
                         ((LayerWithSubAreas)Biosensor.Layers[index - 1]).SubAreas.Last());
                 }
                 else
@@ -129,6 +129,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         private void SetMatchingConditionsWithNonHomogenousLayer(Area layer, Area previousLayer)
         {
+            //.GetLength(1).GetLength(1).GetLength(1).GetLength(1).GetLength(1).GetLength(1)
             for (var j = previousLayer.LeftBondIndex; j < previousLayer.RightBondIndex; j++)
             {
                 SCur[layer.LowerBondIndex, j] =
@@ -145,42 +146,6 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                 (layer.H * previousLayer.Product.DiffusionCoefficient
                 + previousLayer.H * layer.Product.DiffusionCoefficient);
             }
-        }
-
-        public void CalculateDiffusionLayersMatchinCondition(Area layer, Area previousLayer)
-        {
-            var i = layer.LowerBondIndex;
-            for (var j = previousLayer.LeftBondIndex; j < previousLayer.RightBondIndex; j++)
-            {
-                SCur[i, j] = SPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
-                                (CalculateDiffusionLayerCoordinateZNextLocation(SPrev[i - 1, j], SPrev[i, j], SPrev[i + 1, j], layer.H)
-                                + CalculateDiffusionLayerCoordinateRNextLocation(SPrev[i, j - 1], SPrev[i, j], SPrev[i, j + 1], layer.W, j));
-
-                PCur[i, j] = PPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
-                                (CalculateDiffusionLayerCoordinateZNextLocation(PPrev[i - 1, j], PPrev[i, j], PPrev[i + 1, j], layer.H)
-                                + CalculateDiffusionLayerCoordinateRNextLocation(PPrev[i, j - 1], PPrev[i, j], PPrev[i, j + 1], layer.W, j));
-            }
-        }
-
-        private double CalculateDiffusionLayerCoordinateRNextLocation(
-            double previous, double current, double next, double step, long j)
-        {
-            var firstStep = (j + 0.5) * step;
-            var first = (next - current) / step;
-            var secondStep = (j - 0.5) * step;
-            var second = (current - previous) / step;
-            var division = step * step * j;
-
-            return (firstStep * first - secondStep * second) / division;
-        }
-
-        private double CalculateDiffusionLayerCoordinateZNextLocation(
-            double previous, double current, double next, double step)
-        {
-            var first = (next - current) / step;
-            var second = (current - previous) / step;
-
-            return (first - second) / step;
         }
 
         private void SetMatchingConditionsVertically(LayerWithSubAreas layer)

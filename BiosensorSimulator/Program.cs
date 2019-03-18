@@ -22,7 +22,7 @@ namespace BiosensorSimulator
             //var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation2D simulation = new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation2D simulation = new SimpleSimulation2D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();

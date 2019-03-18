@@ -54,7 +54,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         private void SetMatchingConditions(Layer layer, Layer previousLayer)
         {
-            for (int j = 0; j < SCur.GetLength(1); j++)
+            for (var j = 0; j < SCur.GetLength(1); j++)
             {
                 SCur[layer.LowerBondIndex, j] =
                     (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
