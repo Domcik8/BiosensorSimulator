@@ -6,6 +6,7 @@
         Enzyme,
         PerforatedMembrane,
         DiffusionLayer,
-        DiffusionSmallLayer
+        DiffusionSmallLayer,
+        EnzymeSmallLayer
     }
 }

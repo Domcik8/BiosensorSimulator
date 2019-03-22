@@ -42,6 +42,12 @@ namespace BiosensorSimulator.Schemes
             return D * t / (h * h) <= 0.25;
         }
 
+        public bool GetDiffusionStability2(double D, double h, double t)
+        {
+            // Why we tried to change 0.25 to 0.083333333333333?
+            return D * t / (h * h) <= 0.16;
+        }
+
         public bool GetReactionStability(double Vmax, double Km, double t)
         {
             return t * Vmax / Km <= 0.5;

@@ -58,5 +58,6 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base.Layers
 
         public double Width { get; set; }
         public double FullWidth { get; set; }
+        public double FullHeight { get; set; }
     }
 }

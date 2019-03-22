@@ -45,6 +45,9 @@ namespace BiosensorSimulator.Schemes.Calculators2D
                     case LayerType.DiffusionLayer:
                         CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
+                    case LayerType.EnzymeSmallLayer:
+                        CalculateSmallEnzymeLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                        break;
                     case LayerType.DiffusionSmallLayer:
                         CalculateSmallDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
@@ -77,7 +80,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         
         public void CalculateSmallDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex + 1; i++)
+            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
             {
                 for (var j = 1; j < layer.M; j++)
                 {
@@ -88,6 +91,27 @@ namespace BiosensorSimulator.Schemes.Calculators2D
                     pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
                                  (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)
                                  + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j));
+                }
+            }
+        }
+
+        public void CalculateSmallEnzymeLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
+        {
+            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
+            {
+                for (var j = 1; j < layer.M; j++)
+                {
+                    var fermentReactionSpeed = SimulationParameters.t * (Biosensor.VMax * sPrev[i, j] / (Biosensor.Km + sPrev[i, j]));
+
+                    sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H)
+                                  + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j))
+                                 - fermentReactionSpeed;
+
+                    pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
+                                             (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)
+                                              + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j))
+                                             + fermentReactionSpeed;
                 }
             }
         }

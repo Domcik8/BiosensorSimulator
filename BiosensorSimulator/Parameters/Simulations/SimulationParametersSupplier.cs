@@ -15,20 +15,21 @@ namespace BiosensorSimulator.Parameters.Simulations
             DecayRate = 1e-2;
             F = 96485.33289;
             ZeroIBond = 1e-25;
-            t = 8.3e-4;
+            t = 0.5E-06;
             //t = 4.166665e-4;
             //t = 4.6295296296296314E-05;
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
             {
-                new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 100),
-                new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 100),
-                new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 100),
-                new KeyValuePair<LayerType, long>(LayerType.DiffusionSmallLayer, 100),
-                new KeyValuePair<LayerType, long>(LayerType.Enzyme, 100)
+                new KeyValuePair<LayerType, long>(LayerType.SelectiveMembrane, 30),
+               // new KeyValuePair<LayerType, long>(LayerType.PerforatedMembrane, 20),
+                new KeyValuePair<LayerType, long>(LayerType.DiffusionLayer, 30),
+                new KeyValuePair<LayerType, long>(LayerType.DiffusionSmallLayer, 30),
+                new KeyValuePair<LayerType, long>(LayerType.EnzymeSmallLayer, 30),
+                new KeyValuePair<LayerType, long>(LayerType.Enzyme, 30)
             };
 
-            var widthSteps = 100;
+            var widthSteps = 40;
             M = widthSteps;
 
             long lastLayerMaxIndex = 0;
@@ -39,8 +40,8 @@ namespace BiosensorSimulator.Parameters.Simulations
 
                 layer.LowerBondIndex = lastLayerMaxIndex;
 
-                if (lastLayerMaxIndex == 0)
-                    lastLayerMaxIndex--;
+                //if (lastLayerMaxIndex == 0)
+                //    lastLayerMaxIndex--;
 
                 lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N;
 
@@ -48,6 +49,13 @@ namespace BiosensorSimulator.Parameters.Simulations
                 layer.W = layer.Width / layer.M;
 
                 if (layer.Type == LayerType.DiffusionSmallLayer)
+                {
+                    var smallSteps = layer.Width * widthSteps / layer.FullWidth;
+                    layer.M = (int)smallSteps ;
+                    layer.W = layer.FullWidth / widthSteps;
+                }
+
+                if (layer.Type == LayerType.EnzymeSmallLayer)
                 {
                     var smallSteps = layer.Width * widthSteps / layer.FullWidth;
                     layer.M = (int)smallSteps;

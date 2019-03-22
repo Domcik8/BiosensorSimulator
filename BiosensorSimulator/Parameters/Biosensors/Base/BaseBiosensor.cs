@@ -25,7 +25,9 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base
         
         public Layer EnzymeLayer => Layers.First(l => l.Type == LayerType.Enzyme);
         public Layer DiffusionLayer => Layers.First(l => l.Type == LayerType.DiffusionLayer);
-        public Layer DiffusionSmallLayer => Layers.First(l => l.Type == LayerType.DiffusionSmallLayer);
+        public Layer DiffusionSmallLayer => Layers.FirstOrDefault(l => l.Type == LayerType.DiffusionSmallLayer);
+        public Layer EnzymeSmallLayer => Layers.FirstOrDefault(l => l.Type == LayerType.EnzymeSmallLayer);
+        public Layer SmallLayer => Layers.First(l => l.Type == LayerType.EnzymeSmallLayer || l.Type == LayerType.DiffusionSmallLayer);
         public Layer PerforatedMembraneLayer => Layers.First(l => l.Type == LayerType.PerforatedMembrane);
     }
 }

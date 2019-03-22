@@ -61,9 +61,11 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             Array.Copy(PCur, PPrev, PCur.Length);
 
             SchemeCalculator.CalculateNextStep(SCur, PCur, SPrev, PPrev);
+            
             CalculateMatchingConditions();
-            CalculateBoundaryConditions();
             CalculateNonLeakageConditions();
+            CalculateBoundaryConditions();
+            
         }
 
         public abstract void CalculateNonLeakageConditions();
@@ -83,7 +85,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             SetInitialConditions();
 
             //Print result every resultTime seconds
-            var resultTime = 0.5;
+            var resultTime = 0.1;
 
             // Print result every resulSteps steps
             var resultSteps = (int)(resultTime / SimulationParameters.t);
@@ -138,14 +140,14 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         /// </summary>
         public override void SetInitialConditions()
         {
-            SCur = new double[SimulationParameters.N, SimulationParameters.M];
-            PCur = new double[SimulationParameters.N, SimulationParameters.M];
-            SPrev = new double[SimulationParameters.N, SimulationParameters.M];
-            PPrev = new double[SimulationParameters.N, SimulationParameters.M];
+            SCur = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
+            PCur = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
+            SPrev = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
+            PPrev = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
 
             for (int j = 0; j < SCur.GetLength(1); j++)
             {
-                SCur[SimulationParameters.N - 1, j] = Biosensor.S0;
+                SCur[SimulationParameters.N, j] = Biosensor.S0;
             }
         }
 

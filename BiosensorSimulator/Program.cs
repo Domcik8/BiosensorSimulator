@@ -15,14 +15,14 @@ namespace BiosensorSimulator
     {
         static void Main()
         {
-            var biosensor = new SingleLayerAnalyticalBiosensor();
+            var biosensor = new TwoLayerPerforatedMembraneBiosensor2D();
             var simulationParameters = new SimulationParametersSupplier(biosensor);
 
             var resultPrinter = new ConsoleFilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
             //var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation2D simulation = new SimpleSimulation2D(simulationParameters, biosensor, resultPrinter);
+            BaseSimulation2D simulation = new PerforatedMembrane2D(simulationParameters, biosensor, resultPrinter);
 
             simulation.PrintParameters();
             simulation.ShowValidationValues();
