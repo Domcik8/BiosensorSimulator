@@ -36,8 +36,9 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         {
             var enzyme = Biosensor.EnzymeLayer;
             var diffusion = Biosensor.DiffusionLayer;
-            var diffusionSmall = Biosensor.SmallLayer;
-            //var enzymeSmall = Biosensor.EnzymeSmallLayer;
+           // var small = Biosensor.SmallLayer;
+          //  var enzymeSmall = Biosensor.EnzymeSmallLayer;
+           // var diffusionSmall = Biosensor.DiffusionSmallLayer;
 
             //for (int j = 0; j < SCur.GetLength(1); j++)
             //{
@@ -69,10 +70,10 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                 PCur[i, SimulationParameters.M] = PCur[i, SimulationParameters.M - 1];
             }
 
-            for (long i = enzyme.UpperBondIndex + 1; i < diffusion.LowerBondIndex; i++)
+            for (long i = enzyme.M2; i <= diffusion.M2; i++)
             {
-                SCur[i, diffusionSmall.M] = SCur[i, diffusionSmall.M - 1];
-                PCur[i, diffusionSmall.M] = PCur[i, diffusionSmall.M - 1];
+                SCur[i, diffusion.M] = SCur[i, diffusion.M - 1];
+                PCur[i, diffusion.M] = PCur[i, diffusion.M - 1];
             }
          
             //var enzymeSmall = Biosensor.EnzymeSmallLayer;
@@ -87,13 +88,13 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             //    SetMatchingConditionsInverse(diffusionSmallL);
             //}
 
-            for (long j = diffusionSmall.M; j < SimulationParameters.M; j++)
+            for (long j = enzyme.M + 1; j < SimulationParameters.M; j++)
             {
-                SCur[enzyme.UpperBondIndex, j] = SCur[enzyme.UpperBondIndex - 1, j];
-                PCur[enzyme.UpperBondIndex, j] = PCur[enzyme.UpperBondIndex - 1, j];
+                SCur[enzyme.M2, j] = SCur[enzyme.M2 - 1, j];
+                PCur[enzyme.M2, j] = PCur[enzyme.M2 - 1, j];
 
-                SCur[diffusion.LowerBondIndex, j] = SCur[diffusion.LowerBondIndex + 1, j];
-                PCur[diffusion.LowerBondIndex, j] = PCur[diffusion.LowerBondIndex + 1, j];
+                SCur[diffusion.M2, j] = SCur[diffusion.M2 + 1, j];
+                PCur[diffusion.M2, j] = PCur[diffusion.M2 + 1, j];
             }
         }
 
@@ -124,25 +125,41 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
                 var previousLayer = Biosensor.Layers[index - 1];
 
-                if (previousLayer.Type == LayerType.DiffusionSmallLayer && layer.Type == LayerType.DiffusionLayer)
-                {
-                    SetMatchingConditionsSmallDiffusion(layer, previousLayer);
-                    var s = 5;
-                }
-                else if (previousLayer.Type == LayerType.Enzyme && layer.Type == LayerType.EnzymeSmallLayer)
-                {
-                    SetMatchingConditionsEnzyme(layer, previousLayer);
-                    var s = 5;
-                }
-                else if (previousLayer.Type == LayerType.SelectiveMembrane)
+                //if (previousLayer.Type == LayerType.DiffusionSmallLayer && layer.Type == LayerType.DiffusionLayer)
+                //{
+                //    //SetMatchingConditionsSmallDiffusion(layer, previousLayer);
+                //    CalculateDiffusionLayersMatchinCondition(layer, previousLayer);
+                //    var s = 5;
+                //}
+                //else if (previousLayer.Type == LayerType.Enzyme && layer.Type == LayerType.EnzymeSmallLayer)
+                //{
+                //    //SetMatchingConditionsEnzyme(layer, previousLayer);
+                //    CalculateReactionDiffusionLayersMatchinCondition(layer, previousLayer);
+                //    var s = 5;
+                //}
+                //else if (previousLayer.Type == LayerType.SelectiveMembrane)
+                //{
+                //    SetMatchingConditionsWithSelectiveMembrane(layer, previousLayer);
+                //}
+                //else if (previousLayer.Type == LayerType.Enzyme && layer.Type != LayerType.EnzymeSmallLayer)
+                //{
+                //    SetMatchingConditionsEnzyme(layer, previousLayer);
+                //}
+                //else if (previousLayer.Type == LayerType.EnzymeSmallLayer)
+                //{
+                //    SetMatchingConditionsSmallEnzyme(layer, previousLayer);
+                //}
+                //else
+                //{
+                //    SetMatchingConditions(layer, Biosensor.Layers[index - 1]);
+                //}
+
+                if (previousLayer.Type == LayerType.SelectiveMembrane)
                 {
                     SetMatchingConditionsWithSelectiveMembrane(layer, previousLayer);
                 }
-                else if (previousLayer.Type == LayerType.Enzyme && layer.Type != LayerType.EnzymeSmallLayer)
-                {
-                    SetMatchingConditionsEnzyme(layer, previousLayer);
-                }
-                else if (previousLayer.Type == LayerType.EnzymeSmallLayer)
+ 
+                else if (previousLayer.Type == LayerType.Enzyme)
                 {
                     SetMatchingConditionsSmallEnzyme(layer, previousLayer);
                 }
@@ -217,6 +234,61 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                     (previousLayer.H * layer.Product.DiffusionCoefficient * PCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Product.DiffusionCoefficient *
                      PCur[layer.LowerBondIndex - 1, j]) / (layer.H * previousLayer.Product.DiffusionCoefficient + previousLayer.H * layer.Product.DiffusionCoefficient);
             }
+        }
+
+        public void CalculateDiffusionLayersMatchinCondition(Layer layer, Layer previousLayer)
+        {
+            var i = layer.LowerBondIndex;
+            for (int j = 1; j < previousLayer.M; j++)
+            {
+                SCur[i, j] = SPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                             (CalculateDiffusionLayerCoordinateZNextLocation(SPrev[i - 1, j], SPrev[i, j], SPrev[i + 1, j], layer.H)
+                              + CalculateDiffusionLayerCoordinateRNextLocation(SPrev[i, j - 1], SPrev[i, j], SPrev[i, j + 1], layer.W, j));
+
+                PCur[i, j] = PPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
+                             (CalculateDiffusionLayerCoordinateZNextLocation(PPrev[i - 1, j], PPrev[i, j], PPrev[i + 1, j], layer.H)
+                              + CalculateDiffusionLayerCoordinateRNextLocation(PPrev[i, j - 1], PPrev[i, j], PPrev[i, j + 1], layer.W, j));
+            }
+        }
+
+        public void CalculateReactionDiffusionLayersMatchinCondition(Layer layer, Layer previousLayer)
+        {
+            var i = layer.LowerBondIndex;
+            for (int j = 1; j < layer.M; j++)
+            {
+                var fermentReactionSpeed = SimulationParameters.t * (Biosensor.VMax * SPrev[i, j] / (Biosensor.Km + SPrev[i, j]));
+
+                SCur[i, j] = SPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                             (CalculateDiffusionLayerCoordinateZNextLocation(SPrev[i - 1, j], SPrev[i, j], SPrev[i + 1, j], layer.H)
+                              + CalculateDiffusionLayerCoordinateRNextLocation(SPrev[i, j - 1], SPrev[i, j], SPrev[i, j + 1], layer.W, j))
+                             - fermentReactionSpeed;
+
+                PCur[i, j] = PPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
+                                         (CalculateDiffusionLayerCoordinateZNextLocation(PPrev[i - 1, j], PPrev[i, j], PPrev[i + 1, j], layer.H)
+                                          + CalculateDiffusionLayerCoordinateRNextLocation(PPrev[i, j - 1], PPrev[i, j], PPrev[i, j + 1], layer.W, j))
+                                         + fermentReactionSpeed;
+            }
+        }
+
+        private double CalculateDiffusionLayerCoordinateRNextLocation(
+            double previous, double current, double next, double step, int j)
+        {
+            var firstStep = (j + 0.5) * step;
+            var first = (next - current) / step;
+            var secondStep = (j - 0.5) * step;
+            var second = (current - previous) / step;
+            var division = step * step * j;
+
+            return (firstStep * first - secondStep * second) / division;
+        }
+
+        private double CalculateDiffusionLayerCoordinateZNextLocation(
+            double previous, double current, double next, double step)
+        {
+            var first = (next - current) / step;
+            var second = (current - previous) / step;
+
+            return (first - second) / step;
         }
     }
 }

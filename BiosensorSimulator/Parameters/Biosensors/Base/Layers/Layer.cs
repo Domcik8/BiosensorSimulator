@@ -23,6 +23,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base.Layers
         /// Quantity of layer space steps in axis Y
         /// </summary>
         public long M { get; set; }
+        public long M2 { get; set; }
 
         /// <summary>
         /// Layer space step in axis Y

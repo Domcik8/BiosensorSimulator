@@ -40,10 +40,10 @@ namespace BiosensorSimulator.Schemes.Calculators2D
                 switch (layer.Type)
                 {
                     case LayerType.Enzyme:
-                        CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                        CalculateSmallEnzymeLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
                     case LayerType.DiffusionLayer:
-                        CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                        CalculateSmallDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
                     case LayerType.EnzymeSmallLayer:
                         CalculateSmallEnzymeLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
@@ -80,7 +80,7 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         
         public void CalculateSmallDiffusionLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
+            for (var i = layer.LowerBondIndex + 1; i <= layer.M2; i++)
             {
                 for (var j = 1; j < layer.M; j++)
                 {
@@ -93,11 +93,43 @@ namespace BiosensorSimulator.Schemes.Calculators2D
                                  + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j));
                 }
             }
+
+            for (var i = layer.M2 + 1; i < layer.UpperBondIndex; i++)
+            {
+                for (var j = 1; j < sCur.GetLength(1) - 1; j++)
+                {
+                    sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H)
+                                  + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j));
+
+                    pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)
+                                  + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j));
+                }
+            }
         }
 
         public void CalculateSmallEnzymeLayerNextStep(Layer layer, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
-            for (var i = layer.LowerBondIndex + 1; i < layer.UpperBondIndex; i++)
+            for (var i = layer.LowerBondIndex + 1; i < layer.M2; i++)
+            {
+                for (var j = 1; j < sCur.GetLength(1) - 1; j++)
+                {
+                    var fermentReactionSpeed = SimulationParameters.t * (Biosensor.VMax * sPrev[i, j] / (Biosensor.Km + sPrev[i, j]));
+
+                    sCur[i, j] = sPrev[i, j] + layer.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                                 (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], layer.H)
+                                  + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], layer.W, j))
+                                 - fermentReactionSpeed;
+
+                    pCur[i, j] = pPrev[i, j] + layer.Product.DiffusionCoefficient * SimulationParameters.t *
+                                             (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], layer.H)
+                                              + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], layer.W, j))
+                                             + fermentReactionSpeed;
+                }
+            }
+
+            for (var i = layer.M2; i < layer.UpperBondIndex; i++)
             {
                 for (var j = 1; j < layer.M; j++)
                 {
