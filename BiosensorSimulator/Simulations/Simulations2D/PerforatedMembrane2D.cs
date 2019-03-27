@@ -54,9 +54,9 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             for (int i = 0; i < PCur.GetLength(0); i++)
             {
                 SCur[i, 0] = SCur[i, 1];
-                SCur[i, SimulationParameters.M - 1] = SCur[i, SimulationParameters.M - 2];
+                SCur[i, SimulationParameters.M] = SCur[i, SimulationParameters.M - 1];
                 PCur[i, 0] = PCur[i, 1];
-                PCur[i, SimulationParameters.M - 1] = PCur[i, SimulationParameters.M - 2];
+                PCur[i, SimulationParameters.M] = PCur[i, SimulationParameters.M - 1];
             }
 
             for (long i = enzyme.UpperBondIndex; i < diffusion.LowerBondIndex; i++)

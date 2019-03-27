@@ -136,7 +136,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             SPrev = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
             PPrev = new double[SimulationParameters.N + 1, SimulationParameters.M + 1];
 
-            for (int j = 0; j < SCur.GetLength(1); j++)
+            for (var j = 0; j < SCur.GetLength(1); j++)
                 SCur[SimulationParameters.N, j] = Biosensor.S0;
         }
 

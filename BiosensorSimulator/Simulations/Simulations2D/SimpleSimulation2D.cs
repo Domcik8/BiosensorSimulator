@@ -19,7 +19,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         private void SetBoundaryConditions()
         {
-            for (int j = 0; j < SCur.GetLength(1); j++)
+            for (var j = 0; j < SCur.GetLength(1); j++)
             {
                 SCur[SimulationParameters.N, j] = Biosensor.S0;
                 SCur[0, j] = SCur[1, j];
@@ -30,12 +30,12 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         public override void CalculateNonLeakageConditions()
         {
-            for (int i = 0; i < PCur.GetLength(0); i++)
+            for (var i = 0; i < PCur.GetLength(0); i++)
             {
                 SCur[i, 0] = SCur[i, 1];
-                SCur[i, SimulationParameters.M - 1] = SCur[i, SimulationParameters.M - 2];
+                SCur[i, SimulationParameters.M] = SCur[i, SimulationParameters.M - 1];
                 PCur[i, 0] = PCur[i, 1];
-                PCur[i, SimulationParameters.M - 1] = PCur[i, SimulationParameters.M - 2];
+                PCur[i, SimulationParameters.M] = PCur[i, SimulationParameters.M - 1];
             }
         }
 

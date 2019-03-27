@@ -60,7 +60,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         private void SetBoundaryConditions()
         {
-            for (int j = 0; j < SCur.GetLength(1); j++)
+            for (var j = 0; j < SCur.GetLength(1); j++)
             {
                 SCur[SimulationParameters.N, j] = Biosensor.S0;
                 SCur[0, j] = SCur[1, j];
@@ -71,12 +71,12 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         public override void CalculateNonLeakageConditions()
         {
-            for (int i = 0; i < PCur.GetLength(0); i++)
+            for (var i = 0; i < PCur.GetLength(0); i++)
             {
                 SCur[i, 0] = SCur[i, 1];
-                SCur[i, SimulationParameters.M - 1] = SCur[i, SimulationParameters.M - 2];
+                SCur[i, SimulationParameters.M] = SCur[i, SimulationParameters.M - 1];
                 PCur[i, 0] = PCur[i, 1];
-                PCur[i, SimulationParameters.M - 1] = PCur[i, SimulationParameters.M - 2];
+                PCur[i, SimulationParameters.M] = PCur[i, SimulationParameters.M - 1];
             }
         }
 
@@ -115,7 +115,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         
         private void SetMatchingConditions(Area layer, Area previousLayer)
         {
-            for (var j = layer.LeftBondIndex; j < layer.RightBondIndex; j++)
+            for (var j = layer.LeftBondIndex; j <= layer.RightBondIndex; j++)
             {
                 SCur[layer.LowerBondIndex, j] =
                     (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j] + layer.H * previousLayer.Substrate.DiffusionCoefficient *
@@ -129,8 +129,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
 
         private void SetMatchingConditionsWithNonHomogenousLayer(Area layer, Area previousLayer)
         {
-            //.GetLength(1).GetLength(1).GetLength(1).GetLength(1).GetLength(1).GetLength(1)
-            for (var j = previousLayer.LeftBondIndex; j < previousLayer.RightBondIndex; j++)
+            for (var j = previousLayer.LeftBondIndex; j <= previousLayer.RightBondIndex; j++)
             {
                 SCur[layer.LowerBondIndex, j] =
                 (previousLayer.H * layer.Substrate.DiffusionCoefficient * SCur[layer.LowerBondIndex + 1, j]
@@ -156,7 +155,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             if (secondArea.Width == 0)
                 return;
 
-            for (var i = layer.LowerBondIndex; i < layer.UpperBondIndex; i++)
+            for (var i = layer.LowerBondIndex; i <= layer.UpperBondIndex; i++)
             {
                 SCur[i, firstArea.RightBondIndex] =
                     (firstArea.W * secondArea.Substrate.DiffusionCoefficient * SCur[i, firstArea.RightBondIndex + 1]
