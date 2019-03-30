@@ -38,6 +38,10 @@ namespace BiosensorSimulator.Schemes.Calculators1D
                         CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;
 
+                    case LayerType.NonHomogenousLayer:
+                        CalculateReactionDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
+                        break;
+
                     case LayerType.DiffusionLayer:
                         CalculateDiffusionLayerNextStep(layer, sCur, pCur, sPrev, pPrev);
                         break;

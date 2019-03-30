@@ -14,12 +14,12 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base
 
             if (UseEffectiveDiffusionCoefficent)
             {
-                EnzymeLayer.Substrate.DiffusionCoefficient = GetEffectiveDiffusionCoefficent(
-                    EnzymeLayer.Substrate.DiffusionCoefficient,
+                NonHomogenousLayer.Substrate.DiffusionCoefficient = GetEffectiveDiffusionCoefficent(
+                    NonHomogenousLayer.Substrate.DiffusionCoefficient,
                     DiffusionLayer.Substrate.DiffusionCoefficient);
 
-                EnzymeLayer.Product.DiffusionCoefficient = GetEffectiveDiffusionCoefficent(
-                    EnzymeLayer.Product.DiffusionCoefficient,
+                NonHomogenousLayer.Product.DiffusionCoefficient = GetEffectiveDiffusionCoefficent(
+                    NonHomogenousLayer.Product.DiffusionCoefficient,
                     DiffusionLayer.Product.DiffusionCoefficient);
             }
         }
