@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Parameters\Biosensors\Base\Layers\Area.cs" />
     <Compile Include="Parameters\Biosensors\Base\Layers\LayerWithSubAreas.cs" />
-    <Compile Include="Parameters\Biosensors\TwoLayerAnalyticalMicroreactorBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\MicroreactorBiosensors\TwoLayerAnalyticalMicroreactorBiosensor.cs" />
     <Compile Include="Results\ConsoleFilePrinter.cs" />
     <Compile Include="Schemes\Calculators1D\CrankNicolsonScheme1D.cs" />
     <Compile Include="Schemes\Calculators2D\ExplicitSchemeCalculator2D.cs" />
@@ -64,13 +64,13 @@
     <Compile Include="Parameters\Biosensors\Base\Layers\Enums\SubstanceType.cs" />
     <Compile Include="Parameters\Biosensors\Base\Layers\Layer.cs" />
     <Compile Include="Parameters\Biosensors\Base\Layers\Substance.cs" />
-    <Compile Include="Parameters\Biosensors\TwoLayerMicroreactorBiosensor.cs" />
-    <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\MicroreactorBiosensors\TwoLayerMicroreactorBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensors\PerforatedMembraneBiosensor.cs" />
     <Compile Include="Parameters\Biosensors\AnalyticalBiosensors\TwoLayerAnalyticalBiosensor.cs" />
     <Compile Include="Schemes\Parameters\ExplicitSchemeParameters.cs" />
     <Compile Include="Schemes\Parameters\ImplicitSchemeParameters.cs" />
-    <Compile Include="Parameters\Biosensors\TwoLayerPerforatedMembraneBiosensor2D.cs" />
-    <Compile Include="Parameters\Biosensors\TwoLayerPerforatedMembraneBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensors\TwoLayerPerforatedMembraneBiosensor2D.cs" />
+    <Compile Include="Parameters\Biosensors\PerforatedMembraneBiosensors\TwoLayerPerforatedMembraneBiosensor.cs" />
     <Compile Include="Parameters\Simulations\SimulationParametersSupplier.cs" />
     <Compile Include="Results\ConsolePrinter.cs" />
     <Compile Include="Results\FilePrinter.cs" />
