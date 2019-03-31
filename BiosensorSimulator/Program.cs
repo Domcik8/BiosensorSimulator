@@ -5,6 +5,7 @@ using BiosensorSimulator.Schemes.Calculators1D;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
 using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors;
 using BiosensorSimulator.Schemes;
 using BiosensorSimulator.Schemes.Calculators2D;
 using BiosensorSimulator.Simulations.Simulations2D;

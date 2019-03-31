@@ -1,9 +1,9 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using System.Collections.Generic;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
-using System.Collections.Generic;
 
-namespace BiosensorSimulator.Parameters.Biosensors
+namespace BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors
 {
     public class TwoLayerAnalyticalMicroreactorBiosensor : BaseMicroreactorBiosensor
     {
