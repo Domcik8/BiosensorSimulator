@@ -10,8 +10,8 @@ namespace BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors
     {
         public TwoLayerMicroreactorBiosensor()
         {
-            Console.WriteLine("S0: ");
-            var s0 = double.Parse(Console.ReadLine());
+            //Console.WriteLine("S0: ");
+            //var s0 = double.Parse(Console.ReadLine());
             //Console.WriteLine("Microreactor radius (mm): ");
             //var mr = double.Parse(Console.ReadLine());
             //Console.WriteLine("Unit radius (mm): ");
@@ -26,7 +26,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors
             VMax = 3e-12;
             Km = 1e-10;
             S0 = 1e-10;
-            MicroReactorRadius = 0.08;
+            MicroReactorRadius = 0.12;
             UnitRadius = 0.2;
             Height = 0.3;
 
