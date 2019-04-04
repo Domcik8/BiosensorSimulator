@@ -23,6 +23,7 @@ namespace BiosensorSimulator
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
 
+
             foreach (double Vmax in vm)
             {
                 var biosensor = new TwoLayerMicroreactorBiosensor();
@@ -65,6 +66,8 @@ namespace BiosensorSimulator
             if (!(resultPrinter is FilePrinter))
             {
                 resultPrinter.CloseStream();
+                Console.WriteLine("Simulations ended, please copy console data.");
+
                 for (var j = 0; j < 15; j++)
                     Console.ReadKey();
             }
