@@ -50,6 +50,7 @@
     <Compile Include="Parameters\Biosensors\Base\Layers\Area.cs" />
     <Compile Include="Parameters\Biosensors\Base\Layers\LayerWithSubAreas.cs" />
     <Compile Include="Parameters\Biosensors\MicroreactorBiosensors\TwoLayerAnalyticalMicroreactorBiosensor.cs" />
+    <Compile Include="Parameters\Biosensors\MicroreactorBiosensors\TwoLayerNonPhysicalMicroreactorBiosensor.cs" />
     <Compile Include="Results\ConsoleFilePrinter.cs" />
     <Compile Include="Schemes\Calculators1D\CrankNicolsonScheme1D.cs" />
     <Compile Include="Schemes\Calculators2D\ExplicitSchemeCalculator2D.cs" />

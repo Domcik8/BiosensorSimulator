@@ -12,24 +12,28 @@ namespace BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors
         {
             Console.WriteLine("S0: ");
             var s0 = double.Parse(Console.ReadLine());
-            Console.WriteLine("Microreactor radius (mm): ");
-            var mr = double.Parse(Console.ReadLine());
-            Console.WriteLine("Unit radius (mm): ");
-            var ur = double.Parse(Console.ReadLine());
+            //Console.WriteLine("Microreactor radius (mm): ");
+            //var mr = double.Parse(Console.ReadLine());
+            //Console.WriteLine("Unit radius (mm): ");
+            //var ur = double.Parse(Console.ReadLine());
+            //Console.WriteLine("VMax (mm): ");
+            //var vm = double.Parse(Console.ReadLine());
+            //Console.WriteLine("VMax (mm): ");
+            //var vm = double.Parse(Console.ReadLine());
 
             Name = "Two-Layer-Microreactor-Biosensor";
             P0 = 0;
-            VMax = 100e-12;
-            Km = 100e-12;
-            //S0 = 20e-12;
-            //S0 = 100e-12;
-            S0 = s0;
+            VMax = 3e-12;
+            Km = 1e-10;
+            S0 = 1e-10;
+            MicroReactorRadius = 0.08;
+            UnitRadius = 0.2;
+            Height = 0.3;
 
-            //MicroReactorRadius = 0.1;
-            //UnitRadius = 0.1;
-            MicroReactorRadius = mr;
-            UnitRadius = ur;
-            Height = 0.12;
+            //S0 = s0;
+            //MicroReactorRadius = mr;
+            //UnitRadius = ur;
+            //VMax = vm;
 
             Layers = new List<Layer>
             {
@@ -97,7 +101,7 @@ namespace BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors
                 new Layer
                 {
                     Type = LayerType.DiffusionLayer,
-                    Height = 0.02,
+                    Height = 0.2,
                     Width = UnitRadius,
                     Substrate = new Substrate
                     {

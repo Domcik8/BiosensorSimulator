@@ -117,9 +117,6 @@ namespace BiosensorSimulator.Simulations
         // Show ZeroCondition and First condition and two model condition
         public void ShowValidationValues()
         {
-            if (Biosensor is BaseMicroreactorBiosensor)
-                return;
-
             var simulation = new AnalyticSimulation();
 
             var firstOrderCurrent = simulation.GetFirstOrderAnalyticSolution(Biosensor, SimulationParameters);

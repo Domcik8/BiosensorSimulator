@@ -21,7 +21,7 @@ namespace BiosensorSimulator.Simulations
         {
             var S0 = 0.01 * biosensor.Km;
 
-            var enzymeLayer = biosensor.EnzymeLayer;
+            var enzymeLayer = biosensor.NonHomogenousLayer;
             var alpha = Math.Sqrt(biosensor.VMax / (biosensor.Km * enzymeLayer.Substrate.DiffusionCoefficient));
 
             var iCur = simulationParameters.ne * simulationParameters.F * enzymeLayer.Product.DiffusionCoefficient *
@@ -34,7 +34,7 @@ namespace BiosensorSimulator.Simulations
         {
             var S0 = biosensor.S0;
 
-            var enzymeLayer = biosensor.EnzymeLayer;
+            var enzymeLayer = biosensor.NonHomogenousLayer;
             var diffusionLayer = biosensor.DiffusionLayer;
 
             var alpha = Math.Sqrt(biosensor.VMax * enzymeLayer.Height * enzymeLayer.Height
@@ -75,7 +75,7 @@ namespace BiosensorSimulator.Simulations
 
         private static double GetZeroOrderAnalyticalSolutionForSingleLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
-            var enzymeLayer = biosensor.EnzymeLayer;
+            var enzymeLayer = biosensor.NonHomogenousLayer;
             var iCur = simulationParameters.ne * simulationParameters.F * biosensor.VMax * enzymeLayer.Height / 2;
 
             return iCur;
@@ -85,7 +85,7 @@ namespace BiosensorSimulator.Simulations
             
             GetZeroOrderAnalyticalSolutionForTwoLayerModel(BaseBiosensor biosensor, SimulationParameters simulationParameters)
         {
-            var enzymeLayer = biosensor.EnzymeLayer;
+            var enzymeLayer = biosensor.NonHomogenousLayer;
             var diffusionLayer = biosensor.DiffusionLayer;
             var iCur = simulationParameters.ne * simulationParameters.F * biosensor.VMax * enzymeLayer.Height *
                        (diffusionLayer.Product.DiffusionCoefficient * diffusionLayer.Height +

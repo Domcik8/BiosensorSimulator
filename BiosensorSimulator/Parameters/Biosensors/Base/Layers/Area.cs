@@ -1,14 +1,13 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
-using Microsoft.SolverFoundation.Services;
 
 namespace BiosensorSimulator.Parameters.Biosensors.Base.Layers
 {
     public class Area
     {
         public LayerType Type { get; set; }
-        
+
         public double Height { get; set; }
-        
+
         public double Width { get; set; }
 
         /// <summary>

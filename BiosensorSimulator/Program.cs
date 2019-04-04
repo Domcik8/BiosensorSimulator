@@ -5,6 +5,7 @@ using BiosensorSimulator.Schemes.Calculators1D;
 using BiosensorSimulator.Simulations.Simulations1D;
 using System;
 using BiosensorSimulator.Parameters.Biosensors;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors;
 using BiosensorSimulator.Schemes;
 using BiosensorSimulator.Schemes.Calculators2D;
@@ -16,25 +17,32 @@ namespace BiosensorSimulator
     {
         static void Main()
         {
-            var biosensor = new TwoLayerMicroreactorBiosensor();
+            var biosensor = new TwoLayerNonPhysicalMicroreactorBiosensor();
             var simulationParameters = new SimulationParametersSupplier(biosensor);
 
             var resultPrinter = new ConsoleFilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
             //var resultPrinter = new ConsolePrinter();
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
-            BaseSimulation2D simulation = new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
+            //1D
 
+            BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
             simulation.PrintParameters();
             simulation.ShowValidationValues();
+            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, false);
+            if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
+                biosensor.Homogenize();
+            simulation.SchemeCalculator = new ExplicitSchemeCalculator1D(biosensor, simulationParameters);
 
-            var isSimulation2d = true;
-            new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, isSimulation2d);
 
-            /*if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
-                biosensor.Homogenize();*/
+            //2D
+            //BaseSimulation2D simulation = new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
+            //simulation.PrintParameters();
+            //simulation.ShowValidationValues();
+            //var isSimulation2d = true;
+            //new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, isSimulation2d);
+            //simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
 
-            simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
 
             if (simulation.SchemeCalculator is ImplicitSchemeCalculator1D)
                 resultPrinter.Print("====Implicit Scheme Calculator====");

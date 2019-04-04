@@ -40,7 +40,6 @@ namespace BiosensorSimulator.Schemes
 
         public bool GetDiffusionStability(double D, double h, double t)
         {
-            // Why we tried to change 0.25 to 0.083333333333333?
             return D * t / (h * h) <= 0.25;
         }
 
