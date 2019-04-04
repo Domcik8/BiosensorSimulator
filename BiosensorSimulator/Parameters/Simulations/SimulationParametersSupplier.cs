@@ -17,7 +17,7 @@ namespace BiosensorSimulator.Parameters.Simulations
             F = 96485.33289;
             ZeroIBond = 1e-25;
             //t = 4.166666666666665E-06;
-            t = 1.6665E-05;
+            t = 1.6665E-3;
             //t = 8.3e-4;
             //t = 4.166665e-4;
             //t = 4.6295296296296314E-05;

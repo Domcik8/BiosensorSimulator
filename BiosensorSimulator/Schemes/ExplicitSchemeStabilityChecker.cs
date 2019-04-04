@@ -17,8 +17,7 @@ namespace BiosensorSimulator.Schemes
             foreach (var layer in biosensor.Layers)
             {
                 if (layer.Type == LayerType.SelectiveMembrane
-                    || layer.Type == LayerType.DiffusionSmallLayer
-                    || layer.Type == LayerType.NonHomogenousLayer)
+                    || layer.Type == LayerType.DiffusionSmallLayer)
                     continue;
 
                 if (layer.N == 0)

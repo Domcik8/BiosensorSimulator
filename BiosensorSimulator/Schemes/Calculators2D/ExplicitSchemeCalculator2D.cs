@@ -80,15 +80,18 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         public void CalculateDiffusionLayerNextStep(
             Area area, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
+            var substrateDiffusionCoefficientT = area.Substrate.DiffusionCoefficient * SimulationParameters.t;
+            var productDiffusionCoefficientT = area.Product.DiffusionCoefficient * SimulationParameters.t;
+
             for (var i = area.LowerBondIndex + 1; i < area.UpperBondIndex; i++)
             {
                 for (var j = area.LeftBondIndex + 1; j < area.RightBondIndex; j++)
                 {
-                    sCur[i, j] = sPrev[i, j] + area.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                    sCur[i, j] = sPrev[i, j] + substrateDiffusionCoefficientT *
                                  (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], area.H)
                                  + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], area.W, j));
 
-                    pCur[i, j] = pPrev[i, j] + area.Product.DiffusionCoefficient * SimulationParameters.t *
+                    pCur[i, j] = pPrev[i, j] + productDiffusionCoefficientT *
                                  (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], area.H)
                                  + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], area.W, j));
                 }
@@ -98,15 +101,18 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         public void CalculateSmallDiffusionLayerNextStep(
             Area area, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
+            var substrateDiffusionCoefficientT = area.Substrate.DiffusionCoefficient * SimulationParameters.t;
+            var productDiffusionCoefficientT = area.Product.DiffusionCoefficient * SimulationParameters.t;
+
             for (var i = area.LowerBondIndex + 1; i < area.UpperBondIndex + 1; i++)
             {
                 for (var j = area.LeftBondIndex + 1; j < area.RightBondIndex; j++)
                 {
-                    sCur[i, j] = sPrev[i, j] + area.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                    sCur[i, j] = sPrev[i, j] + substrateDiffusionCoefficientT *
                                  (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], area.H)
                                  + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], area.W, j));
 
-                    pCur[i, j] = pPrev[i, j] + area.Product.DiffusionCoefficient * SimulationParameters.t *
+                    pCur[i, j] = pPrev[i, j] + productDiffusionCoefficientT *
                                  (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], area.H)
                                  + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], area.W, j));
                 }
@@ -137,18 +143,21 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         public void CalculateReactionDiffusionLayerNextStep(
             Area area, double[,] sCur, double[,] pCur, double[,] sPrev, double[,] pPrev)
         {
+            var substrateDiffusionCoefficientT = area.Substrate.DiffusionCoefficient * SimulationParameters.t;
+            var productDiffusionCoefficientT = area.Product.DiffusionCoefficient * SimulationParameters.t;
+
             for (var i = area.LowerBondIndex + 1; i < area.UpperBondIndex; i++)
             {
                 for (var j = area.LeftBondIndex + 1; j < area.RightBondIndex; j++)
                 {
                     var fermentReactionSpeed = SimulationParameters.t * (Biosensor.VMax * sPrev[i, j] / (Biosensor.Km + sPrev[i, j]));
 
-                    sCur[i, j] = sPrev[i, j] + area.Substrate.DiffusionCoefficient * SimulationParameters.t *
+                    sCur[i, j] = sPrev[i, j] + substrateDiffusionCoefficientT *
                                  (CalculateDiffusionLayerCoordinateZNextLocation(sPrev[i - 1, j], sPrev[i, j], sPrev[i + 1, j], area.H)
                                  + CalculateDiffusionLayerCoordinateRNextLocation(sPrev[i, j - 1], sPrev[i, j], sPrev[i, j + 1], area.W, j))
                         - fermentReactionSpeed;
 
-                    pCur[i, j] = pPrev[i, j] + area.Product.DiffusionCoefficient * SimulationParameters.t *
+                    pCur[i, j] = pPrev[i, j] + productDiffusionCoefficientT *
                                  (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], area.H)
                                  + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], area.W, j))
                         + fermentReactionSpeed;
@@ -159,11 +168,13 @@ namespace BiosensorSimulator.Schemes.Calculators2D
         public void CalculateDiffusionLayerWithOnlyProductNextStep(
             Area area, double[,] pCur, double[,] pPrev)
         {
+            var productDiffusionCoefficientT = area.Product.DiffusionCoefficient * SimulationParameters.t;
+
             for (var i = area.LowerBondIndex + 1; i < area.UpperBondIndex; i++)
             {
                 for (var j = area.LeftBondIndex + 1; j < area.RightBondIndex; j++)
                 {
-                    pCur[i, j] = pPrev[i, j] + area.Product.DiffusionCoefficient * SimulationParameters.t *
+                    pCur[i, j] = pPrev[i, j] + productDiffusionCoefficientT  *
                                  (CalculateDiffusionLayerCoordinateZNextLocation(pPrev[i - 1, j], pPrev[i, j], pPrev[i + 1, j], area.H)
                                  + CalculateDiffusionLayerCoordinateRNextLocation(pPrev[i, j - 1], pPrev[i, j], pPrev[i, j + 1], area.W, j));
                 }
