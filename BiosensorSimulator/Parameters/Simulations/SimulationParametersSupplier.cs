@@ -1,4 +1,5 @@
-﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+﻿using System;
+using BiosensorSimulator.Parameters.Biosensors.Base;
 using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,6 @@ namespace BiosensorSimulator.Parameters.Simulations
             DecayRate = 1e-2;
             F = 96485.33289;
             ZeroIBond = 1e-25;
-            //t = 4.166666666666665E-06;
-            t = 1.6665E-3;
-            //t = 8.3e-4;
-            //t = 4.166665e-4;
-            //t = 4.6295296296296314E-05;
             var LayerHight = 100;
             M = 100;
 
@@ -34,7 +30,7 @@ namespace BiosensorSimulator.Parameters.Simulations
                 new KeyValuePair<LayerType, long>(LayerType.Enzyme, LayerHight),
                 new KeyValuePair<LayerType, long>(LayerType.NonHomogenousLayer, LayerHight)
             };
-            
+
             long lastLayerMaxIndex = 0;
             foreach (var layer in biosensor.Layers)
             {
@@ -45,9 +41,9 @@ namespace BiosensorSimulator.Parameters.Simulations
                 N += layer.N;
 
                 layer.LowerBondIndex = lastLayerMaxIndex;
-                
+
                 lastLayerMaxIndex = layer.UpperBondIndex = lastLayerMaxIndex + layer.N;
-                
+
                 layer.M = M;
                 layer.W = layer.Width / layer.M;
 
@@ -64,11 +60,11 @@ namespace BiosensorSimulator.Parameters.Simulations
 
                 if (layer.Type == LayerType.NonHomogenousLayer)
                 {
-                    var microreactiorBiosensor = (BaseMicroreactorBiosensor) biosensor;
+                    var microreactiorBiosensor = (BaseMicroreactorBiosensor)biosensor;
                     var enzymeArea = ((LayerWithSubAreas)layer).SubAreas.First();
                     var diffusionArea = ((LayerWithSubAreas)layer).SubAreas.Last();
 
-                    enzymeArea.M = (long) (microreactiorBiosensor.MicroReactorRadius / layer.Width * layer.M);
+                    enzymeArea.M = (long)(microreactiorBiosensor.MicroReactorRadius / layer.Width * layer.M);
                     diffusionArea.M = layer.M - enzymeArea.M;
 
                     enzymeArea.LeftBondIndex = 0;
@@ -85,6 +81,19 @@ namespace BiosensorSimulator.Parameters.Simulations
                     enzymeArea.UpperBondIndex = diffusionArea.UpperBondIndex = layer.UpperBondIndex;
                 }
             }
+
+            t = GetMinimalTimestep(biosensor);
+        }
+
+        private static double GetMinimalTimestep(BaseBiosensor biosensor)
+        {
+            var minH = biosensor.Layers.Aggregate((curMin, x) => curMin == null || x.H < curMin.H ? x : curMin).H;
+            var maxDiffusionCoefficient = 6.00E-04;
+
+            var diffusionTime = 0.25 * minH * minH / maxDiffusionCoefficient;
+            var reactionTime = 0.5 * biosensor.Km / biosensor.VMax;
+
+            return Math.Min(diffusionTime, reactionTime);
         }
 
         private long GetLayerSteps(LayerType layerType)

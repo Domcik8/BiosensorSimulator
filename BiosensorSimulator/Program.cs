@@ -51,11 +51,6 @@ namespace BiosensorSimulator
                 new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, isSimulation2d);
                 simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
 
-                if (simulation.SchemeCalculator is ImplicitSchemeCalculator1D)
-                    resultPrinter.Print("====Implicit Scheme Calculator====");
-                else
-                    resultPrinter.Print("====Explicit Scheme Calculator====");
-
                 resultPrinter.Print("====Results====");
                 simulation.RunStableCurrentSimulation();
             }
@@ -100,7 +95,7 @@ namespace BiosensorSimulator
         {
             Console.WriteLine("o = 1, s0 = 1, bi = 1");
 
-            Console.WriteLine("Simulated parameter (1. Vmax, 2.S0): ");
+            Console.WriteLine("Simulated parameter (1. Vmax, 2.S0, 3.Bi): ");
             parameter = int.Parse(Console.ReadLine());
             Console.WriteLine("Parameter values (separate parameters with ';')");
             var input = Console.ReadLine();
