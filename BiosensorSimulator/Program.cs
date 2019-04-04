@@ -25,7 +25,6 @@ namespace BiosensorSimulator
             //var resultPrinter = new FilePrinter($@"C:\BiosensorSimulations\{biosensor.Name}");
 
             //1D
-
             BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
             simulation.PrintParameters();
             simulation.ShowValidationValues();
