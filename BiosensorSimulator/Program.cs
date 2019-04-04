@@ -105,7 +105,7 @@ namespace BiosensorSimulator
             inputs.ForEach(x => { tempValues.Add(double.Parse(x)); });
             values = tempValues;
 
-            Console.WriteLine("Value of y: ");
+            Console.WriteLine("Value of y (1; 0,8; 0,6; 0,4; 0,2): ");
             y = double.Parse(Console.ReadLine());
         }
     }
