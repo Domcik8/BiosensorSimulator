@@ -13,12 +13,15 @@ namespace BiosensorSimulator.Parameters.Simulations
 
         public SimulationParametersSupplier(BaseBiosensor biosensor)
         {
+            
             ne = 2;
             DecayRate = 1e-2;
             F = 96485.33289;
             ZeroIBond = 1e-25;
             var LayerHight = 100;
             M = 100;
+
+            t = GetMinimalTimestep(biosensor, LayerHight);
 
             LayersSteps = new List<KeyValuePair<LayerType, long>>
             {
@@ -81,13 +84,12 @@ namespace BiosensorSimulator.Parameters.Simulations
                     enzymeArea.UpperBondIndex = diffusionArea.UpperBondIndex = layer.UpperBondIndex;
                 }
             }
-
-            t = GetMinimalTimestep(biosensor);
         }
 
-        private static double GetMinimalTimestep(BaseBiosensor biosensor)
+        private static double GetMinimalTimestep(BaseBiosensor biosensor, int numberOfSpaceSteps)
         {
-            var minH = biosensor.Layers.Aggregate((curMin, x) => curMin == null || x.H < curMin.H ? x : curMin).H;
+            var minH = biosensor.Layers.Aggregate((curMin, x) => curMin == null || x.Height < curMin.Height ? x : curMin)
+                .Height/ numberOfSpaceSteps;
             var maxDiffusionCoefficient = 6.00E-04;
 
             var diffusionTime = 0.25 * minH * minH / maxDiffusionCoefficient;

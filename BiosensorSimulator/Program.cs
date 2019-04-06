@@ -18,11 +18,11 @@ namespace BiosensorSimulator
         static void Main()
         {
             Console.BufferHeight = Int16.MaxValue - 1;
-            int parameter;
+            int dimension, parameter;
             double y;
             List<double> values;
 
-            ReadParameters(out parameter, out y, out values);
+            ReadParameters(out dimension, out parameter, out y, out values);
 
             var resultPrinter =
                 new ConsoleFilePrinter(@"C:\BiosensorSimulations\Two-Layer-Microreactor-Biosensor");
@@ -35,24 +35,32 @@ namespace BiosensorSimulator
                 var simulationParameters = new SimulationParametersSupplier(biosensor);
 
                 //1D
-                //BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
-                //simulation.PrintParameters();
-                //simulation.ShowValidationValues();
-                //new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, false);
-                //if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
-                //    biosensor.Homogenize();
-                //simulation.SchemeCalculator = new ExplicitSchemeCalculator1D(biosensor, simulationParameters);
+                if (dimension == 1)
+                {
+                    BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
+                    simulation.PrintParameters();
+                    simulation.ShowValidationValues();
+                    new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, false);
+                    if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
+                        biosensor.Homogenize();
+                    simulation.SchemeCalculator = new ExplicitSchemeCalculator1D(biosensor, simulationParameters);
 
-                //2D
-                BaseSimulation2D simulation = new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
-                simulation.PrintParameters();
-                simulation.ShowValidationValues();
-                var isSimulation2d = true;
-                new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, isSimulation2d);
-                simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
+                    resultPrinter.Print("====Results====");
+                    simulation.RunStableCurrentSimulation();
+                }
+                else if (dimension == 2)
+                {
+                    BaseSimulation2D simulation =
+                        new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
+                    simulation.PrintParameters();
+                    simulation.ShowValidationValues();
+                    new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, true);
+                    simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
 
-                resultPrinter.Print("====Results====");
-                simulation.RunStableCurrentSimulation();
+                    resultPrinter.Print("====Results====");
+                    simulation.RunStableCurrentSimulation();
+                }
+                else throw new Exception("no papa");
             }
 
             if (!(resultPrinter is FilePrinter))
@@ -91,9 +99,12 @@ namespace BiosensorSimulator
             biosensor.MicroReactorRadius = biosensor.UnitRadius * y;
         }
 
-        private static void ReadParameters(out int parameter, out double y, out List<double> values)
+        private static void ReadParameters(out int dimension, out int parameter, out double y, out List<double> values)
         {
             Console.WriteLine("o = 1, s0 = 1, bi = 1");
+
+            Console.WriteLine("Simulation dimension (1. 1D, 2. 2D: ");
+            dimension = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Simulated parameter (1. Vmax, 2.S0, 3.Bi): ");
             parameter = int.Parse(Console.ReadLine());
@@ -105,8 +116,34 @@ namespace BiosensorSimulator
             inputs.ForEach(x => { tempValues.Add(double.Parse(x)); });
             values = tempValues;
 
-            Console.WriteLine("Value of y (1; 0,8; 0,6; 0,4; 0,2): ");
-            y = double.Parse(Console.ReadLine());
+            Console.WriteLine("Value of y (1. 1; 2. 0,8; 3. 0,6; 4. 0,4; 5. 0,2): ");
+            var tempy = int.Parse(Console.ReadLine());
+
+            switch (tempy)
+            {
+                case 1:
+                    y = 1;
+                    break;
+
+                case 2:
+                    y = 0.8;
+                    break;
+
+                case 3:
+                    y = 0.6;
+                    break;
+
+                case 4:
+                    y = 0.4;
+                    break;
+
+                case 5:
+                    y = 0.2;
+                    break;
+
+                default:
+                    throw new Exception("no papa");
+            }
         }
     }
 }
