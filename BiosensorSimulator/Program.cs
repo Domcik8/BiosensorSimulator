@@ -37,6 +37,7 @@ namespace BiosensorSimulator
                 //1D
                 if (dimension == 1)
                 {
+                    resultPrinter.Print("1D simulation");
                     BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
                     simulation.PrintParameters();
                     simulation.ShowValidationValues();
@@ -50,6 +51,7 @@ namespace BiosensorSimulator
                 }
                 else if (dimension == 2)
                 {
+                    resultPrinter.Print("2D simulation");
                     BaseSimulation2D simulation =
                         new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
                     simulation.PrintParameters();
