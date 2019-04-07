@@ -103,7 +103,7 @@ namespace BiosensorSimulator
         {
             Console.WriteLine("o = 1, s0 = 1, bi = 1");
 
-            Console.WriteLine("Simulation dimension (1. 1D, 2. 2D: ");
+            Console.WriteLine("Simulation dimension (1. 1D, 2. 2D): ");
             dimension = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Simulated parameter (1. Vmax, 2.S0, 3.Bi): ");

@@ -141,7 +141,8 @@ namespace BiosensorSimulator.Simulations
             ResultPrinter.Print(I.ToString());
         }
 
-        public void PrintSimulationResults(Stopwatch stopwatch, double I, double simulationTime, bool printConcentrations = true, bool normalize = false)
+        public void PrintSimulationResults(Stopwatch stopwatch, double I, double simulationTime,
+            bool printConcentrations = true, bool normalize = false)
         {
             ResultPrinter.Print("");
             ResultPrinter.Print("----------------------------------------------------");
@@ -153,7 +154,8 @@ namespace BiosensorSimulator.Simulations
                 PrintSimulationConcentrations(normalize);
         }
 
-        public void PrintSimulationResults(Stopwatch stopwatch, double I, bool printConcentrations = true, bool normalize = false)
+        public void PrintSimulationResults(Stopwatch stopwatch, double I,
+            bool printConcentrations = true, bool normalize = false)
         {
             ResultPrinter.Print("");
             ResultPrinter.Print("----------------------------------------------------");
