@@ -88,7 +88,7 @@ namespace BiosensorSimulator
                     break;
                 case 3:
                     {
-                        biosensor.Height = biosensor.NonHomogenousLayer.H + value;
+                        biosensor.Height = biosensor.NonHomogenousLayer.Height + value;
                         biosensor.DiffusionLayer.Height = value;
                         break;
                     }

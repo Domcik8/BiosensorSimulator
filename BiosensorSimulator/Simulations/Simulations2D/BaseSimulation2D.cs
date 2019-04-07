@@ -37,9 +37,9 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             IResultPrinter resultPrinter)
             : base(simulationParameters, biosensor, resultPrinter) { }
 
-        public override void PrintParameters()
+        public override void PrintParameters(int dimension)
         {
-            base.PrintParameters();
+            base.PrintParameters(dimension);
             ResultPrinter.Print("====2D Parameters====");
             ResultPrinter.Print($"Radius steps: {SimulationParameters.M}");
             ResultPrinter.Print("");
