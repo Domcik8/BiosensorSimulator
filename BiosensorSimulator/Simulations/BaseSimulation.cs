@@ -171,10 +171,11 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Write parameters for result
         /// </summary>
-        public virtual void PrintParameters()
+        public virtual void PrintParameters(int dimension)
         {
             ResultPrinter.Print("***************************" + Biosensor.Name + "***************************");
             ResultPrinter.Print("");
+            ResultPrinter.Print($"{dimension}D simulation");
 
             ResultPrinter.Print("");
             ResultPrinter.Print("====Parameters====");

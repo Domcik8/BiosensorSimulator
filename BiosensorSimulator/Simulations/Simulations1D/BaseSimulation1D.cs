@@ -91,8 +91,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             }
 
             stopWatch.Stop();
-
-            ResultPrinter.Print("Simulation Result");
+            
             PrintSimulationResults(stopWatch, iCur, i * SimulationParameters.t, false);
             Current = iCur;
 

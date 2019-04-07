@@ -38,9 +38,8 @@ namespace BiosensorSimulator
                 //1D
                 if (dimension == 1)
                 {
-                    resultPrinter.Print("1D simulation");
                     BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
-                    simulation.PrintParameters();
+                    simulation.PrintParameters(dimension);
                     simulation.ShowValidationValues();
                     new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, false);
                     if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
@@ -52,10 +51,9 @@ namespace BiosensorSimulator
                 }
                 else if (dimension == 2)
                 {
-                    resultPrinter.Print("2D simulation");
                     BaseSimulation2D simulation =
                         new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
-                    simulation.PrintParameters();
+                    simulation.PrintParameters(dimension);
                     simulation.ShowValidationValues();
                     new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, true);
                     simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
