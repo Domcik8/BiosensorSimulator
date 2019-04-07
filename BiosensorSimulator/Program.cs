@@ -8,6 +8,7 @@ using BiosensorSimulator.Simulations.Simulations1D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Schemes.Calculators2D;
 using BiosensorSimulator.Simulations.Simulations2D;
 
@@ -99,6 +100,10 @@ namespace BiosensorSimulator
             }
 
             biosensor.MicroReactorRadius = biosensor.UnitRadius * y;
+            var subAreas = ((LayerWithSubAreas) biosensor.Layers.First()).SubAreas;
+            subAreas.First().Width = biosensor.MicroReactorRadius;
+            subAreas.Last().Width = biosensor.UnitRadius - biosensor.MicroReactorRadius;
+
         }
 
         private static void ReadParameters(out int dimension, out int parameter, out double y, out List<double> values)
