@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 
 namespace BiosensorSimulator.Results
@@ -17,6 +18,8 @@ namespace BiosensorSimulator.Results
                 Directory.CreateDirectory(path);
 
             OpenStream();
+
+            CultureInfo.CurrentCulture = new CultureInfo("lt-LT", false);
         }
 
         public void Print(string message)

@@ -12,9 +12,9 @@ namespace BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors
         {
             Name = "Two-Layer-Microreactor-Biosensor";
             P0 = 0;
-            VMax = 3e-12;
+            VMax = 3e-12; //3e-14, 3e-12, 3e-10
             Km = 1e-10;
-            S0 = 1e-10;
+            S0 = 1e-10; //1e-8, 1e-10, 1e-12
 
             MicroReactorRadius = 0.2;
             UnitRadius = 0.2;
