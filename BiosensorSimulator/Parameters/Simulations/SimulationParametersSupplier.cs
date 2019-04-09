@@ -89,8 +89,10 @@ namespace BiosensorSimulator.Parameters.Simulations
         private static double GetMinimalTimestep(BaseBiosensor biosensor, int numberOfSpaceSteps)
         {
             var minH = biosensor.Layers.Aggregate((curMin, x) => curMin == null || x.Height < curMin.Height ? x : curMin)
-                .Height/ numberOfSpaceSteps;
-            var maxDiffusionCoefficient = 6.00E-04;
+                .Height / numberOfSpaceSteps;
+            var maxDiffusionCoefficient =
+                biosensor.Layers.Aggregate((curMin, x) => curMin == null || x.Substrate.DiffusionCoefficient > curMin.Substrate.DiffusionCoefficient ? x : curMin)
+                    .Substrate.DiffusionCoefficient;
 
             var diffusionTime = 0.25 * minH * minH / maxDiffusionCoefficient;
             var reactionTime = 0.5 * biosensor.Km / biosensor.VMax;
