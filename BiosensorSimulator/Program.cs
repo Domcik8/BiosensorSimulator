@@ -106,7 +106,7 @@ namespace BiosensorSimulator
 
         private static void ReadParameters(out int dimension, out int parameter, out double y, out List<double> values)
         {
-            Console.WriteLine("o = 1, s0 = 1e-2, bi = 1");
+            Console.WriteLine("o = 1, s0 = 1, bi = 1");
 
             Console.WriteLine("Simulation dimension (1. 1D, 2. 2D): ");
             dimension = int.Parse(Console.ReadLine());
