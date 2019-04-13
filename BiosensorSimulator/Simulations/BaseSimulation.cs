@@ -1,7 +1,10 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers.Enums;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BiosensorSimulator.Simulations
 {
@@ -28,7 +31,7 @@ namespace BiosensorSimulator.Simulations
         public abstract void CalculateNextStep();
         public abstract void CalculateMatchingConditions();
         public abstract void CalculateBoundaryConditions();
-  
+
         /// <summary>
         /// Runs simulation till eternity. Prints result every on specified times.
         /// </summary>
@@ -109,6 +112,25 @@ namespace BiosensorSimulator.Simulations
             PrintSimulationResults(stopWatch, Current, i * SimulationParameters.t);
         }
 
+        protected double GetResultTime()
+        {
+            switch (Biosensor.DiffusionLayer.Height)
+            {
+                case 2e-2:
+                case 4e-2:
+                    return 0.5;
+                case 2e-1:
+                    return 5;
+                case 4e-1:
+                    return 10;
+                case 2e0:
+                    return 50;
+
+                default:
+                    return 0.5;
+            }
+        }
+
         /// <summary>
         /// Simulation stable current 
         /// </summary>
@@ -171,62 +193,111 @@ namespace BiosensorSimulator.Simulations
         /// <summary>
         /// Write parameters for result
         /// </summary>
-        public virtual void PrintParameters(int dimension)
+        public virtual void PrintParameters()
         {
             ResultPrinter.Print("***************************" + Biosensor.Name + "***************************");
             ResultPrinter.Print("");
 
-            ResultPrinter.Print("");
-            ResultPrinter.Print("====Parameters====");
+            PrintMainBiosensorParameters();
+
+            ResultPrinter.Print("====Biosensor parameters====");
             ResultPrinter.Print($"Height: {Biosensor.Height} m");
             ResultPrinter.Print($"Km: {Biosensor.Km} M");
             ResultPrinter.Print($"S0: {Biosensor.S0} M");
             ResultPrinter.Print($"Vmax: {Biosensor.VMax} M/s");
+            ResultPrinter.Print("====Simulation parameters====");
             ResultPrinter.Print($"Time step: {SimulationParameters.t} s");
             ResultPrinter.Print($"Steps: {SimulationParameters.N}");
             ResultPrinter.Print($"Decay rate: {SimulationParameters.DecayRate}");
             ResultPrinter.Print("");
 
-            ResultPrinter.Print("====Main parameters====");
-            ResultPrinter.Print("");
-
-            if (Biosensor is BaseHomogenousBiosensor homogenousBiosensor)
-            {
-                ResultPrinter.Print("*********Homogenization*********");
-                ResultPrinter.Print($"Use Homogenization: {homogenousBiosensor.IsHomogenized}");
-                ResultPrinter.Print($"Use EffectiveDiffusionCoefficent: {homogenousBiosensor.UseEffectiveDiffusionCoefficent}");
-                ResultPrinter.Print($"Use EffectiveReactionCoefficent: {homogenousBiosensor.UseEffectiveReactionCoefficent}");
-                ResultPrinter.Print("");
-            }
-
             if (Biosensor is BaseMicroreactorBiosensor microreactorBiosensor)
-            {
-                ResultPrinter.Print("*********Microreactor parameters*********");
-                ResultPrinter.Print($"Microreactor radius: {microreactorBiosensor.MicroReactorRadius}");
-                ResultPrinter.Print($"Unit radius: {microreactorBiosensor.UnitRadius}");
-                ResultPrinter.Print("");
-            }
+                PrintMicroreactorParameters(microreactorBiosensor);
 
             if (Biosensor is BasePerforatedMembraneBiosensor basePerforatedMembraneBiosensor)
-            {
-                ResultPrinter.Print("*********Perforated membrane parameters*********");
-                ResultPrinter.Print($"Hole radius: {basePerforatedMembraneBiosensor.HoleRadius}");
-                ResultPrinter.Print($"Half distance between holes: {basePerforatedMembraneBiosensor.HalfDistanceBetweenHoles}");
-                ResultPrinter.Print($"Enzyme height in hole: {basePerforatedMembraneBiosensor.EnzymeHoleHeight}");
-                ResultPrinter.Print($"Partition coeffient: {basePerforatedMembraneBiosensor.PartitionCoefficient}");
-                ResultPrinter.Print("");
-            }
+                PrintPerforatedMembraneParameters(basePerforatedMembraneBiosensor);
 
-            //foreach (var biosensorLayer in Biosensor.Layers)
-            //{
-            //    ResultPrinter.Print($"{biosensorLayer.Type}:");
-            //    ResultPrinter.Print($"Height: {biosensorLayer.Height} m");
-            //    ResultPrinter.Print($"Dp: {biosensorLayer.Product.DiffusionCoefficient} m2/s");
-            //    ResultPrinter.Print($"Ds: {biosensorLayer.Substrate?.DiffusionCoefficient} m2/s");
-            //    ResultPrinter.Print($"Steps count: {biosensorLayer.N}");
-            //    ResultPrinter.Print($"Step: {biosensorLayer.H} M");
-            //    ResultPrinter.Print("");
-            //}
+            foreach (var biosensorLayer in Biosensor.Layers)
+            {
+                PrintAreaParameters(biosensorLayer);
+
+                if (biosensorLayer.Type == LayerType.NonHomogenousLayer)
+                    foreach (var area in ((LayerWithSubAreas)biosensorLayer).SubAreas)
+                        PrintAreaParameters(area);
+            }
+        }
+
+        private void PrintMainBiosensorParameters()
+        {
+            ResultPrinter.Print("====Biosensor Main parameters====");
+            ResultPrinter.Print($"o2: {GetBiosensorDimensionlessParameterO2()}");
+            ResultPrinter.Print($"S0: {GetBiosensorDimensionlessParameterS0()}");
+            ResultPrinter.Print($"y: {GetBiosensorDimensionlessParameterY()}");
+            ResultPrinter.Print($"Bi: {GetBiosensorDimensionlessParameterBi()}");
+        }
+
+        private double GetBiosensorDimensionlessParameterBi()
+        {
+            var effectiveDiffusionCoefficient = ((BaseMicroreactorBiosensor)Biosensor).GetEffectiveDiffusionCoefficent(
+                Biosensor.NonHomogenousLayer.Product.DiffusionCoefficient,
+                Biosensor.DiffusionLayer.Product.DiffusionCoefficient);
+
+            return Biosensor.Layers.First().Height * Biosensor.DiffusionLayer.Substrate.DiffusionCoefficient
+                   / effectiveDiffusionCoefficient
+                   / Biosensor.DiffusionLayer.Height;
+        }
+
+        private double GetBiosensorDimensionlessParameterY()
+        {
+            return Biosensor.NonHomogenousLayer.SubAreas.First().Width / Biosensor.NonHomogenousLayer.Width;
+        }
+
+        private double GetBiosensorDimensionlessParameterO2()
+        {
+            var effectiveDiffusionCoefficient = ((BaseMicroreactorBiosensor)Biosensor).GetEffectiveDiffusionCoefficent(
+                Biosensor.NonHomogenousLayer.Product.DiffusionCoefficient,
+                Biosensor.DiffusionLayer.Product.DiffusionCoefficient);
+
+            var height = Biosensor.Layers.First().Height;
+
+            return Biosensor.VMax * height * height
+                   / Biosensor.Km
+                   / effectiveDiffusionCoefficient;
+        }
+
+        private double GetBiosensorDimensionlessParameterS0()
+        {
+            return Biosensor.S0 / Biosensor.Km;
+        }
+
+        private void PrintAreaParameters(Area area)
+        {
+            ResultPrinter.Print($"{area.Type}:");
+            ResultPrinter.Print($"Height: {area.Height} m");
+            ResultPrinter.Print($"Width: {area.Width} m");
+            ResultPrinter.Print($"Dp: {area.Product.DiffusionCoefficient} m2/s");
+            ResultPrinter.Print($"Ds: {area.Substrate?.DiffusionCoefficient} m2/s");
+            ResultPrinter.Print($"Steps count: {area.N}");
+            ResultPrinter.Print($"Step: {area.H} M");
+            ResultPrinter.Print("");
+        }
+
+        private void PrintMicroreactorParameters(BaseMicroreactorBiosensor microreactorBiosensor)
+        {
+            ResultPrinter.Print("*********Microreactor parameters*********");
+            ResultPrinter.Print($"Microreactor radius: {microreactorBiosensor.MicroReactorRadius}");
+            ResultPrinter.Print($"Unit radius: {microreactorBiosensor.UnitRadius}");
+            ResultPrinter.Print("");
+        }
+
+        private void PrintPerforatedMembraneParameters(BasePerforatedMembraneBiosensor basePerforatedMembraneBiosensor)
+        {
+            ResultPrinter.Print("*********Perforated membrane parameters*********");
+            ResultPrinter.Print($"Hole radius: {basePerforatedMembraneBiosensor.HoleRadius}");
+            ResultPrinter.Print($"Half distance between holes: {basePerforatedMembraneBiosensor.HalfDistanceBetweenHoles}");
+            ResultPrinter.Print($"Enzyme height in hole: {basePerforatedMembraneBiosensor.EnzymeHoleHeight}");
+            ResultPrinter.Print($"Partition coeffient: {basePerforatedMembraneBiosensor.PartitionCoefficient}");
+            ResultPrinter.Print("");
         }
     }
 }

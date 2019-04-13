@@ -23,24 +23,23 @@ namespace BiosensorSimulator
             double y;
             List<double> values;
 
-            ReadParameters(out dimension, out parameter, out y, out values);
-
             var resultPrinter =
                 new ConsoleFilePrinter(@"C:\BiosensorSimulations\Two-Layer-Microreactor-Biosensor");
+
+            ReadParameters(resultPrinter, out dimension, out parameter, out y, out values);
 
             foreach (var value in values)
             {
                 var biosensor = new TwoLayerMicroreactorBiosensor();
                 EnterInputValues(parameter, y, value, biosensor);
-
+                
                 var simulationParameters = new SimulationParametersSupplier(biosensor);
 
                 //1D
                 if (dimension == 1)
                 {
                     BaseSimulation1D simulation = new SimpleSimulation1D(simulationParameters, biosensor, resultPrinter);
-                    simulation.PrintParameters(dimension);
-                    simulation.ShowValidationValues();
+                    simulation.PrintParameters();
                     new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, false);
                     if (biosensor is BaseHomogenousBiosensor homogenousBiosensor && homogenousBiosensor.IsHomogenized)
                         biosensor.Homogenize();
@@ -53,8 +52,7 @@ namespace BiosensorSimulator
                 {
                     BaseSimulation2D simulation =
                         new MicroreactorSimulation2D(simulationParameters, biosensor, resultPrinter);
-                    simulation.PrintParameters(dimension);
-                    simulation.ShowValidationValues();
+                    simulation.PrintParameters();
                     new ExplicitSchemeStabilityChecker().AssertStability(simulationParameters, biosensor, true);
                     simulation.SchemeCalculator = new ExplicitSchemeCalculator2D(biosensor, simulationParameters);
 
@@ -66,8 +64,8 @@ namespace BiosensorSimulator
 
             if (!(resultPrinter is FilePrinter))
             {
+                resultPrinter.Print("Simulations ended, please copy console data.");
                 resultPrinter.CloseStream();
-                Console.WriteLine("Simulations ended, please copy console data.");
 
                 for (var j = 0; j < 15; j++)
                     Console.ReadKey();
@@ -101,19 +99,16 @@ namespace BiosensorSimulator
             var subAreas = ((LayerWithSubAreas) biosensor.Layers.First()).SubAreas;
             subAreas.First().Width = biosensor.MicroReactorRadius;
             subAreas.Last().Width = biosensor.UnitRadius - biosensor.MicroReactorRadius;
-
         }
 
-        private static void ReadParameters(out int dimension, out int parameter, out double y, out List<double> values)
+        private static void ReadParameters(IResultPrinter resultPrinter, out int dimension, out int parameter, out double y, out List<double> values)
         {
-            Console.WriteLine("o = 1, s0 = 1, bi = 1");
-
-            Console.WriteLine("Simulation dimension (1. 1D, 2. 2D): ");
+            resultPrinter.Print("Simulation dimension (1. 1D, 2. 2D): ");
             dimension = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Simulated parameter (1. Vmax, 2.S0, 3.Bi): ");
+            resultPrinter.Print("Simulated parameter (1. Vmax, 2.S0, 3.Bi): ");
             parameter = int.Parse(Console.ReadLine());
-            Console.WriteLine("Parameter values (separate parameters with ';')");
+            resultPrinter.Print("Parameter values (separate parameters with ';')");
             var input = Console.ReadLine();
             var inputs = input.Split(';').ToList();
 
@@ -121,7 +116,7 @@ namespace BiosensorSimulator
             inputs.ForEach(x => { tempValues.Add(double.Parse(x)); });
             values = tempValues;
 
-            Console.WriteLine("Value of y (1. 1; 2. 0,8; 3. 0,6; 4. 0,4; 5. 0,2): ");
+            resultPrinter.Print("Value of y (1. 1; 2. 0,8; 3. 0,6; 4. 0,4; 5. 0,2): ");
             var tempy = int.Parse(Console.ReadLine());
 
             switch (tempy)
