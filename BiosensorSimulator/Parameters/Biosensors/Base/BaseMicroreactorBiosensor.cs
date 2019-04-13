@@ -32,12 +32,11 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base
             return enzymeArea / unitArea;
         }
 
-        private double GetEffectiveDiffusionCoefficent(
+        public double GetEffectiveDiffusionCoefficent(
             double enzymelayerDiffusionCoefficent1, double diffusionLayerDiffusionCoefficent2)
         {
             var enzymeArea = MicroReactorRadius * MicroReactorRadius;
             var unitArea = UnitRadius * UnitRadius;
-            //var diffusionLayerArea = unitArea - enzymeArea;
 
             var relativeArea = enzymeArea / unitArea;
 

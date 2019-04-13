@@ -37,9 +37,9 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             IResultPrinter resultPrinter)
             : base(simulationParameters, biosensor, resultPrinter) { }
 
-        public override void PrintParameters(int dimension)
+        public override void PrintParameters()
         {
-            base.PrintParameters(dimension);
+            base.PrintParameters();
             ResultPrinter.Print("====2D Parameters====");
             ResultPrinter.Print($"Radius steps: {SimulationParameters.M}");
             ResultPrinter.Print("");
@@ -81,9 +81,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             stopWatch.Start();
 
             SetInitialConditions();
-
-            //Print result every resultTime seconds
-            var resultTime = 0.5;
+            double resultTime = GetResultTime();
 
             // Print result every resulSteps steps
             var resultSteps = (int)(resultTime / SimulationParameters.t);
@@ -98,7 +96,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
                     && iCur > SimulationParameters.ZeroIBond
                     && Math.Abs(iCur - iPrev) * i / iCur < SimulationParameters.DecayRate)
                     break;
-                
+
                 if (i % resultSteps == 0)
                     PrintSimulationResults(stopWatch, iCur, i / resultSteps * resultTime, false);
 
@@ -115,7 +113,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
         }
 
         public override double GetCurrent()
-        { 
+        {
             double sum = 0;
             var firstLayer = Biosensor.Layers.First();
             var spaceStepR = firstLayer.W / firstLayer.H * firstLayer.W;

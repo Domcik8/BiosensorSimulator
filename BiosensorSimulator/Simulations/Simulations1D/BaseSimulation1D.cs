@@ -62,9 +62,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             stopWatch.Start();
 
             SetInitialConditions();
-
-            //Print result every resultTime seconds
-            var resultTime = 0.5;
+            double resultTime = GetResultTime();
             // Print result every resulSteps steps
             var resultSteps = (int)(resultTime / SimulationParameters.t);
             var maxSteps = (int)(maxTime / SimulationParameters.t);
@@ -91,7 +89,7 @@ namespace BiosensorSimulator.Simulations.Simulations1D
             }
 
             stopWatch.Stop();
-            
+
             PrintSimulationResults(stopWatch, iCur, i * SimulationParameters.t, false);
             Current = iCur;
 
