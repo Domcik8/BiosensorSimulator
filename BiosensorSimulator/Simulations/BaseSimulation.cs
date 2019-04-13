@@ -114,21 +114,15 @@ namespace BiosensorSimulator.Simulations
 
         protected double GetResultTime()
         {
-            switch (Biosensor.DiffusionLayer.Height)
-            {
-                case 2e-2:
-                case 4e-2:
-                    return 0.5;
-                case 2e-1:
-                    return 5;
-                case 4e-1:
-                    return 10;
-                case 2e0:
-                    return 50;
+            var height = Biosensor.DiffusionLayer.Height;
 
-                default:
-                    return 0.5;
-            }
+            if (height < 1e-2)
+                return 0.5;
+            if (height < 1e-1)
+                return 5;
+            if (height < 1)
+                return 10;
+            return 50;
         }
 
         /// <summary>

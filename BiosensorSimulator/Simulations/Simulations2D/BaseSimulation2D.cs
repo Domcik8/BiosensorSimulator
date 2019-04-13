@@ -36,24 +36,7 @@ namespace BiosensorSimulator.Simulations.Simulations2D
             BaseBiosensor biosensor,
             IResultPrinter resultPrinter)
             : base(simulationParameters, biosensor, resultPrinter) { }
-
-        public override void PrintParameters()
-        {
-            base.PrintParameters();
-            ResultPrinter.Print("====2D Parameters====");
-            ResultPrinter.Print($"Radius steps: {SimulationParameters.M}");
-            ResultPrinter.Print("");
-
-            foreach (var biosensorLayer in Biosensor.Layers)
-            {
-                ResultPrinter.Print($"{biosensorLayer.Type}:");
-                ResultPrinter.Print($"Width: {biosensorLayer.Width} m");
-                ResultPrinter.Print($"Radius steps count: {biosensorLayer.M}");
-                ResultPrinter.Print($"Radius step: {biosensorLayer.W} M");
-                ResultPrinter.Print("");
-            }
-        }
-
+        
         // Calculate next step of biosensor
         public override void CalculateNextStep()
         {

@@ -31,10 +31,9 @@ namespace BiosensorSimulator
             foreach (var value in values)
             {
                 var biosensor = new TwoLayerMicroreactorBiosensor();
+                var simulationParameters = new SimulationParametersSupplier(biosensor);
                 SetY(y, biosensor);
                 EnterInputValues(parameter, y, value, biosensor);
-
-                var simulationParameters = new SimulationParametersSupplier(biosensor);
 
                 //1D
                 if (dimension == 1)
@@ -80,15 +79,15 @@ namespace BiosensorSimulator
             switch (parameter)
             {
                 case 1:
-                    biosensor.VMax = value;
+                    biosensor.VMax *= value;
                     break;
                 case 2:
-                    biosensor.S0 = value;
+                    biosensor.S0 *= value;
                     break;
                 case 3:
                     {
-                        biosensor.Height = biosensor.NonHomogenousLayer.Height + value;
-                        biosensor.DiffusionLayer.Height = value;
+                        biosensor.DiffusionLayer.Height *= value;
+                        biosensor.Height = biosensor.Layers.First().Height + value;
                         break;
                     }
 
@@ -103,6 +102,14 @@ namespace BiosensorSimulator
             var subAreas = ((LayerWithSubAreas)biosensor.Layers.First()).SubAreas;
             subAreas.First().Width = biosensor.MicroReactorRadius;
             subAreas.Last().Width = biosensor.UnitRadius - biosensor.MicroReactorRadius;
+
+            // Homogenization might change Deff, we need to adjust Vmax and d-c
+            var c = biosensor.Layers.First().Height;
+
+            biosensor.VMax = biosensor.EffectiveSubstrateDiffusionCoefficient * biosensor.Km / (c * c);
+
+            biosensor.DiffusionLayer.Height = c * biosensor.DiffusionLayer.Substrate.DiffusionCoefficient
+                                              / biosensor.EffectiveSubstrateDiffusionCoefficient;
         }
 
         private static void ReadParameters(IResultPrinter resultPrinter, out int dimension, out int parameter, out double y, out List<double> values)

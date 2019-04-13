@@ -13,7 +13,6 @@ namespace BiosensorSimulator.Parameters.Simulations
 
         public SimulationParametersSupplier(BaseBiosensor biosensor)
         {
-            
             ne = 2;
             DecayRate = 1e-2;
             F = 96485.33289;
