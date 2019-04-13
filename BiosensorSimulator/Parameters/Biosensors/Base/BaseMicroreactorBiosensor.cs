@@ -4,6 +4,8 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base
 {
     public abstract class BaseMicroreactorBiosensor : BaseHomogenousBiosensor
     {
+        public double EffectiveSubstrateDiffusionCoefficient { get; set; }
+        public double EffectiveProductDiffusionCoefficient { get; set; }
         public double MicroReactorRadius { get; set; }
         public double UnitRadius { get; set; }
 
@@ -14,13 +16,8 @@ namespace BiosensorSimulator.Parameters.Biosensors.Base
 
             if (UseEffectiveDiffusionCoefficent)
             {
-                NonHomogenousLayer.Substrate.DiffusionCoefficient = GetEffectiveDiffusionCoefficent(
-                    NonHomogenousLayer.Substrate.DiffusionCoefficient,
-                    DiffusionLayer.Substrate.DiffusionCoefficient);
-
-                NonHomogenousLayer.Product.DiffusionCoefficient = GetEffectiveDiffusionCoefficent(
-                    NonHomogenousLayer.Product.DiffusionCoefficient,
-                    DiffusionLayer.Product.DiffusionCoefficient);
+                NonHomogenousLayer.Substrate.DiffusionCoefficient = EffectiveSubstrateDiffusionCoefficient;
+                NonHomogenousLayer.Product.DiffusionCoefficient = EffectiveProductDiffusionCoefficient;
             }
         }
 

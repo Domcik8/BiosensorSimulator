@@ -238,12 +238,8 @@ namespace BiosensorSimulator.Simulations
 
         private double GetBiosensorDimensionlessParameterBi()
         {
-            var effectiveDiffusionCoefficient = ((BaseMicroreactorBiosensor)Biosensor).GetEffectiveDiffusionCoefficent(
-                Biosensor.NonHomogenousLayer.Product.DiffusionCoefficient,
-                Biosensor.DiffusionLayer.Product.DiffusionCoefficient);
-
             return Biosensor.Layers.First().Height * Biosensor.DiffusionLayer.Substrate.DiffusionCoefficient
-                   / effectiveDiffusionCoefficient
+                   / ((BaseMicroreactorBiosensor)Biosensor).EffectiveSubstrateDiffusionCoefficient
                    / Biosensor.DiffusionLayer.Height;
         }
 
@@ -254,15 +250,11 @@ namespace BiosensorSimulator.Simulations
 
         private double GetBiosensorDimensionlessParameterO2()
         {
-            var effectiveDiffusionCoefficient = ((BaseMicroreactorBiosensor)Biosensor).GetEffectiveDiffusionCoefficent(
-                Biosensor.NonHomogenousLayer.Product.DiffusionCoefficient,
-                Biosensor.DiffusionLayer.Product.DiffusionCoefficient);
-
             var height = Biosensor.Layers.First().Height;
 
             return Biosensor.VMax * height * height
                    / Biosensor.Km
-                   / effectiveDiffusionCoefficient;
+                   / ((BaseMicroreactorBiosensor)Biosensor).EffectiveSubstrateDiffusionCoefficient;
         }
 
         private double GetBiosensorDimensionlessParameterS0()
