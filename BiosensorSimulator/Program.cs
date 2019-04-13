@@ -1,16 +1,16 @@
 ﻿using BiosensorSimulator.Parameters.Biosensors.Base;
+using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
 using BiosensorSimulator.Parameters.Biosensors.MicroreactorBiosensors;
 using BiosensorSimulator.Parameters.Simulations;
 using BiosensorSimulator.Results;
 using BiosensorSimulator.Schemes;
 using BiosensorSimulator.Schemes.Calculators1D;
+using BiosensorSimulator.Schemes.Calculators2D;
 using BiosensorSimulator.Simulations.Simulations1D;
+using BiosensorSimulator.Simulations.Simulations2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BiosensorSimulator.Parameters.Biosensors.Base.Layers;
-using BiosensorSimulator.Schemes.Calculators2D;
-using BiosensorSimulator.Simulations.Simulations2D;
 
 namespace BiosensorSimulator
 {
@@ -31,8 +31,9 @@ namespace BiosensorSimulator
             foreach (var value in values)
             {
                 var biosensor = new TwoLayerMicroreactorBiosensor();
+                SetY(y, biosensor);
                 EnterInputValues(parameter, y, value, biosensor);
-                
+
                 var simulationParameters = new SimulationParametersSupplier(biosensor);
 
                 //1D
@@ -94,9 +95,12 @@ namespace BiosensorSimulator
                 default:
                     throw new Exception("No papa");
             }
+        }
 
+        private static void SetY(double y, TwoLayerMicroreactorBiosensor biosensor)
+        {
             biosensor.MicroReactorRadius = biosensor.UnitRadius * y;
-            var subAreas = ((LayerWithSubAreas) biosensor.Layers.First()).SubAreas;
+            var subAreas = ((LayerWithSubAreas)biosensor.Layers.First()).SubAreas;
             subAreas.First().Width = biosensor.MicroReactorRadius;
             subAreas.Last().Width = biosensor.UnitRadius - biosensor.MicroReactorRadius;
         }
@@ -106,10 +110,12 @@ namespace BiosensorSimulator
             resultPrinter.Print("Simulation dimension (1. 1D, 2. 2D): ");
             dimension = int.Parse(Console.ReadLine());
 
-            resultPrinter.Print("Simulated parameter (1. Vmax, 2.S0, 3.Bi): ");
+            resultPrinter.Print("Simulated parameter (1. O2, 2.S0, 3.Bi): ");
             parameter = int.Parse(Console.ReadLine());
-            resultPrinter.Print("Parameter values (separate parameters with ';')");
+            resultPrinter.Print("Parameter values (separate parameters with ';', use 0 to simulate 0.01;0.1;1;10;100)");
             var input = Console.ReadLine();
+            if (input == "0")
+                input = "1e-2;1e-1;1;1e1;1e2";
             var inputs = input.Split(';').ToList();
 
             var tempValues = new List<double>();
