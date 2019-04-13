@@ -96,7 +96,7 @@ namespace BiosensorSimulator.Parameters.Simulations
             var diffusionTime = 0.25 * minH * minH / maxDiffusionCoefficient;
             var reactionTime = 0.5 * biosensor.Km / biosensor.VMax;
 
-            return Math.Min(diffusionTime, reactionTime);
+            return Math.Min(diffusionTime, reactionTime) - 0.00000001;
         }
 
         private long GetLayerSteps(LayerType layerType)
