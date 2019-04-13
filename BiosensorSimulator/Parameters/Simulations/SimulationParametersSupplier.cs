@@ -83,19 +83,6 @@ namespace BiosensorSimulator.Parameters.Simulations
                     enzymeArea.UpperBondIndex = diffusionArea.UpperBondIndex = layer.UpperBondIndex;
                 }
             }
-
-            if (biosensor is BaseMicroreactorBiosensor microreactorBiosensor)
-            {
-                microreactorBiosensor.EffectiveSubstrateDiffusionCoefficient
-                    = microreactorBiosensor.GetEffectiveDiffusionCoefficent(
-                    microreactorBiosensor.NonHomogenousLayer.Substrate.DiffusionCoefficient,
-                    microreactorBiosensor.DiffusionLayer.Substrate.DiffusionCoefficient);
-
-                microreactorBiosensor.EffectiveProductDiffusionCoefficient
-                    = microreactorBiosensor.GetEffectiveDiffusionCoefficent(
-                    microreactorBiosensor.NonHomogenousLayer.Product.DiffusionCoefficient,
-                    microreactorBiosensor.DiffusionLayer.Product.DiffusionCoefficient);
-            }
         }
 
         private static double GetMinimalTimestep(BaseBiosensor biosensor, int numberOfSpaceSteps)

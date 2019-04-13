@@ -31,9 +31,11 @@ namespace BiosensorSimulator
             foreach (var value in values)
             {
                 var biosensor = new TwoLayerMicroreactorBiosensor();
-                var simulationParameters = new SimulationParametersSupplier(biosensor);
+
                 SetY(y, biosensor);
                 EnterInputValues(parameter, y, value, biosensor);
+                var simulationParameters = new SimulationParametersSupplier(biosensor);
+                
 
                 //1D
                 if (dimension == 1)
@@ -103,6 +105,19 @@ namespace BiosensorSimulator
             subAreas.First().Width = biosensor.MicroReactorRadius;
             subAreas.Last().Width = biosensor.UnitRadius - biosensor.MicroReactorRadius;
 
+            if (biosensor is BaseMicroreactorBiosensor microreactorBiosensor)
+            {
+                microreactorBiosensor.EffectiveSubstrateDiffusionCoefficient
+                    = microreactorBiosensor.GetEffectiveDiffusionCoefficent(
+                        microreactorBiosensor.NonHomogenousLayer.Substrate.DiffusionCoefficient,
+                        microreactorBiosensor.DiffusionLayer.Substrate.DiffusionCoefficient);
+
+                microreactorBiosensor.EffectiveProductDiffusionCoefficient
+                    = microreactorBiosensor.GetEffectiveDiffusionCoefficent(
+                        microreactorBiosensor.NonHomogenousLayer.Product.DiffusionCoefficient,
+                        microreactorBiosensor.DiffusionLayer.Product.DiffusionCoefficient);
+            }
+
             // Homogenization might change Deff, we need to adjust Vmax and d-c
             var c = biosensor.Layers.First().Height;
 
@@ -119,7 +134,7 @@ namespace BiosensorSimulator
 
             resultPrinter.Print("Simulated parameter (1. O2, 2.S0, 3.Bi): ");
             parameter = int.Parse(Console.ReadLine());
-            resultPrinter.Print("Parameter values (separate parameters with ';', use 0 to simulate 0.01;0.1;1;10;100)");
+            resultPrinter.Print("Parameter values (separate parameters with ';', use 0 to simulate 1e-2;1e-1;1;1e1;1e2)");
             var input = Console.ReadLine();
             if (input == "0")
                 input = "1e-2;1e-1;1;1e1;1e2";
