@@ -88,7 +88,7 @@ namespace BiosensorSimulator
                     break;
                 case 3:
                     {
-                        biosensor.DiffusionLayer.Height *= value;
+                        biosensor.DiffusionLayer.Height /= value;
                         biosensor.Height = biosensor.Layers.First().Height + value;
                         break;
                     }
@@ -121,7 +121,7 @@ namespace BiosensorSimulator
             // Homogenization might change Deff, we need to adjust Vmax and d-c
             var c = biosensor.Layers.First().Height;
 
-            biosensor.VMax = biosensor.EffectiveSubstrateDiffusionCoefficient * biosensor.Km / (c * c);
+            biosensor.VMax = biosensor.EffectiveSubstrateDiffusionCoefficient * biosensor.Km / (c * c)  /*/ 100*/;
 
             biosensor.DiffusionLayer.Height = c * biosensor.DiffusionLayer.Substrate.DiffusionCoefficient
                                               / biosensor.EffectiveSubstrateDiffusionCoefficient;

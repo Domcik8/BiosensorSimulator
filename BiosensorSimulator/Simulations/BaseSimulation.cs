@@ -122,7 +122,11 @@ namespace BiosensorSimulator.Simulations
                 return 5;
             if (height < 1)
                 return 10;
-            return 50;
+            if (height < 1)
+                return 500;
+            if (height < 10)
+                return 5000;
+            return 50000;
         }
 
         /// <summary>
