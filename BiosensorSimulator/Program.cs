@@ -35,7 +35,7 @@ namespace BiosensorSimulator
                 SetY(y, biosensor);
                 EnterInputValues(parameter, y, value, biosensor);
                 var simulationParameters = new SimulationParametersSupplier(biosensor);
-                
+
 
                 //1D
                 if (dimension == 1)
@@ -121,10 +121,14 @@ namespace BiosensorSimulator
             // Homogenization might change Deff, we need to adjust Vmax and d-c
             var c = biosensor.Layers.First().Height;
 
-            biosensor.VMax = biosensor.EffectiveSubstrateDiffusionCoefficient * biosensor.Km / (c * c)  /*/ 100*/;
-
+            biosensor.VMax = biosensor.EffectiveSubstrateDiffusionCoefficient * biosensor.Km / (c * c);
+            
             biosensor.DiffusionLayer.Height = c * biosensor.DiffusionLayer.Substrate.DiffusionCoefficient
                                               / biosensor.EffectiveSubstrateDiffusionCoefficient;
+
+            biosensor.VMax *= 1;
+            biosensor.S0 *= 1;
+            biosensor.DiffusionLayer.Height *= 1; //Anti
         }
 
         private static void ReadParameters(IResultPrinter resultPrinter, out int dimension, out int parameter, out double y, out List<double> values)
@@ -137,7 +141,8 @@ namespace BiosensorSimulator
             resultPrinter.Print("Parameter values (separate parameters with ';', use 0 to simulate 1e-2;1e-1;1;1e1;1e2)");
             var input = Console.ReadLine();
             if (input == "0")
-                input = "1e-2;1e-1;1;1e1;1e2";
+                input = parameter == 3 ? "1e-1;5e-1;1;5;1e1" : "1e-2;1e-1;1;1e1;1e2";
+
             var inputs = input.Split(';').ToList();
 
             var tempValues = new List<double>();
