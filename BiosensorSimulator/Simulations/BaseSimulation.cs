@@ -116,15 +116,15 @@ namespace BiosensorSimulator.Simulations
         {
             var height = Biosensor.DiffusionLayer.Height;
 
-            if (height < 1e-2)
+            if (height < 3e-2)
                 return 0.5;
-            if (height < 1e-1)
+            if (height < 3e-1)
                 return 5;
-            if (height < 1)
+            if (height < 3)
                 return 10;
-            if (height < 1)
-                return 500;
-            if (height < 10)
+            if (height < 30)
+                return 50;
+            if (height < 300)
                 return 5000;
             return 50000;
         }

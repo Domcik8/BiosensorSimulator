@@ -129,6 +129,8 @@ namespace BiosensorSimulator
             biosensor.VMax *= 1;
             biosensor.S0 *= 1;
             biosensor.DiffusionLayer.Height *= 1; //Anti
+
+            biosensor.Height = biosensor.DiffusionLayer.Height + biosensor.Layers.First().Height;
         }
 
         private static void ReadParameters(IResultPrinter resultPrinter, out int dimension, out int parameter, out double y, out List<double> values)
