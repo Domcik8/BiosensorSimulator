@@ -20,20 +20,20 @@ namespace BiosensorSimulator
         {
             Console.BufferHeight = Int16.MaxValue - 1;
             int dimension, parameter;
-            double y;
+            double[] baseParameters = new double[4];
             List<double> values;
 
             var resultPrinter =
                 new ConsoleFilePrinter(@"C:\BiosensorSimulations\Two-Layer-Microreactor-Biosensor");
 
-            ReadParameters(resultPrinter, out dimension, out parameter, out y, out values);
+            ReadParameters(resultPrinter, baseParameters, out dimension, out parameter, out values);
 
             foreach (var value in values)
             {
                 var biosensor = new TwoLayerMicroreactorBiosensor();
 
-                SetY(y, biosensor);
-                EnterInputValues(parameter, y, value, biosensor);
+                SetY(baseParameters[3], biosensor);
+                EnterInputValues(baseParameters, parameter, value, biosensor);
                 var simulationParameters = new SimulationParametersSupplier(biosensor);
 
 
@@ -76,8 +76,14 @@ namespace BiosensorSimulator
                 resultPrinter.CloseStream();
         }
 
-        private static void EnterInputValues(int parameter, double y, double value, TwoLayerMicroreactorBiosensor biosensor)
+        private static void EnterInputValues(double[] baseParameters, int parameter, double value,
+            TwoLayerMicroreactorBiosensor biosensor)
         {
+            biosensor.VMax *= baseParameters[0];
+            biosensor.S0 *= baseParameters[1];
+            biosensor.DiffusionLayer.Height /= baseParameters[2];
+            biosensor.Height = biosensor.Layers.First().Height + baseParameters[2];
+
             switch (parameter)
             {
                 case 1:
@@ -133,52 +139,32 @@ namespace BiosensorSimulator
             biosensor.Height = biosensor.DiffusionLayer.Height + biosensor.Layers.First().Height;
         }
 
-        private static void ReadParameters(IResultPrinter resultPrinter, out int dimension, out int parameter, out double y, out List<double> values)
+        private static void ReadParameters(IResultPrinter resultPrinter, double[] baseParameters,
+            out int dimension, out int parameter, out List<double> values)
         {
             resultPrinter.Print("Simulation dimension (1. 1D, 2. 2D): ");
             dimension = int.Parse(Console.ReadLine());
-
-            resultPrinter.Print("Simulated parameter (1. O2, 2.S0, 3.Bi): ");
+            
+            resultPrinter.Print("Main simulated parameter (1. O2, 2.S0, 3.Bi) (overrides non main value): ");
             parameter = int.Parse(Console.ReadLine());
             resultPrinter.Print("Parameter values (separate parameters with ';', use 0 to simulate 1e-2;1e-1;1;1e1;1e2)");
             var input = Console.ReadLine();
             if (input == "0")
                 input = parameter == 3 ? "1e-1;5e-1;1;5;1e1" : "1e-2;1e-1;1;1e1;1e2";
-
+            
             var inputs = input.Split(';').ToList();
-
             var tempValues = new List<double>();
             inputs.ForEach(x => { tempValues.Add(double.Parse(x)); });
             values = tempValues;
 
-            resultPrinter.Print("Value of y (1. 1; 2. 0,8; 3. 0,6; 4. 0,4; 5. 0,2): ");
-            var tempy = int.Parse(Console.ReadLine());
-
-            switch (tempy)
-            {
-                case 1:
-                    y = 1;
-                    break;
-
-                case 2:
-                    y = 0.8;
-                    break;
-
-                case 3:
-                    y = 0.6;
-                    break;
-
-                case 4:
-                    y = 0.4;
-                    break;
-
-                case 5:
-                    y = 0.2;
-                    break;
-
-                default:
-                    throw new Exception("no papa");
-            }
+            resultPrinter.Print("Parameter o2 value:");
+            baseParameters[0] = double.Parse(Console.ReadLine());
+            resultPrinter.Print("Parameter S0 value:");
+            baseParameters[1] = double.Parse(Console.ReadLine());
+            resultPrinter.Print("Parameter Bi value:");
+            baseParameters[2] = double.Parse(Console.ReadLine());
+            resultPrinter.Print("Value of y: ");
+            baseParameters[3] = double.Parse(Console.ReadLine());
         }
     }
 }
