@@ -32,7 +32,7 @@ namespace BiosensorSimulator
             {
                 var biosensor = new TwoLayerMicroreactorBiosensor();
 
-                SetY(baseParameters[3], biosensor);
+                SetY(parameter == 4 ? value : baseParameters[3], biosensor);
                 EnterInputValues(baseParameters, parameter, value, biosensor);
                 var simulationParameters = new SimulationParametersSupplier(biosensor);
 
@@ -98,6 +98,8 @@ namespace BiosensorSimulator
                         biosensor.Height = biosensor.Layers.First().Height + value;
                         break;
                     }
+                case 4:
+                    break;
 
                 default:
                     throw new Exception("No papa");
@@ -145,12 +147,12 @@ namespace BiosensorSimulator
             resultPrinter.Print("Simulation dimension (1. 1D, 2. 2D): ");
             dimension = int.Parse(Console.ReadLine());
             
-            resultPrinter.Print("Main simulated parameter (1. O2, 2.S0, 3.Bi) (overrides non main value): ");
+            resultPrinter.Print("Main simulated parameter (1. O2, 2.S0, 3.Bi, 4.y) (overrides non main value): ");
             parameter = int.Parse(Console.ReadLine());
             resultPrinter.Print("Parameter values (separate parameters with ';', use 0 to simulate 1e-2;1e-1;1;1e1;1e2)");
             var input = Console.ReadLine();
             if (input == "0")
-                input = parameter == 3 ? "1e-1;5e-1;1;5;1e1" : "1e-2;1e-1;1;1e1;1e2";
+                input = parameter == 3 ? "1e-1;5e-1;1;5;1e1" : parameter == 4 ? "2e-1;4e-1;6e-1;8e-1;1" : "1e-2;1e-1;1;1e1;1e2";
             
             var inputs = input.Split(';').ToList();
             var tempValues = new List<double>();

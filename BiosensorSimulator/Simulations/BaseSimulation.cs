@@ -120,10 +120,12 @@ namespace BiosensorSimulator.Simulations
                 return 0.5;
             if (height < 3e-1)
                 return 5;
-            if (height < 3)
+            if (height < 1)
                 return 10;
-            if (height < 30)
+            if (height < 1.5)
                 return 50;
+            if (height < 30)
+                return 100;
             if (height < 300)
                 return 5000;
             return 50000;
